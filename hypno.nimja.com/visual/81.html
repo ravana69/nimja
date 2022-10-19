@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/81 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:40 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Particle Storm - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Let yourself be surrounded by many floating and fluttering particles, swept up by invisible winds." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Particle Storm - Nimja Hypnosis" />
+    <meta property="og:description" content="Let yourself be surrounded by many floating and fluttering particles, swept up by invisible winds." />
+    <meta property="og:url" content="81.html" />
+    <meta property="og:image" content="thumb/Particle_Storm-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="82.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/81.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="80.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Particle Storm</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/81.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <script src="http://assets.nimja.com/js/three.min.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/threehelper.js"></script>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<!-- https://threejs.org/docs/index.html -->
+<script>
+    var renderer_canvas = document.getElementById('canvas');
+    function hasWebGL() {
+        try {
+            return !!(window.WebGLRenderingContext && (renderer_canvas.getContext('webgl') || renderer_canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    }
+    if (false && !hasWebGL()) {
+        alert("WebGL not supported.");
+    } else {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: renderer_canvas });
+
+        function resize(w, h) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            if (render.resize) {
+                render.resize(w, h);
+            }
+        }
+
+        function perFrame(time, diff) {
+            words.update();
+            render.update(time, diff);
+            renderer.render(scene, camera);
+        }
+        var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+        config = new Config([]);
+        //Spiral.
+        /**
+ * By Nimja - Particle Storm
+ *
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(colors, colorSet)
+{
+    var t = this;
+    this.colors = colors;
+    this.hexColors = (new Colors(colors)).toInt();
+    this.colorSet = colorSet;
+    this.cubes = [];
+    this.max = 20;
+    var defaults = {
+        shape: {type: 'int', val: 0, min: 0, max: 6},
+        type: {type: 'int', val: 0, min: 0, max: 4},
+        move: {type: 'ratio'},
+        size: {type: 'ratio'},
+        count: {type: 'ratio'},
+        color: {type: 'adjust', val: 2},
+        speed: {type: 'ratio'},
+        flip: {type: 'dir'},
+        dir: {type: 'dir'}
+    };
+    this.settings = config.get(defaults);
+    this.settings.max = Math.round(t.settings.count * 1000);
+    this.zMax = 100;
+    this.zH = t.zMax * .5;
+    this.threeHelper = new ThreeHelper(colors, colorSet);
+    this.textureDrawer = new TextureDrawer();
+    this.objects = [];
+    this.previous = 0;
+    this.light;
+    this.center = {x: 0, y: 0};
+    /**
+     * Every frame.
+     * @param {Number} time
+     */
+    this.update = function (time) {
+        var diff = time - t.previous;
+        t.previous = time;
+        if (diff > 1) {
+            return;
+        }
+        for (var i = 0; i < t.settings.max; i++) {
+            var object = t.objects[i];
+            var data = object.userData;
+            t.calculateAndSetPosition(object, diff, time);
+            if (data.cur >= 1 || data.cur < 0) {
+                t.setUserData(data, t.settings.dir < 0 ? 1 : 0);
+            }
+        }
+        if (t.settings.color !== 0) {
+            renderer.domElement.style.filter = 'hue-rotate(' + Math.floor(time * t.settings.color * 360 % 360) + 'deg)';
+        }
+    };
+
+    this.calculateAndSetPosition = function (object, diff, time) {};
+
+    this.positionSlowFall = function (object, diff, time)
+    {
+        var data = object.userData;
+        data.cur += diff * .1 * t.settings.speed * t.settings.dir;
+        var c, z, radius, angle;
+        z = data.cur * t.zMax + t.waveMovement(data.cur, data.b, t.zMax * .01, t.variance(time, .07, 30));
+        radius = this.zH * data.a;
+        angle = TAU * data.b + TAU * data.cur * t.adjust(data.b, .5) + t.waveMovement(data.cur, data.c, .1, t.variance(time, .08, 10))
+        c = coordMath.rotate(t.center, radius, angle);
+
+        object.position.set(c.x * t.settings.flip, c.y, z);
+        object.rotation.x = data.cur * data.c * TAU * 5;
+        object.rotation.z = data.cur * data.d * TAU * 5;
+        object.material.color.setHex(getIndex(t.hexColors, 1 - data.cur));
+    };
+    this.positionStarfield = function (object, diff, time)
+    {
+        var data = object.userData;
+        data.cur += diff * .15 * t.adjust(data.b, .5) * t.settings.speed * t.settings.dir;
+        var c, z, radius, angle;
+        z = data.cur * t.zMax;
+        radius = this.zH * data.a;
+        angle = TAU * data.b;
+        c = coordMath.rotate(t.center, radius, angle);
+
+        object.position.set(c.x, c.y, z);
+        object.rotation.z = angle + data.cur * TAU * t.adjust(data.c, .5) * t.settings.flip;
+        var scale = data.scale * limit.float(data.cur * 2, 0, 1);
+        object.scale.set(scale, scale, scale);
+        object.material.color.setHex(getIndex(t.hexColors, 1 - data.cur));
+    };
+    this.positionSideWind = function (object, diff, time)
+    {
+        var data = object.userData;
+        data.cur += diff * .1 * t.settings.speed * t.settings.dir;
+        var x, y, z;
+        x = -t.zH + data.cur * t.zMax + t.waveMovement(data.cur, data.b, t.zMax * .07, t.variance(time, .09, 22));
+        y = -t.zH * .5 + data.b * t.zMax - data.cur * t.zH + t.waveMovement(data.cur, data.c, t.zMax * .07, t.variance(time, .08, 23));
+        z = data.c * t.zMax + t.waveMovement(data.cur, data.d, t.zMax * .07, t.variance(time, .07, 24));
+
+        object.position.set(x * t.settings.flip, y, z);
+        object.rotation.x = data.cur * data.c * TAU * 5;
+        object.rotation.z = data.cur * data.d * TAU * 5;
+        object.material.color.setHex(getIndex(t.hexColors, 1 - (z / t.zMax)));
+    };
+    this.positionFrontWind = function (object, diff, time)
+    {
+        var data = object.userData;
+        data.cur += diff * .1 * t.settings.speed * t.settings.dir;
+        var x, y, z;
+        x = -t.zH + data.c * t.zMax + t.waveMovement(data.cur, data.b, t.zMax * .07, t.variance(time, .09, 22));
+        y = -t.zH * .5 + data.b * t.zMax - data.cur * t.zH + t.waveMovement(data.cur, data.c, t.zMax * .07, t.variance(time, .08, 23));
+        z = data.cur * t.zMax + t.waveMovement(data.cur, data.d, t.zMax * .07, t.variance(time, .07, 24));
+
+        object.position.set(x, y * t.settings.flip, z);
+        object.rotation.x = data.cur * data.c * TAU * 5;
+        object.rotation.z = data.cur * data.d * TAU * 5;
+        object.material.color.setHex(getIndex(t.hexColors, 1 - (z / t.zMax)));
+    };
+    this.positionWobbleFall = function (object, diff, time)
+    {
+        var data = object.userData;
+        data.cur += diff * .1 * t.settings.speed * t.settings.dir;
+        var c, z, radius, angle;
+        z = data.cur * t.zMax + t.waveMovement(data.cur, data.b, t.zMax * .01, t.variance(time, .07, 30));
+        radius = this.zH * data.a * .8 + (Math.sin(z / t.zMax * TAU * 3.1) + 1) * t.zH * .1 * t.settings.move;
+        angle = TAU * data.b + t.waveMovement(data.cur, data.c, .2, t.variance(time, .08, 10));
+        c = coordMath.rotate(t.center, radius, angle);
+
+        object.position.set(c.x * t.settings.flip, c.y, z);
+        object.rotation.x = data.cur * data.c * TAU * 5;
+        object.rotation.z = data.cur * data.d * TAU * 5;
+        object.material.color.setHex(getIndex(t.hexColors, 1 - data.cur));
+    };
+    this.variance = function (time, mult, max)
+    {
+        return Math.sin(time * mult) * .2 * max + max;
+    };
+    this.waveMovement = function (cur, val, size, variance)
+    {
+        return size * Math.sin(cur * variance * val) * t.settings.move;
+    };
+
+    /**
+     * Render the particles..
+     * @returns {undefined}
+     */
+    this.init = function () {
+        switch (t.settings.shape) {
+            case 1:
+                t.textureDrawer.drawFlower();
+                break;
+            case 2:
+                t.textureDrawer.drawHeart();
+                break;
+            case 3:
+                t.textureDrawer.drawStar();
+                break;
+            case 4:
+                t.textureDrawer.drawLeaf();
+                break;
+            case 5:
+                t.textureDrawer.drawSpiral();
+                break;
+            case 6:
+                t.textureDrawer.drawGlow();
+                break;
+            default:
+                t.textureDrawer.drawSnowFlake();
+        }
+        switch (t.settings.type) {
+            case 1:
+                t.calculateAndSetPosition = t.positionWobbleFall;
+                break;
+            case 2:
+                t.calculateAndSetPosition = t.positionStarfield;
+                break;
+            case 3:
+                t.calculateAndSetPosition = t.positionSideWind;
+                break;
+            case 4:
+                t.calculateAndSetPosition = t.positionFrontWind;
+                break;
+            default:
+                t.calculateAndSetPosition = t.positionSlowFall;
+                ;
+        }
+
+        var size = 1 * t.settings.size;
+        for (var i = 0; i < t.settings.max; i++) {
+            var geometry = new THREE.PlaneGeometry(size, size, size);
+            t.threeHelper.wrapUV(geometry, 'x', 'y');
+
+            var material = t.textureDrawer.getMaterial();
+            var object = new THREE.Mesh(geometry, material);
+            t.setUserData(object.userData, Math.random());
+            object.scale.set(object.userData.scale, object.userData.scale, object.userData.scale);
+            t.objects.push(object);
+            scene.add(object);
+        }
+
+        camera.position.z = t.zMax;
+        //Create a PointLight
+        t.light = new THREE.PointLight(new Color('#ffffff').toInt(), 3, t.zMax * 2);
+        t.light.position.z = t.zMax;
+        scene.add(t.light);
+    };
+    this.setUserData = function (data, cur)
+    {
+        data.a = t.adjust(Math.random(), .95);
+        data.b = Math.random();
+        data.c = Math.random();
+        data.d = Math.random();
+        data.scale = t.adjust(Math.random(), .75);
+        data.cur = cur;
+    };
+
+    this.adjust = function (v, m)
+    {
+        return v * m + (1 - m);
+    };
+
+
+}
+
+function TextureDrawer() {
+    var canvas = document.createElement("canvas");
+    var res = 256;
+    var middle = Math.round(res / 2);
+    var center = {x: middle, y: middle}
+    canvas.width = res;
+    canvas.height = res;
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'white';
+    var texture;
+    function bakeTexture()
+    {
+        texture = new THREE.Texture(canvas);
+        texture.needsUpdate = true;
+    }
+    this.drawSnowFlake = function () {
+        ctx.lineWidth = res * .05;
+        ctx.strokeStyle = 'white';
+        ctx.lineCap = 'butt';
+        ctx.lineJoin = 'miter';
+        var step = TAU / 6,
+                c, ca, cb;
+        ctx.beginPath();
+        for (var r = 0; r < 6; r++) {
+            var angle = step * r;
+            c = coordMath.rotate(center, middle, angle);
+            ctx.moveTo(center.x, center.y);
+            ctx.lineTo(c.x, c.y);
+            c = coordMath.rotate(center, middle * .3, angle);
+            ca = coordMath.rotate(center, middle * .5, angle - .4);
+            cb = coordMath.rotate(center, middle * .5, angle + .4);
+            ctx.moveTo(ca.x, ca.y);
+            ctx.lineTo(c.x, c.y);
+            ctx.lineTo(cb.x, cb.y);
+            c = coordMath.rotate(center, middle * .6, angle);
+            ca = coordMath.rotate(center, middle * .9, angle - .3);
+            cb = coordMath.rotate(center, middle * .9, angle + .3);
+            ctx.moveTo(ca.x, ca.y);
+            ctx.lineTo(c.x, c.y);
+            ctx.lineTo(cb.x, cb.y);
+        }
+        ctx.stroke();
+        bakeTexture();
+    };
+    this.drawFlower = function () {
+        var shape = new Shape(1, middle, 0, true);
+        var color = new Color('#ffffff');
+        for (var i = 0; i < 100; i++) {
+            var cur = 1 - i / 99;
+            var curNext = 1 - (i + 2) / 99;
+            ctx.beginPath();
+            ctx.fillStyle = color.toRgba(Math.pow(cur, 2));
+            shape.draw(ctx, center.x, center.y, 0, true, cur);
+            shape.draw(ctx, center.x, center.y, 0, false, curNext);
+            ctx.fill();
+        }
+        bakeTexture();
+    };
+    this.drawHeart = function () {
+        var shape = new Shape(2, middle, 0, true);
+        ctx.beginPath();
+        shape.draw(ctx, center.x, center.y, 0, 0, 1);
+        ctx.fill();
+        bakeTexture();
+    };
+    this.drawStar = function () {
+        var shape = new Shape(8, middle, .6, true);
+        ctx.beginPath();
+        shape.draw(ctx, center.x, center.y, 0, 0, 1);
+        ctx.fill();
+        bakeTexture();
+    };
+    this.drawGlow = function () {
+        var grd = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, middle);
+        grd.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        grd.addColorStop(.2, 'rgba(255, 255, 255, 1)');
+        grd.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, res, res);
+        bakeTexture();
+    };
+    this.drawLeaf = function () {
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'miter';
+        ctx.beginPath();
+
+        var c1 = {x: -middle, y: 0};
+        var c2 = {x: -middle, y: -middle};
+        var c3 = {x: middle * .5, y: -middle};
+        var c4 = {x: middle, y: 0};
+        ctx.moveTo(center.x + c1.x, center.y + c1.y);
+        ctx.bezierCurveTo(
+                center.x + c2.x, center.y + c2.y,
+                center.x + c3.x, center.y + c3.y,
+                center.x + c4.x, center.y + c4.y
+                );
+        ctx.bezierCurveTo(
+                center.x + c3.x, center.y - c3.y,
+                center.x + c2.x, center.y - c2.y,
+                center.x + c1.x, center.y - c1.y
+                );
+        ctx.fill();
+        ctx.beginPath();
+        ctx.globalCompositeOperation = 'source-atop';
+        ctx.strokeStyle = '#666666';
+        ctx.lineWidth = res * .05;
+        ctx.moveTo(center.x + c1.x, center.y + c1.y);
+        ctx.lineTo(center.x + c4.x, center.y + c4.y);
+        for (var i = 1; i < 6; i++) {
+            var cur = i / 5 * res;
+            var c1 = {x: cur, y: 0};
+            var c2 = {x: cur, y: res * .5};
+            var c3 = {x: cur + res, y: res};
+            var c4 = {x: cur + res, y: res};
+            ctx.moveTo(c1.x, center.y + c1.y);
+            ctx.bezierCurveTo(
+                    c2.x, center.y + c2.y,
+                    c3.x, center.y + c3.y,
+                    c4.x, center.y + c4.y
+                    );
+            ctx.moveTo(c1.x, center.y + c1.y);
+            ctx.bezierCurveTo(
+                    c2.x, center.y - c2.y,
+                    c3.x, center.y - c3.y,
+                    c4.x, center.y - c4.y
+                    );
+        }
+        ctx.stroke();
+        bakeTexture();
+    };
+    this.drawSpiral = function () {
+        ctx.strokeStyle = 'white';
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        var twists = 3;
+        var width = res * .05;
+        var radius = middle - width;
+        ctx.lineWidth = width;
+        var steps = 1000;
+        var step = TAU * twists / steps;
+        ctx.beginPath();
+        for (var i = 0; i < steps; i++) {
+            var cur = i / steps;
+            var radius = cur * middle;
+            var angle = i * step;
+            var c = coordMath.rotate(center, radius, angle);
+            if (i == 0) {
+                ctx.moveTo(c.x, c.y);
+            } else {
+                ctx.lineTo(c.x, c.y);
+            }
+        }
+        ctx.stroke();
+        bakeTexture();
+    };
+
+    this.getMaterial = function () {
+        var material = new THREE.MeshPhongMaterial({color: 0xffffff, map: texture, side: THREE.DoubleSide, transparent: true, specular: 0x808080, shininess: 1000});
+        material.flatShading = false;
+        material.depthTest = true;
+        material.depthWrite = false;
+        return material;
+    };
+}
+        var render = new Render(
+            ["#ffffff","#fbfffe","#f7fffe","#f4fffe","#f0fffe","#ecfffe","#e9fffd","#e4fffe","#e1fffe","#ddfffd","#d9fffe","#d5fffe","#d1fffe","#cdfffe","#c9ffff","#c5ffff","#c1ffff","#befdff","#bafdff","#b7fdff","#b4fcff","#b0fcff","#adfcff","#a9fcff","#a7faff","#a3faff","#9ffaff","#9df8ff","#9af8ff","#96f8ff","#94f6ff","#90f5ff","#8df5ff","#89f5ff","#88f3ff","#84f2ff","#81f2ff","#7ff0ff","#7cefff","#78efff","#77ecff","#73ecff","#70ecff","#6debff","#6be8ff","#68e8ff","#65e7ff","#64e5ff","#60e4ff","#5de4ff","#5ce1ff","#59e0ff","#56e0ff","#52dfff","#52dcff","#4edbff","#4bdbff","#4ad7ff","#47d7ff","#44d6ff","#43d3ff","#40d2ff","#3dd1ff","#3ad1ff","#3acdff","#37cdff","#34ccff","#33c8ff","#30c7ff","#2dc7ff","#2dc3ff","#2ac2ff","#27c1ff","#27beff","#24bdff","#21bcff","#1ebbff","#1eb7ff","#1bb6ff","#18b5ff","#18b2ff","#15b1ff","#12b0ff","#12acff","#0fabff","#0caaff","#0aa9ff","#0aa5ff","#07a4ff","#04a3ff","#049fff","#029eff","#009cfe","#0098fe","#0097fc","#0095f9","#0094f7","#0090f7","#008ff5","#008df2","#0089f2","#0088f0","#0086ee","#0082ee","#0081eb","#0080e9","#007ee6","#007be6","#0079e4","#0078e1","#0074e1","#0073df","#0071dc","#006edc","#006cd9","#006bd7","#006ad4","#0066d4","#0065d1","#0064cf","#0060cf","#005fcc","#005ec9","#005ac9","#0059c6","#0058c4","#0057c1","#0053c1","#0052be","#0051bb","#004ebb","#004cb8","#004bb5","#0048b5","#0047b2","#0046af","#0043af","#0042ac","#0040a9","#003fa6","#003ca5","#003ba3","#003aa0","#00379f","#00369c","#003599","#003298","#003195","#003193","#003090","#002d8f","#002c8c","#002b89","#002888","#002785","#002782","#002480","#00237d","#00227a","#002177","#001f76","#001e73","#001d70","#001b6e","#001a6b","#001a68","#001866","#001763","#001660","#00155d","#00135b","#001358","#001255","#001053","#001050","#000f4c","#000d4a","#000d47","#000c44","#000b40","#000a3e","#00093b","#000938","#000835","#000732","#00072e","#00052c","#000528","#000425","#000421","#00031e","#00031b","#000218","#000214","#000111","#00010d","#00000a","#000007","#000003","#000000"], ["#0099ff"]
+        );
+        intro(words.words, function () {
+            if (render.init) {
+                render.init();
+            }
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/81 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:43 GMT -->
+</html>

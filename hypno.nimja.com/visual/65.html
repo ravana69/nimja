@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/65 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:57 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Large Pendulum - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A single pendulum with a spiral, watch, gem or something else inside." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Large Pendulum - Nimja Hypnosis" />
+    <meta property="og:description" content="A single pendulum with a spiral, watch, gem or something else inside." />
+    <meta property="og:url" content="65.html" />
+    <meta property="og:image" content="thumb/Large_Pendulum-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="66.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/65.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="64.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Large Pendulum</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/65.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - Large Pendulum
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    this.colorList = new Colors(colors);
+    this.pos = {x: 0, y: 0, w: 0, h: 0};
+    var defaults = {
+        type: {type: 'int', val: 0, min: 0, max: 5},
+        bpm: {type: 'int', val: 60, min: 10, max: 180},
+        color: {type: 'adjust', val: 2},
+        spread: {type: 'adjust', val: 2},
+        flip: {type: 'dir'},
+        dir: {type: 'dir'}
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.speed = 1 / (60 / t.settings.bpm) * Math.PI;
+    this.shape;
+    this.drawer;
+    switch (t.settings.type) {
+        case 0:
+            t.drawer = new Spiral(this.pos, this.colorList, t.settings.spread);
+            break;
+        case 1:
+            t.drawer = new Watch(this.pos, this.colorList, t.settings.spread, t.settings.bpm);
+            break;
+        case 2:
+            t.drawer = new Gem(this.pos, this.colorList, t.settings.spread);
+            break;
+        case 3:
+            t.drawer = new Cone(this.pos, this.colorList, t.settings.spread);
+            break;
+        case 4:
+            t.drawer = new Round(this.pos, this.colorList, t.settings.spread);
+            break;
+        case 5:
+            t.drawer = new Smiley(this.pos, this.colorList, t.settings.spread);
+            break;
+    }
+    this.restAngle = HPI;
+    this.amplitude = .25;
+    this.update = function (time) {
+        var ctx = t.context;
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        var angle = t.restAngle + t.amplitude * Math.sin(time * t.speed),
+                cSpeed = time * t.settings.color,
+                x = t.pos.x + t.pos.length * Math.cos(angle),
+                y = t.pos.yStart + t.pos.length * Math.sin(angle),
+                x2 = t.pos.x + t.pos.lengthEdge * Math.cos(angle),
+                y2 = t.pos.yStart + t.pos.lengthEdge * Math.sin(angle);
+        t.drawer.pos = {x: x, y: y, size: t.pos.size};
+        t.drawer.draw(t.context, angle, time * t.settings.dir, cSpeed);
+        ctx.strokeStyle = t.colorList.getAdjustHsl(0, cSpeed, 0, 0);
+        ctx.lineWidth = t.pos.thickness;
+        ctx.beginPath();
+        ctx.moveTo(t.pos.x, t.pos.yStart);
+        ctx.lineTo(x2, y2);
+        ctx.moveTo(x + t.pos.size, y);
+        ctx.arc(x, y, t.pos.size, 0, TAU, false);
+        ctx.stroke();
+
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.context.lineCap = "round";
+        t.context.lineJoin = "round";
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.pos.max = coordMath.distance(t.pos);
+        t.pos.size = t.pos.max * .2;
+        t.pos.length = t.pos.max * 2 * t.settings.flip;
+        t.pos.lengthEdge = t.pos.length - t.pos.size * t.settings.flip;
+        t.pos.yStart = t.pos.y - t.pos.length + t.pos.size * .25 * t.settings.flip;
+        t.pos.thickness = t.pos.max * .02;
+        t.amplitude = Math.atan2(t.pos.length * t.settings.flip, t.pos.x - t.pos.size - t.pos.size) - HPI;
+        t.shape = new Shape(t.settings.shape, 1, t.settings.ratio, true);
+        t.drawFrame = 0;
+    };
+}
+
+
+function Spiral(pos, colors, spread) {
+    var t = this;
+    this.pos = pos;
+    this.colors = colors;
+    this.spread = spread;
+    this.settings = {turns: 3, arms: 2, curve: 2.5, dir: 0};
+    this.draw = function (ctx, mainAngle, angle, cSpeed) {
+        var width = 1 / (t.settings.arms * 2);
+        ctx.fillStyle = gradient.createRadial(ctx, rColors(t.colors, cSpeed, this.spread), t.pos.x, t.pos.y, 0, t.pos.size * .95, -1);
+        for (var i = 0; i < t.settings.arms; i++) {
+            ctx.beginPath();
+            ctx.moveTo(t.pos.x, t.pos.y);
+            var offset = i / t.settings.arms + angle;
+            var outCoords = t.calculateArm(t.settings, offset);
+            var inCoords = t.calculateArm(t.settings, offset + width);
+            t.drawArm(ctx, outCoords, false);
+            t.drawArc(ctx, outCoords, inCoords, t.settings.dir);
+            t.drawArm(ctx, inCoords, true);
+            ctx.closePath();
+            ctx.fill();
+        }
+    };
+    this.calculateArm = function (settings, offset) {
+        var result = [];
+        var steps = 180 * settings.turns;
+        var step = 1 / steps;
+        for (var i = 0; i <= 1; i += step) {
+            result.push(this.calculatePoint(settings, offset, i));
+        }
+        return result;
+    };
+    this.calculatePoint = function (settings, offset, cur) {
+        var curRot = (cur * settings.turns * TAU) + offset * TAU;
+        var curSmooth = Math.pow(cur, settings.curve);
+        var curRadius = t.pos.size * curSmooth;
+        if (settings.dir) {
+            curRot = TAU - curRot;
+        }
+        var x = t.pos.x + curRadius * Math.cos(curRot);
+        var y = t.pos.y + curRadius * Math.sin(curRot);
+        return {x: x, y: y};
+    };
+    this.drawArm = function (ctx, coords, reverse) {
+        if (reverse) {
+            coords.reverse();
+        }
+        var c;
+        for (var index in coords) {
+            c = coords[index];
+            ctx.lineTo(c.x, c.y);
+        }
+    };
+    this.drawArc = function (ctx, outCoords, inCoords, antiClockwise) {
+        var c1 = outCoords[outCoords.length - 1];
+        var c2 = inCoords[inCoords.length - 1];
+        var a1 = Math.atan2(c1.y - t.pos.y, c1.x - t.pos.x);
+        var a2 = Math.atan2(c2.y - t.pos.y, c2.x - t.pos.x);
+        ctx.arc(t.pos.x, t.pos.y, t.pos.size, a1, a2, antiClockwise);
+    };
+}
+
+
+function Watch(pos, colors, spread, bpm) {
+    var t = this;
+    this.pos = pos;
+    this.colors = colors;
+    this.spread = spread;
+    this.angleM = bpm / 60 * .5;
+    this.draw = function (ctx, mainAngle, angle, cSpeed) {
+        mainAngle -= Math.PI;
+        ctx.fillStyle = gradient.createRadial(ctx, rColors(t.colors, cSpeed, this.spread), t.pos.x, t.pos.y, 0, t.pos.size * .95);
+        ctx.beginPath();
+        ctx.arc(t.pos.x, t.pos.y, t.pos.size, 0, TAU);
+        ctx.fill();
+        var color = t.colors.getAdjustHsl(0, cSpeed, 0, 0);
+        ctx.strokeStyle = color;
+        t.drawMainHours(ctx, mainAngle);
+        t.drawSubHours(ctx, mainAngle);
+        t.drawHands(ctx, mainAngle, angle, cSpeed);
+        ctx.beginPath();
+        ctx.arc(t.pos.x, t.pos.y, t.pos.size * .101, 0, TAU, false);
+        ctx.fillStyle = color;
+        ctx.fill();
+    };
+    this.drawMainHours = function (ctx, mainAngle) {
+        ctx.lineWidth = t.pos.size * .07;
+        ctx.beginPath();
+        var cur, x1, y1, x2, y2;
+        for (var i = 0; i < 4; i++) {
+            cur = i * HPI + mainAngle;
+            x1 = t.pos.x + t.pos.size * .7 * Math.cos(cur);
+            y1 = t.pos.y + t.pos.size * .7 * Math.sin(cur);
+            x2 = t.pos.x + t.pos.size * 1 * Math.cos(cur);
+            y2 = t.pos.y + t.pos.size * 1 * Math.sin(cur);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+        }
+        ctx.stroke();
+    };
+    this.drawSubHours = function (ctx, mainAngle) {
+        ctx.lineWidth = t.pos.size * .025;
+        ctx.beginPath();
+        var cur, x1, y1, x2, y2;
+        for (var i = 0; i < 12; i++) {
+            if (i % 3 == 0) {
+                continue;
+            }
+            cur = i * TAU / 12 + mainAngle;
+            x1 = t.pos.x + t.pos.size * .8 * Math.cos(cur);
+            y1 = t.pos.y + t.pos.size * .8 * Math.sin(cur);
+            x2 = t.pos.x + t.pos.size * 1 * Math.cos(cur);
+            y2 = t.pos.y + t.pos.size * 1 * Math.sin(cur);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+        }
+        ctx.stroke();
+    };
+    this.drawHands = function (ctx, mainAngle, angle, cSpeed) {
+        var minutes = angle * t.angleM * TAU;
+        t.drawHand(ctx, mainAngle + minutes, .8, .04);
+        t.drawHand(ctx, mainAngle + minutes / 12, .5, .06);
+    };
+    this.drawHand = function (ctx, angle, length, width) {
+        ctx.beginPath();
+        var x, y;
+        x = t.pos.x + t.pos.size * length * Math.cos(angle);
+        y = t.pos.y + t.pos.size * length * Math.sin(angle);
+        ctx.moveTo(t.pos.x, t.pos.y);
+        ctx.lineTo(x, y);
+        ctx.lineWidth = t.pos.size * width;
+        ctx.stroke();
+    };
+}
+
+
+function Cone(pos, colors, spread) {
+    var t = this;
+    this.pos = pos;
+    this.colors = colors;
+    this.spread = spread;
+    this.max = 11;
+    this.memory = [];
+    this.current = 0;
+    this.draw = function (ctx, mainAngle, angle, cSpeed) {
+        if (t.memory.length < t.max) {
+            for (var i = 0; i < t.max; i++) {
+                this.memory.push(t.pos);
+            }
+        }
+        ctx.beginPath();
+        ctx.arc(t.pos.x, t.pos.y, t.pos.size, 0, TAU, false);
+        ctx.fillStyle = t.colors.getAdjustHsl(0, cSpeed, 0, 0);
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-atop';
+        for (var i = 0; i < t.max; i++) {
+            var cur = i / t.max;
+            var color = t.colors.getAdjustHsl(i / (t.max - 1), cSpeed + cur * spread, 0, 0);
+            var pos = t.memory[(i + t.current) % t.max];
+            ctx.beginPath();
+            ctx.arc(t.pos.x, t.pos.y, t.pos.size, 0, TAU, false);
+            ctx.arc(pos.x, pos.y, t.pos.size * cur, 0, TAU, true);
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+        ctx.globalCompositeOperation = 'source-over';
+        t.current = (t.current + 1) % t.max;
+        t.memory[t.current] = t.pos;
+    };
+}
+
+
+function Gem(pos, colors, spread) {
+    var t = this;
+    this.pos = pos;
+    this.colors = colors;
+    this.spread = spread;
+    this.shape = 6;
+    this.offsets = [];
+    this.draw = function (ctx, mainAngle, angle, cSpeed) {
+        angle *= .7;
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
+        mainAngle -= Math.PI;
+        var layers = [
+            [],
+            [],
+            []
+        ];
+        for (var i = 0; i < t.shape; i++) {
+            var a = i / t.shape * TAU + mainAngle + angle;
+            var xP = t.pos.size * Math.cos(a);
+            var yP = t.pos.size * Math.sin(a);
+            layers[0].push({x: (t.pos.x + xP * .25), y: (t.pos.y + yP * .25)});
+            layers[1].push({x: (t.pos.x + xP * .65), y: (t.pos.y + yP * .65)});
+            layers[2].push({x: (t.pos.x + xP * 1), y: (t.pos.y + yP * 1)});
+        }
+        // Layer 1
+        ctx.beginPath();
+        var i, i1, i2, c1, c2, c3, c4, curOffset = 1;
+        for (i = 0; i <= t.shape; i++) {
+            c1 = layers[0][i % t.shape];
+            if (i == 0) {
+                ctx.moveTo(c1.x, c1.y);
+            } else {
+                ctx.lineTo(c1.x, c1.y);
+            }
+        }
+        ctx.fillStyle = t.colors.getAdjustHsl(Math.sin(t.offsets[0] + mainAngle + angle) * .5 + .5, cSpeed, 0, 0);
+        ctx.fill();
+
+        // Layer 2 and 3
+        for (var l = 0; l < 2; l++) {
+            for (i = 0; i < t.shape; i++) {
+                i1 = i;
+                i2 = (i + 1) % t.shape;
+                c1 = layers[0 + l][i1];
+                c2 = layers[1 + l][i1];
+                c3 = layers[1 + l][i2];
+                c4 = layers[0 + l][i2];
+                ctx.beginPath();
+                ctx.moveTo(c1.x, c1.y);
+                ctx.lineTo(c2.x, c2.y);
+                ctx.lineTo(c3.x, c3.y);
+                ctx.lineTo(c4.x, c4.y);
+                ctx.lineTo(c1.x, c1.y);
+                ctx.fillStyle = t.colors.getAdjustHsl(Math.sin(t.offsets[curOffset] + mainAngle + angle) * .5 + .5, cSpeed + (i / t.shape) * spread, 0, 0);
+                ctx.fill();
+                curOffset++;
+            }
+        }
+    };
+    this.init = function () {
+        // Layer 1.
+        t.offsets.push(Math.random() * TAU);
+        // Layer 2 and 3
+        for (var l = 0; l < 2; l++) {
+            for (var i = 0; i < t.shape; i++) {
+                t.offsets.push(Math.random() * TAU);
+            }
+        }
+    };
+    t.init();
+}
+
+
+function Round(pos, colors, spread) {
+    var t = this;
+    this.pos = pos;
+    this.colors = colors;
+    this.spread = spread;
+    this.parts = 33;
+    this.draw = function (ctx, mainAngle, angle, cSpeed) {
+        var slice = TAU / t.parts, a, colIndex,
+                offset = (mainAngle - HPI) * 10 + HPI + angle * .5;
+        for (var i = 0; i < t.parts; i++) {
+            a = i * slice + offset;
+            ctx.beginPath();
+            colIndex = Math.abs(i / (t.parts - 1) * 2 - 1);
+            ctx.fillStyle = t.colors.getAdjustHsl(colIndex, cSpeed + (i / t.parts) * spread, 0, 0);
+            ctx.moveTo(t.pos.x, t.pos.y);
+            ctx.arc(t.pos.x, t.pos.y, t.pos.size, a, a + slice + 0.1, false);
+            ctx.lineTo(t.pos.x, t.pos.y);
+            ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(t.pos.x, t.pos.y, t.pos.size * .101, 0, TAU, false);
+        ctx.fillStyle = t.colors.getAdjustHsl(0, cSpeed + (i / t.parts) * spread, 0, 0);
+        ctx.fill();
+    };
+}
+
+function Smiley(pos, colors, spread) {
+    var t = this;
+    this.pos = pos;
+    this.colors = colors;
+    this.spread = spread;
+    this.parts = 33;
+    this.draw = function (ctx, mainAngle, angle, cSpeed) {
+        mainAngle -= Math.PI;
+        ctx.fillStyle = gradient.createRadial(ctx, rColors(t.colors, cSpeed, this.spread), t.pos.x, t.pos.y, 0, t.pos.size * .95);
+        ctx.beginPath();
+        ctx.arc(t.pos.x, t.pos.y, t.pos.size, 0, TAU);
+        ctx.fill();
+        var color = t.colors.getAdjustHsl(0, cSpeed, 0, 0);
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = t.pos.size * .1;
+        t.drawFace(ctx, mainAngle);
+    };
+    this.drawNormal = function(ctx, mainAngle)
+    {
+        var c1 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .6, mainAngle - .65),
+            c2 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .6, mainAngle + .65),
+            r = t.pos.size * .1;
+        ctx.beginPath();
+        ctx.moveTo(c1.x + r, c1.y);
+        ctx.arc(c1.x, c1.y, r, 0, TAU, false);
+        ctx.moveTo(c2.x + r, c2.y);
+        ctx.arc(c2.x, c2.y, r, 0, TAU, false);
+        ctx.fill();
+
+        ctx.beginPath();
+        var smileSize = 1.2;
+        ctx.arc(t.pos.x, t.pos.y, t.pos.size * .55, Math.PI - smileSize + mainAngle, Math.PI + smileSize + mainAngle, false);
+        ctx.stroke();
+    };
+    this.drawWink = function(ctx, mainAngle)
+    {
+        var c1 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .6, mainAngle - .65),
+            c2 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .6, mainAngle + .65),
+            c2a = t.getCoords(c2.x, c2.y, t.pos.size * .1, mainAngle + HPI),
+            c2b = t.getCoords(c2.x, c2.y, t.pos.size * .1, mainAngle - HPI),
+                r = t.pos.size * .1;
+        ctx.beginPath();
+        ctx.moveTo(c1.x + r, c1.y);
+        ctx.arc(c1.x, c1.y, r, 0, TAU, false);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(c2a.x, c2a.y);
+        ctx.lineTo(c2b.x, c2b.y);
+        ctx.stroke();
+
+        ctx.beginPath();
+        var smileSize = 1;
+        ctx.arc(t.pos.x, t.pos.y, t.pos.size * .55, Math.PI - smileSize * 1.3 + mainAngle, Math.PI + smileSize *.7 + mainAngle, false);
+        ctx.stroke();
+
+    };
+    this.drawHappy = function(ctx, mainAngle)
+    {
+        var c1 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .6, mainAngle - .65),
+            c2 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .6, mainAngle + .65),
+            c3 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .2, mainAngle + Math.PI),
+            r = t.pos.size * .16;
+        ctx.beginPath();
+        ctx.moveTo(c1.x + r, c1.y);
+        ctx.arc(c1.x, c1.y, r, 0, TAU, false);
+        ctx.moveTo(c2.x + r, c2.y);
+        ctx.arc(c2.x, c2.y, r, 0, TAU, false);
+        ctx.moveTo(c3.x, c3.y);
+        var smileSize = HPI;
+        ctx.arc(c3.x, c3.y, t.pos.size * .55, Math.PI - smileSize + mainAngle, Math.PI + smileSize + mainAngle, false);
+        ctx.lineTo(c3.x, c3.y);
+        ctx.stroke();
+    };
+    this.drawSleepy = function(ctx, mainAngle)
+    {
+        var r1 = t.pos.size * .1,
+            r2 = t.pos.size * .25,
+            c1 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .5, mainAngle - .8),
+            c1a = t.getCoords(c1.x, c1.y, r1, mainAngle + HPI),
+            c1b = t.getCoords(c1.x, c1.y, r1, mainAngle - HPI),
+            c2 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .5, mainAngle + .8),
+            c2a = t.getCoords(c2.x, c2.y, r1, mainAngle + HPI),
+            c2b = t.getCoords(c2.x, c2.y, r1, mainAngle - HPI),
+            c3 = t.getCoords(t.pos.x, t.pos.y, t.pos.size * .35, mainAngle + Math.PI),
+            c3a = t.getCoords(c3.x, c3.y, r2, mainAngle + HPI),
+            c3b = t.getCoords(c3.x, c3.y, r2, mainAngle - HPI);
+
+        ctx.beginPath();
+        ctx.moveTo(c1a.x, c1a.y);
+        ctx.lineTo(c1b.x, c1b.y);
+        ctx.moveTo(c2a.x, c2a.y);
+        ctx.lineTo(c2b.x, c2b.y);
+        ctx.moveTo(c3a.x, c3a.y);
+        ctx.lineTo(c3b.x, c3b.y);
+        ctx.stroke();
+    };
+    this.getCoords = function(x, y, radius, angle) {
+        return {
+            x: x + radius * Math.cos(angle),
+            y: y + radius * Math.sin(angle)
+        };
+    };
+    var rand = Math.random();
+    if (rand < .7) {
+        this.drawFace = t.drawNormal;
+    } else if (rand < .85) {
+        this.drawFace = t.drawWink;
+    } else if (rand < .95) {
+        this.drawFace = t.drawHappy;
+    } else {
+        this.drawFace = t.drawSleepy;
+    }
+}
+
+function rColors(colors, cSpeed, spread) {
+    var result = [], max = 10, cur;
+    for (i = 0; i <= max; i++) {
+        cur = i / max;
+        result.push(colors.getAdjustHsl(cur, cSpeed + cur * spread, 0, 0));
+    }
+    return result;
+}
+    var render = new Render(document.getElementById('canvas'), ["#ffffee","#fefeec","#fefdeb","#fdfce9","#fdfce8","#fcfbe6","#fcfae5","#fcf9e4","#fbf9e2","#fbf8e1","#faf7df","#faf6de","#faf6dc","#f9f5db","#f9f4d9","#f8f3d8","#f8f3d6","#f7f2d5","#f7f1d3","#f7f0d2","#f6f0d0","#f6efcf","#f5eecd","#f5edcc","#f5edca","#f4ecc9","#f4ebc7","#f3eac6","#f3eac4","#f2e9c3","#f2e8c1","#f2e7bf","#f1e6be","#f1e6bc","#f0e5bb","#f0e4b9","#efe3b8","#efe3b6","#efe2b4","#eee1b3","#eee0b1","#eddfaf","#eddfae","#ecdeac","#ecddaa","#ecdca9","#ebdca7","#ebdba5","#eadaa4","#ead9a2","#e9d8a0","#e9d89f","#e9d79d","#e8d69b","#e8d599","#e7d498","#e7d496","#e6d394","#e6d292","#e6d191","#e5d08f","#e5d08d","#e4cf8b","#e4ce89","#e3cd87","#e3cc85","#e3cb84","#e2cb82","#e2ca80","#e1c97e","#e1c87c","#e0c77a","#e0c678","#e0c676","#dfc574","#dfc472","#dec370","#dec26e","#ddc16c","#ddc16a","#dcc068","#dcbf65","#dcbe63","#dbbd61","#dbbc5f","#dabc5d","#dabb5a","#d9ba58","#d9b956","#d8b853","#d8b751","#d8b64e","#d7b64c","#d7b549","#d6b447","#d6b344","#d5b242","#d5b13f","#d4b03c","#d4af39","#d4af37","#d2ad37","#d1ac37","#cfab37","#ceaa37","#cca937","#cba837","#c9a637","#c8a538","#c7a438","#c5a338","#c4a238","#c2a138","#c19f38","#bf9e38","#be9d39","#bc9c39","#bb9b39","#b99939","#b89839","#b69739","#b59639","#b39539","#b2933a","#b0923a","#af913a","#ad903a","#ab8e3a","#aa8d3a","#a88c3a","#a78b3b","#a5893b","#a3883b","#a2873b","#a0863b","#9f843b","#9d833b","#9b823b","#9a803c","#987f3c","#967e3c","#957c3c","#937b3c","#917a3c","#90783c","#8e773d","#8c763d","#8a743d","#89733d","#87713d","#85703d","#836f3d","#816d3d","#806c3e","#7e6a3e","#7c693e","#7a673e","#78663e","#76643e","#75633e","#73613e","#71603f","#6f5e3f","#6d5d3f","#6b5b3f","#695a3f","#67583f","#65563f","#63553f","#615340","#5f5240","#5c5040","#5a4e40","#584d40","#564b40","#544940","#514741","#4f4641","#4d4441","#4a4241","#484041","#463e41","#433c41","#413a41","#3e3842","#3b3642","#393442","#363242","#333042","#302e42","#2d2c42","#2a2942","#272743","#242543","#202243","#1c2043","#181d43","#141a43","#0f1743","#091443","#001144"], ["#ffffee","#d4af37","#001144"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/65 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:00 GMT -->
+</html>

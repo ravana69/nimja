@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/85 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:51 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Shape Grid - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Alternating growing shapes on a grid, with cycling colors." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Shape Grid - Nimja Hypnosis" />
+    <meta property="og:description" content="Alternating growing shapes on a grid, with cycling colors." />
+    <meta property="og:url" content="85.html" />
+    <meta property="og:image" content="thumb/Shape_Grid-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="86.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/85.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="84.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Shape Grid</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/85.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - Shape Grid
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    this.colorList = new Colors(colors);
+    this.pos = new Pos();
+    this.stars = [];
+    var defaults = {
+        grid: { type: 'int', val: 0, min: 0, max: 2 },
+        a: { type: 'adjust' }, // Circular spread.
+        b: { type: 'adjust' }, // Growing color spread.
+        c: { type: 'adjust' }, // Cycling color speed
+        d: { type: 'adjust' }, // Rotation.
+        shape: { type: 'int', val: 0, min: 0, max: 10 },
+        ratio: { type: 'float', val: .3, min: 0, max: .8 },
+        count: { type: 'ratio' },
+        size: { type: 'ratio' },
+        speed: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.count = Math.round(8 * t.settings.count);
+    this.shape = new Shape(t.settings.shape, 1, t.settings.ratio, true);
+    this.shapes = [];
+    this.update = function (time) {
+        var ctx = t.context, ctime = time * t.settings.speed * t.settings.dir;
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        for (var index in t.shapes) {
+            t.shapes[index].draw(
+                ctx,
+                t.colorList.colors,
+                t.pos,
+                ctime,
+                time * t.settings.d * .2,
+                time * t.settings.c * 40
+            );
+        }
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.set(width, height);
+        t.pos.radius = t.pos.dist;
+        t.pos.size = t.pos.dist / (t.settings.count * 2) * t.settings.size;
+        t.pos.spread = 180 * t.settings.b;
+    };
+
+    this.createSpiral = function () {
+        t.shapes = [];
+        var rmax = t.settings.count;
+        var max = 10000;
+        var dist = 1 / (t.settings.count);
+        var radius = 0;
+        var angle = 0;
+        var p = new Point();
+        var c;
+        var p2 = new Point(.1, 0);
+        for (var i = 0; i < max; i++) {
+            var cur = i / max;
+            var size = 1;
+            radius = cur;
+            angle = rmax * TAU * -cur;
+            p.set(0, 0).move(radius, angle);
+            if (p.distanceFrom(p2) > (dist * size)) {
+                var phase = (1 - cur) + (angle / TAU * t.settings.a);
+                t.shapes.push(new Circle(t.shape, radius, angle, size, phase));
+                p2 = p.clone();
+            }
+        }
+    };
+
+    this.createHexGrid = function () {
+        t.shapes = [];
+        var rmax = t.settings.count;
+        for (var r = 0; r < rmax; r++) {
+            var max = r == 0 ? 1 : r * 6;
+            var cur = r / rmax;
+            for (var i = 0; i < max; i++) {
+                var icur = i / max;
+                var angle = icur * TAU;
+                var phase = (1 - cur) + (angle / TAU * t.settings.a);
+                t.shapes.push(new Circle(t.shape, cur, angle, 1, phase));
+            }
+
+        }
+    };
+
+    this.createBoxGrid = function () {
+        t.shapes = [];
+        var rmax = t.settings.count;
+        for (var r = 0; r < rmax; r++) {
+            var cur = r / rmax;
+            for (var y = -r; y <= r; y++) {
+                for (var x = -r; x <= r; x++) {
+                    if (y != r && y != -r && x != r && x != -r) {
+                        continue;
+                    }
+                    var radius = Math.sqrt(Math.pow(x / rmax, 2) + Math.pow(y / rmax, 2));
+                    var angle = Math.atan2(y, x) + HPI;
+                    var phase = (1 - cur) + (angle / TAU * t.settings.a);
+                    t.shapes.push(new Circle(t.shape, radius, angle, 1, phase));
+                }
+            }
+        }
+    };
+    switch (t.settings.grid) {
+        case 2:
+            t.createSpiral();
+            break;
+        case 1:
+            t.createBoxGrid();
+            break;
+        default:
+            t.createHexGrid();
+    }
+}
+
+
+function Circle(shape, distance, angle, size, phase) {
+    this.shape = shape;
+    this.distance = distance;
+    this.angle = angle;
+    this.size = size;
+    this.phase = phase;
+}
+
+Circle.prototype = {
+    draw: function (ctx, colors, pos, cur, angleAdd, colorAdd) {
+        var phase = (cur + this.phase),
+            normPhase = Math.abs(phase % 1),
+            dist = Math.cos(phase * TAU) * .5 + .5,
+            colPhase = normPhase < .5 ? (normPhase * 2) * pos.spread : (1 - ((normPhase - .5) * 2)) * -pos.spread,
+            r = pos.size * this.size,
+            pc = (new Point(pos.x, pos.y)).move(this.distance * pos.radius, this.angle + angleAdd),
+            angle = this.distance > 0 ? this.angle + angleAdd : -HPI;
+        ctx.beginPath();
+        this.shape.draw(ctx, pc.x, pc.y, angle, true, r * dist);
+        ctx.fillStyle = getIndex(colors, 1 - dist).adjustHsl(colorAdd + colPhase, 0, 0).toHex();
+        ctx.fill();
+    }
+};
+
+    var render = new Render(document.getElementById('canvas'), ["#ffffff","#fcfeff","#f9fdff","#f6fcff","#f3fbff","#f0faff","#edf9ff","#ebf7ff","#e8f6ff","#e5f5ff","#e3f4ff","#e0f3ff","#ddf2ff","#daf1ff","#d8efff","#d5eeff","#d3edff","#d0ebff","#ceeaff","#cbe9ff","#c9e7ff","#c6e6ff","#c3e5ff","#c1e4ff","#bfe2ff","#bce1ff","#badfff","#b8ddff","#b5dcff","#b2dbff","#b1d9ff","#aed8ff","#acd6ff","#a9d5ff","#a7d3ff","#a5d2ff","#a2d0ff","#a1ceff","#9ecdff","#9ccbff","#9ac9ff","#98c8ff","#95c6ff","#93c5ff","#91c2ff","#8fc1ff","#8cc0ff","#8bbdff","#89bcff","#86baff","#85b8ff","#83b6ff","#80b5ff","#7eb3ff","#7db1ff","#7aafff","#78aeff","#77abff","#75a9ff","#72a8ff","#71a5ff","#6fa4ff","#6da2ff","#6aa1ff","#699eff","#679cff","#659bfe","#6598fd","#6497fb","#6395f9","#6393f9","#6291f7","#6290f5","#618df4","#618cf2","#608bf0","#5f8aee","#5f87ee","#5e86ec","#5d85ea","#5d82e9","#5c81e7","#5b80e5","#5b7de4","#5a7ce2","#597be0","#597ade","#5877dd","#5776db","#5775d9","#5673d9","#5672d7","#5570d5","#546ed4","#546dd2","#536cd0","#526bce","#5268cd","#5167cb","#5066c9","#5064c8","#4f63c6","#4e62c4","#4e5fc3","#4d5ec1","#4c5dbf","#4b5cbd","#4b5abc","#4a59ba","#4958b8","#4955b6","#4855b4","#4754b2","#4751b1","#4650af","#454fad","#444eab","#444caa","#434ba8","#424aa6","#4248a5","#4147a2","#4046a0","#3f449f","#3f439d","#3e429b","#3d4199","#3c3f98","#3b3e95","#3b3e93","#3a3c92","#393b90","#383a8e","#38388c","#37378a","#363688","#363585","#353483","#353381","#34327f","#34317c","#33317a","#323078","#322f75","#312e73","#302d71","#302c6e","#2f2b6c","#2e2a6a","#2d2968","#2d2865","#2c2763","#2b2761","#2b265f","#2a255d","#29245a","#292358","#282256","#272154","#262052","#261f4f","#251f4d","#241e4b","#231d49","#221c47","#211b45","#211a42","#201940","#1f193e","#1e183c","#1d173a","#1c1638","#1b1536","#1b1434","#1a1432","#181330","#18122d","#17112b","#161029","#150f27","#140f25","#130e23","#120d21","#110c1f","#100b1d","#0f0b1b","#0e0a19","#0d0917","#0c0815","#0a0713","#0a0711","#08060f","#07050d","#06040b","#050309","#040307","#030205","#020103","#010001","#000000"], ["#6699ff"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/85 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:54 GMT -->
+</html>

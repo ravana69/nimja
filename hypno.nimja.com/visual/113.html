@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/113 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:27:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Kaleidoshape - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A gently-moving, deep variation of colors that create subtle patterns in their depth." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Kaleidoshape - Nimja Hypnosis" />
+    <meta property="og:description" content="A gently-moving, deep variation of colors that create subtle patterns in their depth." />
+    <meta property="og:url" content="113.html" />
+    <meta property="og:image" content="thumb/Kaleidoshape-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="114.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/113.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="112.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Kaleidoshape</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/113.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <script src="http://assets.nimja.com/js/three.min.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/threehelper.js"></script>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<!-- https://threejs.org/docs/index.html -->
+<script>
+    var renderer_canvas = document.getElementById('canvas');
+    function hasWebGL() {
+        try {
+            return !!(window.WebGLRenderingContext && (renderer_canvas.getContext('webgl') || renderer_canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    }
+    if (false && !hasWebGL()) {
+        alert("WebGL not supported.");
+    } else {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: renderer_canvas });
+
+        function resize(w, h) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            if (render.resize) {
+                render.resize(w, h);
+            }
+        }
+
+        function perFrame(time, diff) {
+            words.update();
+            render.update(time, diff);
+            renderer.render(scene, camera);
+        }
+        var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+        config = new Config([]);
+        //Spiral.
+        
+/**
+ * By Nimja - Kaleidoshape
+ *
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(colors, colorSet) {
+    var t = this;
+    this.colors = colors;
+    this.colorSet = colorSet;
+    this.mainColor = new Color(colorSet[0]);
+    this.colorList = (new Colors(colors)).colors;
+    var defaults = {
+        shape: {type: 'int', val: 3, min: 0, max: 10},
+        ratio: { type: 'float', min: 0, max: .99, val: .1 },
+        alpha: { type: 'float', min: .05, max: 1, val: .4 },
+        grow: { type: 'float', min: 0, max: 1, val: .4 },
+        depth: {type: 'ratio'},
+        count: { type: 'ratio' },
+        steps: { type: 'ratio' },
+        r: { type: 'float', min: 0, max: 1, val: .1 },
+        color: {type: 'adjust', val: 1.9},
+        spread: {type: 'adjust', val: 1},
+        speed: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.speed *= -3;
+    this.settings.count = Math.round(this.settings.count * 15);
+    this.settings.steps = Math.round(this.settings.steps * 7);
+    this.settings.color *= 180;
+    this.settings.spread *= 360;
+    this.settings.grow *= .25;
+    this.objects = [];
+    this.depth = 10 * this.settings.depth;
+
+    this.update = function (time, diff) {
+        var p = new Point(0, 0),
+        speed = t.settings.speed * time * t.settings.dir,
+        cTime = time * t.settings.color;
+        for (var i = 0; i < t.objects.length; i++) {
+            var obj = t.objects[i];
+            var cur = i / t.objects.length;
+            // p.set(0, .1).rotate(cur * TAU + time);
+
+            var col = getIndex(t.colorList, cur).adjustHsl(cTime + cur * t.settings.spread, 0, 0).toInt();
+
+            obj.position.set(p.x, p.y, (.5 + Math.sin(cur * TAU + speed * .2) * .5) * t.depth);
+            obj.material.color.setHex(col);
+            obj.rotation.z = speed * cur * .1;
+        }
+        t.updateTexture(time);
+    };
+    this.init = function () {
+        camera.position.z = t.depth + 3;
+
+        t.updateTexture(0);
+
+        var geometry = new THREE.PlaneGeometry(10, 10);
+        for (var i = 0; i < t.settings.count; i++) {
+            var settings = {
+                color: 0xffffff,
+                depthTest: false,
+                transparent: true,
+                opacity: t.settings.alpha,
+                map: t.texture,
+                // blending: THREE.NormalBlending,
+                blending: THREE.AdditiveBlending,
+                // blending: THREE.SubtractiveBlending,
+                // blending: THREE.MultiplyBlending,
+                flatShading: true
+            };
+            var material = new THREE.MeshBasicMaterial(settings);
+
+            var plane = new THREE.Mesh(geometry, material);
+            scene.add(plane);
+            t.objects.push(plane);
+        }
+    };
+
+    this.updateTexture = function(time) {
+        var size = 1024,
+            s = size * .5,
+            steps = t.settings.steps,
+            radius = s / (steps - 1),
+            cr = radius * (.5 + Math.sin(time) * t.settings.grow),
+            csteps = 0,
+            a;
+        if (!t.texture) {
+            var tr = new TextureRenderer(size, t.colors, false);
+            t.ctx = tr.ctx
+            t.texture = tr.getTexture();
+            t.texture.repeat.set(1, 1);
+            t.shape = new Shape(t.settings.shape, 1, t.settings.ratio, true);
+            t.shape.resetRadius(.5);
+            t.color = new Color('#ffffff');
+        }
+        ctx = t.ctx;
+        shape = t.shape;
+        t.texture.needsUpdate = true;
+        var point = new Point();
+
+
+        var gradient = ctx.createRadialGradient(s, s, 0, s, s, s);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = gradient;
+        ctx.clearRect(0, 0, size, size);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(size, 0);
+        ctx.lineTo(size, size);
+        ctx.lineTo(0, size);
+        ctx.lineTo(0, 0);
+        for (var r = 0; r < (steps * .9); r++) {
+            csteps = 6 * r;
+            if (r == 0) {
+                t.shape.draw(ctx, s, s, -Math.PI, false, cr);
+                continue;
+            }
+            dir = r & 1 ? -t.settings.r: t.settings.r;
+            for (var i = 0; i < csteps; i++) {
+                a = i / csteps * TAU + time * dir;
+                point.set(s, s).move(radius * r, a);
+                t.shape.draw(ctx, point.x, point.y, a + time * dir * -2, false, cr);
+            }
+        }
+        ctx.fill();
+
+        t.texture.needsUpdate = true;
+    };
+}
+        var render = new Render(
+            ["#123456","#123456","#123456","#133456","#133557","#133557","#143557","#143658","#153658","#153658","#153758","#163759","#163759","#163759","#17385a","#17385a","#17385a","#18395a","#18395b","#18395b","#193a5b","#193a5b","#193a5c","#1a3a5c","#1a3b5c","#1a3b5d","#1b3b5d","#1b3c5d","#1b3c5d","#1c3c5e","#1c3c5e","#1c3d5e","#1c3d5f","#1d3d5f","#1d3e5f","#1d3e5f","#1e3e60","#1e3e60","#1e3f60","#1f3f60","#1f3f61","#1f4061","#1f4061","#204062","#204062","#204162","#214162","#214163","#214163","#214263","#224263","#224264","#224364","#234364","#234365","#234365","#234465","#244465","#244466","#244466","#254566","#254566","#254567","#254667","#264667","#264667","#264668","#264768","#274768","#274768","#274769","#274869","#284869","#28486a","#28486a","#29496a","#29496a","#29496b","#29496b","#2a4a6b","#2a4a6b","#2a4a6c","#2a4b6c","#2b4b6c","#2b4b6c","#2b4b6d","#2b4c6d","#2c4c6d","#2c4c6d","#2c4c6e","#2c4d6e","#2d4d6e","#2d4d6e","#2d4d6f","#2d4e6f","#2e4e6f","#2e4e6f","#2e4e70","#2e4f70","#2f4f70","#2f4f70","#2f4f71","#2f5071","#2f5071","#305071","#305072","#305172","#305172","#315172","#315173","#315273","#315273","#325273","#325274","#325374","#325374","#335374","#335375","#335475","#335475","#335475","#345476","#345576","#345576","#345576","#355577","#355577","#355677","#355677","#355678","#365678","#365778","#365778","#365779","#375779","#375879","#375879","#37587a","#38587a","#38597a","#38597a","#38597b","#38597b","#395a7b","#395a7b","#395a7c","#395a7c","#395a7c","#3a5b7c","#3a5b7d","#3a5b7d","#3a5b7d","#3b5c7d","#3b5c7d","#3b5c7e","#3b5c7e","#3b5d7e","#3c5d7e","#3c5d7f","#3c5d7f","#3c5d7f","#3c5e7f","#3d5e80","#3d5e80","#3d5e80","#3d5f80","#3e5f81","#3e5f81","#3e5f81","#3e6081","#3e6082","#3f6082","#3f6082","#3f6082","#3f6182","#3f6183","#406183","#406183","#406283","#406284","#406284","#416284","#416284","#416385","#416385","#416385","#426385","#426485","#426486","#426486","#426486","#436586","#436587","#436587","#436587","#436587","#446688","#446688","#446688","#446688","#456789"], ["#123456","#456789"]
+        );
+        intro(words.words, function () {
+            if (render.init) {
+                render.init();
+            }
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/113 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:27:14 GMT -->
+</html>

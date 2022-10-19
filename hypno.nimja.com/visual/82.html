@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/82 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:43 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Endless Pipes - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Traverse through an endless depth of pipes that keep forming before you. Nostalgia optional." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Endless Pipes - Nimja Hypnosis" />
+    <meta property="og:description" content="Traverse through an endless depth of pipes that keep forming before you. Nostalgia optional." />
+    <meta property="og:url" content="82.html" />
+    <meta property="og:image" content="thumb/Endless_Pipes-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="83.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/82.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="81.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Endless Pipes</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/82.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <script src="http://assets.nimja.com/js/three.min.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/threehelper.js"></script>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<!-- https://threejs.org/docs/index.html -->
+<script>
+    var renderer_canvas = document.getElementById('canvas');
+    function hasWebGL() {
+        try {
+            return !!(window.WebGLRenderingContext && (renderer_canvas.getContext('webgl') || renderer_canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    }
+    if (false && !hasWebGL()) {
+        alert("WebGL not supported.");
+    } else {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: renderer_canvas });
+
+        function resize(w, h) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            if (render.resize) {
+                render.resize(w, h);
+            }
+        }
+
+        function perFrame(time, diff) {
+            words.update();
+            render.update(time, diff);
+            renderer.render(scene, camera);
+        }
+        var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+        config = new Config([]);
+        //Spiral.
+        /**
+ * By Nimja - Endless Pipes
+ *
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(colors, colorSet) {
+    var t = this;
+    this.colors = colors;
+    this.hexColors = (new Colors(colors)).toInt();
+    this.colorSet = colorSet;
+    this.cubes = [];
+    this.max = 20;
+    var defaults = {
+        cap: { type: 'int', val: 0, min: 0, max: 3 },
+        scale: { type: 'int', val: 5, min: 1, max: 10 },
+        pipes: { type: 'int', val: 2, min: 1, max: 10 },
+        width: { type: 'ratio' },
+        angle: { type: 'float', val: .25, min: .01, max: 1 },
+        alpha: { type: 'float', val: 1, min: .1, max: 1 },
+        straight: { type: 'float', val: .5, min: 0, max: 1 },
+        flat: { type: 'bool' },
+        shadow: { type: 'bool' },
+        color: { type: 'adjust', val: 2 },
+        speed: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.max = t.settings.scale * 2;
+    this.settings.pipes = Math.min(t.settings.max);
+    this.settings.sides = t.settings.flat ? 8 : 16;
+    this.settings.rotSteps = Math.round(t.settings.sides * .5);
+    this.settings.metal = true;
+    this.threeHelper = new ThreeHelper(colors, colorSet);
+    this.previous = 0;
+    this.geometries = 0;
+    this.light;
+    this.group = new THREE.Group();
+    this.cube = new Cube(this.settings.max);
+    this.radius = .5 * .2 * t.settings.width;
+    this.prevZ = 0;
+    this.blockTime = 0;
+    this.blockSize = 0.05;
+    this.pipes = [];
+    /**
+     * Every frame.
+     * @param {Number} time
+     */
+    this.update = function (time) {
+        var diff = time - t.previous,
+            adjust = diff * t.settings.speed;
+        t.previous = time;
+        if (diff > 1 || adjust > 1) {
+            return;
+        }
+        t.group.position.z += adjust * t.settings.dir;
+        var curZ = Math.floor(t.group.position.z);
+        if (curZ != t.prevZ) {
+            t.clearRow(curZ);
+        }
+        t.prevZ = curZ;
+        t.blockTime += adjust;
+        if (t.blockTime > t.blockSize) {
+            t.blockTime -= t.blockSize;
+            for (var i = 0; i < t.pipes.length; i++) {
+                if (!t.pipes[i].grow()) {
+                    t.pipes[i] = t.getPipe();
+                }
+            }
+        }
+        if (t.settings.color !== 0) {
+            renderer.domElement.style.filter = 'hue-rotate(' + Math.floor(time * t.settings.color * 360 % 360) + 'deg)';
+        }
+    };
+
+    this.clearRow = function (curZ) {
+        var dir = curZ > t.prevZ;
+        var row = t.cube.shiftRows(dir), cur;
+        for (var i in row) {
+            cur = row[i];
+            if (cur instanceof THREE.Mesh) {
+                t.group.remove(cur);
+            }
+        }
+        for (var index in t.pipes) {
+            t.pipes[index].shift(curZ, dir);
+        }
+    };
+
+
+    this.getPipe = function () {
+        var pipe = new Pipe(
+            t.cube,
+            t.group,
+            t.getMaterial(getIndex(t.colors, Math.random()), t.settings.alpha, !t.settings.flat),
+            t.geometries
+        );
+        pipe.offset = t.prevZ;
+        pipe.straightChance = t.settings.straight;
+        return pipe;
+    };
+
+    /**
+     * Render the particles..
+     * @returns {undefined}
+     */
+    this.init = function () {
+        t.geometries = {
+            straight: t.getStraightGeometry(),
+            bend: t.getBendGeometry()
+        };
+        var ends = [t.getEndPipe(), t.getEndRound(), t.getEndFlat()];
+        if (t.settings.cap < ends.length) {
+            t.geometries.end = [ends[t.settings.cap]];
+        } else {
+            t.geometries.end = ends;
+        }
+
+        for (var i = 0; i < t.settings.pipes; i++) {
+            t.pipes.push(t.getPipe());
+        }
+
+        scene.add(t.group);
+
+        camera.up = new THREE.Vector3(0, 0, 1);
+        camera.position.z = t.cube.size * .95;
+
+        // Fog.
+        var limit = t.cube.size - .2;
+        scene.fog = new THREE.Fog(0x000000, limit * .8, limit);
+
+        //Create a PointLight
+        t.light = new THREE.PointLight(0xffffff, 1.1, t.cube.size * 1.2);
+        t.light.position.z = camera.position.z * .95;
+        t.light.position.y = 1;
+
+
+        if (t.settings.shadow || true) {
+            renderer.shadowMap.enabled = true;
+            //            renderer.shadowMap.type = THREE.BasicShadowMap; // Fastest
+            //            renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Slowest
+            renderer.shadowMap.type = THREE.PCFShadowMap; // medium.
+            t.light.castShadow = true;
+            t.light.shadow.mapSize.width = 1024;
+            t.light.shadow.mapSize.height = 1024;
+            t.light.shadow.radius = 2;
+        }
+
+        scene.add(t.light);
+    };
+
+
+    this.getMaterial = function (color, opacity, soft) {
+        var color = { color: (new Color(color).toInt()), specular: 0x333333 };
+        color.emissive = 0x101010;
+        // Opacity.
+        if (opacity < 1) {
+            color.transparent = true;
+            color.opacity = opacity;
+        }
+        // Environment map.
+        if (t.settings.metal) {
+            color.envMap = t.createMetalEnvMap();
+            color.reflectivity = 0.5;
+        }
+        var material = new THREE.MeshPhongMaterial(color);
+        material.shininess = 50;
+
+        material.flatShading = !soft;
+        //        material.vertexColors = THREE.VertexColors;
+        return material;
+    };
+
+    this.createMetalEnvMap = function () {
+        var canvas = document.createElement("canvas");
+        var res = 64, hres = res * .5;
+        canvas.width = res;
+        canvas.height = res;
+        var ctx = canvas.getContext('2d');
+
+        var radius = coordMath.distance({ x: hres, y: hres });
+        ctx.fillStyle = gradient.createRadial(ctx, t.colors, hres, hres, 0, radius);
+        ctx.fillRect(0, 0, res, res);
+
+        // Darken edges.
+        var colors = ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 1)'];
+        ctx.fillStyle = gradient.createRadial(ctx, colors, hres, hres, hres * .5, radius);
+        ctx.fillRect(0, 0, res, res);
+
+        var envMap = new THREE.Texture(canvas);
+        envMap.mapping = THREE.SphericalReflectionMapping;
+        envMap.flipY = false;
+        envMap.needsUpdate = true;
+        return envMap;
+    };
+
+
+    this.getMaterialMetal = function (color, opacity, soft) {
+        var material = t.threeHelper.getMaterial(0, soft, true, true);
+        material.color.set(new Color(color).toInt());
+        //        material.color.set(0xffffff);
+        material.specular.set(0x444444);
+        material.emissive.set(0x101010);
+
+        if (opacity < 1) {
+            material.transparent = true;
+            material.opacity = opacity;
+        }
+        material.combine = THREE.MultiplyOperation;
+        material.reflectivity = 0.5;
+        material.shininess = 50;
+        return material;
+    };
+
+
+    this.fixEdge = function (geometry, start, length, direction) {
+        var end = start + length;
+        var faceV = ['a', 'b', 'c'];
+        var inverse = false;
+        if (direction[0] == '-') {
+            inverse = true;
+            direction = direction[1];
+        }
+        for (var i in geometry.faces) {
+            var face = geometry.faces[i];
+            for (var r in faceV) {
+                var index = face[faceV[r]];
+                if (index < start || index >= end) {
+                    continue;
+                }
+                var vert = geometry.vertices[index].clone();
+                vert[direction] = 0;
+                vert.normalize();
+                if (inverse) {
+                    vert.negate();
+                }
+                face.vertexNormals[r] = vert;
+            }
+        }
+    };
+
+    this.setNormals = function (geometry, start, length, vector) {
+        var end = start + length;
+        var faceV = ['a', 'b', 'c'];
+        for (var i = start; i < end; i++) {
+            var face = geometry.faces[i];
+            for (var r in faceV) {
+                face.vertexNormals[r] = vector.clone();
+            }
+        }
+    };
+
+    this.getStraightGeometry = function () {
+        var coords = [
+            { z: 0, r: 1 },
+            { z: 1, r: 1 }
+        ];
+        var bands = t.getBandsForCoords(coords);
+        var geometry = t.createForCylinderData(bands);
+        t.fixEdge(geometry, 0, geometry.vertices.length, 'z');
+        return geometry;
+    };
+
+    /**
+     *
+     * @returns {geometry|Render.createForCylinderData.geometry|THREE.Geometry}
+     */
+    this.getEndRound = function () {
+        var coords = [],
+            steps = t.settings.rotSteps;
+        for (var i = 0; i < steps; i++) {
+            var angle = i / (steps - 1) * HPI;
+            var z = .2 + t.radius - t.radius * Math.cos(angle);
+            var r = Math.sin(angle);
+            coords.push({ z: z, r: r });
+        }
+        coords.push({ z: 1, r: 1 });
+        var bands = t.getBandsForCoords(coords);
+        var geometry = t.createForCylinderData(bands);
+        t.fixEdge(geometry, geometry.vertices.length - t.settings.sides, t.settings.sides, 'z');
+        return geometry;
+    };
+
+    /**
+     * Like a pipe.
+     * @returns {geometry|Render.createForCylinderData.geometry|THREE.Geometry}
+     */
+    this.getEndPipe = function () {
+        var coords = [
+            { z: .95, r: 0 },
+            { z: .95, r: .9 },
+            { z: .2, r: .9 },
+            { z: .2, r: 1.2 },
+            { z: .2 + t.radius, r: 1.2 },
+            { z: .2 + t.radius, r: 1 },
+            { z: 1, r: 1 }
+        ];
+        var bands = t.getBandsForCoords(coords);
+        var geometry = t.createForCylinderData(bands);
+        t.fixEdge(geometry, 1, t.settings.sides * 2, '-z');
+        t.fixEdge(geometry, 1 + t.settings.sides * 3, geometry.vertices.length, 'z');
+        //        t.setNormals(geometry, 0, t.settings.sides, new THREE.Vector3(0, 0, 1));
+        t.setNormals(geometry, t.settings.sides * 3, t.settings.sides * 2, new THREE.Vector3(0, 0, 1));
+        t.setNormals(geometry, t.settings.sides * 7, t.settings.sides * 2, new THREE.Vector3(0, 0, -1));
+        return geometry;
+    };
+
+    /**
+     * Like a pipe.
+     * @returns {geometry|Render.createForCylinderData.geometry|THREE.Geometry}
+     */
+    this.getEndFlat = function () {
+        var coords = [
+            { z: .2, r: 0 },
+            { z: .2, r: 1 },
+            { z: 1, r: 1 }
+        ];
+        var bands = t.getBandsForCoords(coords);
+        var geometry = t.createForCylinderData(bands);
+        t.fixEdge(geometry, 0, geometry.vertices.length, 'z');
+        t.setNormals(geometry, 0, t.settings.sides, new THREE.Vector3(0, 0, 1));
+        return geometry;
+    };
+
+    /**
+     * Like a pipe.
+     * @returns {geometry|Render.createForCylinderData.geometry|THREE.Geometry}
+     */
+    this.getEndPoint = function () {
+        var coords = [
+            { z: .2, r: 0 },
+            { z: .2 + t.radius, r: 1 },
+            { z: 1, r: 1 }
+        ];
+        var bands = t.getBandsForCoords(coords);
+        var geometry = t.createForCylinderData(bands);
+        t.fixEdge(geometry, geometry.vertices.length - t.settings.sides, t.settings.sides, 'z');
+        return geometry;
+    };
+
+    this.getBendGeometry = function () {
+        var steps = t.settings.sides,
+            angle = TAU / steps,
+            c = { x: 0, y: 0 },
+            bands = [],
+            rotSteps = Math.round(t.settings.rotSteps * Math.min(1, t.settings.angle + .4) * 2),
+            dist = t.radius + (.5 * .93 - t.radius) * t.settings.angle,
+            cpoint = { x: dist, y: dist };
+
+        // Beginning.
+        var band = [];
+        for (var i = 0; i < steps; i++) {
+            var c1 = coordMath.rotate(c, t.radius, i * angle);
+            band.push(new THREE.Vector3(c1.x, c1.y, .5));
+        }
+        bands.push(band);
+
+        // Make corner.
+        for (var r = 0; r < rotSteps; r++) {
+            var cur = r / (rotSteps - 1);
+            var zangle = cur * HPI + HPI * 2;
+            band = [];
+            for (var i = 0; i < steps; i++) {
+                // For the Y coord.
+                var c1 = coordMath.rotate(c, t.radius, i * angle);
+                // For X / Z
+                var c2 = coordMath.rotate(cpoint, dist - c1.x, zangle);
+                band.push(new THREE.Vector3(c2.x, c1.y, c2.y));
+            }
+            bands.push(band);
+        }
+
+        // End
+        var band = [];
+        for (var i = 0; i < steps; i++) {
+            var c1 = coordMath.rotate(c, t.radius, i * angle);
+            band.push(new THREE.Vector3(.5, c1.y, c1.x));
+        }
+        bands.push(band);
+
+        var geometry = t.createForCylinderData(bands);
+        t.fixEdge(geometry, 0, t.settings.sides, 'z');
+        t.fixEdge(geometry, geometry.vertices.length - t.settings.sides, t.settings.sides, 'x');
+        return geometry;
+    };
+
+    /**
+     * Give z and r coords for straight pieces.
+     * @param {Array} coords
+     * @returns {Array}
+     */
+    this.getBandsForCoords = function (coords) {
+        var steps = t.settings.sides,
+            angle = TAU / steps,
+            bands = [],
+            c = { x: 0, y: 0 },
+            coord;
+        for (var index in coords) {
+            coord = coords[index];
+            var band = [];
+            if (coord.r == 0) {
+                band.push(new THREE.Vector3(c.x, c.y, .5 - coord.z));
+            } else {
+                for (var i = 0; i < steps; i++) {
+                    var c1 = coordMath.rotate(c, coord.r * t.radius, i * angle);
+                    band.push(new THREE.Vector3(c1.x, c1.y, .5 - coord.z));
+                }
+            }
+            bands.push(band);
+        }
+        return bands;
+    }
+
+    /**
+     * Create from cyclindrical/cone/ish data.
+     *
+     * @param {Array} bands
+     * @returns {geometry}
+     */
+    this.createForCylinderData = function (bands) {
+        var geometry = new THREE.Geometry(),
+            band,
+            index = 0,
+            nextIndex = 0,
+            straight, vertical,
+            curBand,
+            nextBand,
+            max = bands.length - 1,
+            rNext, p0, p1, p2, p3;
+        // Add vertices.
+        for (var i = 0; i < bands.length; i++) {
+            band = bands[i];
+            for (var r = 0; r < band.length; r++) {
+                geometry.vertices.push(band[r]);
+            }
+        }
+        // Add faces, allowing for 'collapsed' faces.
+        for (var i = 0; i < max; i++) {
+            curBand = bands[i];
+            nextBand = bands[i + 1];
+            straight = curBand[0].x == nextBand[0].x && curBand[0].y == nextBand[0].y;
+            vertical = curBand[0].z == nextBand[0].z;
+
+            nextIndex = index + curBand.length;
+            //Cap on this end.
+            if (curBand.length == 1) {
+                for (var r = 0; r < nextBand.length; r++) {
+                    rNext = (r + 1) % nextBand.length;
+                    p0 = index;
+                    p1 = nextIndex + r;
+                    p2 = nextIndex + rNext;
+                    geometry.faces.push(new THREE.Face3(p0, p1, p2));
+                }
+            } else if (nextBand.length == 1) {
+                for (var r = 0; r < curBand.length; r++) {
+                    rNext = (r + 1) % curBand.length;
+                    p0 = index + r;
+                    p1 = nextIndex;
+                    p2 = index + rNext;
+                    geometry.faces.push(new THREE.Face3(p0, p1, p2));
+                }
+            } else {
+                // Around the square bl-0, br-1, tr-2, tl-3
+                for (var r = 0; r < curBand.length; r++) {
+                    rNext = (r + 1) % curBand.length;
+                    p0 = index + r;
+                    p1 = nextIndex + r;
+                    p2 = nextIndex + rNext;
+                    p3 = index + rNext;
+                    geometry.faces.push(new THREE.Face3(p0, p1, p2));
+                    geometry.faces.push(new THREE.Face3(p2, p3, p0));
+                }
+            }
+            //
+            index = nextIndex;
+        }
+        // Automatically compute normals.
+        geometry.computeFaceNormals();
+        geometry.computeVertexNormals();
+        return geometry;
+    };
+}
+
+function Cube(size) {
+    var t = this;
+    this.size = size;
+    this.max = size - 1;
+    this.offset = (this.max) * .5;
+    t.data = new Array(t.size);
+    for (var i = 0; i < t.size; i++) {
+        t.data[i] = new Array(t.size * t.size);
+    }
+    this.getItem = function (x, y, z) {
+        return t.data[z][x + y * 25];
+    };
+    this.setItem = function (x, y, z, item) {
+        t.data[z][x + y * 25] = item;
+    };
+
+    /**
+     * Shift the rows in Z.
+     * @returns {Array}
+     */
+    this.shiftRows = function (dir) {
+        var newBlock = new Array(t.size * t.size);
+        if (dir) {
+            t.data.unshift(newBlock);
+            return t.data.pop();
+        } else {
+            t.data.push(newBlock);
+            return t.data.shift();
+        }
+    };
+    /**
+     * Left right, up down, further, closer.
+     * @param {type} pos
+     * @param {type} dir
+     * @returns {Boolean}
+     */
+    this.canMoveDirection = function (x, y, z, direction) {
+        switch (direction) {
+            case 1:
+                return (x > 0 && !t.getItem(x - 1, y, z));
+            case 2:
+                return (x < t.max && !t.getItem(x + 1, y, z));
+            case 3:
+                return (y > 0 && !t.getItem(x, y - 1, z));
+            case 4:
+                return (y < t.max && !t.getItem(x, y + 1, z));
+            case 5:
+                return (z > 0 && !t.getItem(x, y, z - 1));
+            case 6:
+                return (z < t.max && !t.getItem(x, y, z + 1));
+            default:
+                return false;
+        }
+    };
+}
+
+
+function Pipe(cube, group, baseMaterial, geometries) {
+    var t = this;
+    this.offset = 0;
+    this.cube = cube;
+    this.group = group;
+    this.pos = { x: 0, y: 0, z: 0 };
+    this.baseMaterial = baseMaterial;
+    this.previousDir = 0;
+    this.geometries = geometries;
+    this.alive = true;
+    this.maxAge = Math.round(t.cube.size * (.5 + Math.random() * 2));
+    this.age = 0;
+    this.straightChance = 0;
+    this.possibilities = {
+        0: [1, 2, 3, 4, 5, 6],
+        1: [1, 3, 4, 5, 6],
+        2: [2, 3, 4, 5, 6],
+        3: [3, 1, 2, 5, 6],
+        4: [4, 1, 2, 5, 6],
+        5: [5, 1, 2, 3, 4],
+        6: [6, 1, 2, 3, 4]
+    };
+    this.aiming = {
+        1: { x: 0, y: HPI },
+        2: { x: 0, y: -HPI },
+        3: { x: -HPI, y: 0 },
+        4: { x: HPI, y: 0 },
+        5: { x: 0, y: 0 },
+        6: { x: Math.PI, y: 0 }
+    };
+    this.bending = {
+        1: { 3: -HPI, 4: HPI, 5: 0, 6: Math.PI },
+        2: { 3: -HPI, 4: HPI, 5: Math.PI, 6: 0 },
+        3: { 1: Math.PI, 2: 0, 5: HPI, 6: -HPI },
+        4: { 1: Math.PI, 2: 0, 5: -HPI, 6: HPI },
+        5: { 1: Math.PI, 2: 0, 3: -HPI, 4: HPI },
+        6: { 1: Math.PI, 2: 0, 3: HPI, 4: -HPI }
+    };
+    this.shift = function (newZ, dir) {
+        var zPlus = dir ? 1 : -1;
+        t.setPosition(t.pos.x, t.pos.y, t.pos.z + zPlus, false);
+        this.offset = newZ;
+    };
+    /**
+     * Set position, if outside of cube, we dead.
+     */
+    this.setPosition = function (x, y, z, check) {
+        t.pos.x = x;
+        t.pos.y = y;
+        t.pos.z = z;
+        if (x < 0 || y < 0 || z < 0 ||
+            x > t.cube.max || y > t.cube.max || z > t.cube.max
+        ) {
+            t.alive = false;
+        } else if (check) {
+            t.alive = !t.cube.getItem(t.pos.x, t.pos.y, t.pos.z);
+            if (t.alive) {
+                t.cube.setItem(t.pos.x, t.pos.y, t.pos.z, true);
+            }
+        }
+    };
+    this.grow = function () {
+        if (!t.alive) {
+            return false;
+        }
+        if (t.age > t.maxAge) {
+            t.alive = false;
+        } else {
+            // Get new direction.
+            var directions = _getDirections();
+            t.alive = directions.length > 0;
+        }
+        if (!t.alive) {
+            t.alive = false;
+            if (t.age > 0) {
+                _addBlock(t.pos.x, t.pos.y, t.pos.z, 0);
+            }
+            return false;
+        }
+        var direction = directions.length > 1 ? getIndex(directions, Math.random()) : directions[0];
+        // Draw block in old place heading towards this one.
+        _addBlock(t.pos.x, t.pos.y, t.pos.z, direction);
+        switch (direction) {
+            case 1: t.pos.x--; break;
+            case 2: t.pos.x++; break;
+            case 3: t.pos.y--; break;
+            case 4: t.pos.y++; break;
+            case 5: t.pos.z--; break;
+            case 6: t.pos.z++; break;
+        }
+        t.cube.setItem(t.pos.x, t.pos.y, t.pos.z, true);
+        t.age++;
+        return true;
+    };
+    /**
+     * Get next direction.
+     * @returns {Array|Pipe._getDirections.result}
+     */
+    function _getDirections() {
+        var result = [],
+            dirs = t.possibilities[t.previousDir],
+            goStraight = Math.random() < t.straightChance,
+            dir;
+
+        for (var i in dirs) {
+            dir = dirs[i];
+            if (t.cube.canMoveDirection(t.pos.x, t.pos.y, t.pos.z, dir)) {
+                if (dir == t.previousDir && goStraight) {
+                    return [dir];
+                }
+                result.push(dir);
+            }
+        }
+        if (result[0] == t.previousDir && result.length > 1) {
+            result.shift();
+        }
+        return result;
+    }
+
+    function _addBlock(x, y, z, direction) {
+        var bend = false;
+        var final = false;
+        if (t.previousDir == 0) {
+            var geometry = getIndex(t.geometries.end, Math.random());
+            t.previousDir = direction;
+        } else if (direction == 0) {
+            var geometry = getIndex(t.geometries.end, Math.random());
+            final = true;
+        } else {
+            bend = t.previousDir != direction;
+            var geometry = !bend ? t.geometries.straight : t.geometries.bend;
+        }
+        var object = new THREE.Mesh(geometry, t.baseMaterial);
+        // Set rotation for continuing.
+        if (t.previousDir > 0) {
+            var aim = t.aiming[t.previousDir];
+            object.rotation.x = aim.x;
+            object.rotation.y = aim.y;
+            if (final) {
+                object.rotation.y += Math.PI;
+            }
+            // Set rotation for bending.
+            if (bend) {
+                object.rotation.z = t.bending[t.previousDir][direction];
+            }
+        }
+        object.position.x = x - t.cube.offset;
+        object.position.y = y - t.cube.offset;
+        object.position.z = z - t.offset;
+
+        object.castShadow = true; //default is false
+        object.receiveShadow = true; //default
+
+        t.group.add(object);
+        t.cube.setItem(x, y, z, object);
+
+        t.previousDir = direction;
+        return object;
+    }
+    t.setPosition(
+        Math.floor(Math.random() * t.cube.size),
+        Math.floor(Math.random() * t.cube.size),
+        Math.floor(Math.random() * t.cube.size),
+        true
+    );
+}
+        var render = new Render(
+            ["#ff9900","#fe9807","#fd980b","#fc980f","#fb9812","#fa9815","#f99818","#f9981b","#f8981d","#f79820","#f69822","#f59824","#f49827","#f39829","#f2982b","#f2982d","#f1982f","#f09831","#ef9833","#ee9835","#ed9836","#ec9838","#eb983a","#eb983c","#ea983e","#e9983f","#e89841","#e79843","#e69844","#e59846","#e49847","#e39849","#e3984b","#e2984c","#e1984e","#e0984f","#df9851","#de9852","#dd9854","#dc9855","#db9857","#da9858","#d9985a","#d8985b","#d8985c","#d7985e","#d6985f","#d59861","#d49862","#d39863","#d29865","#d19866","#d09867","#cf9869","#ce986a","#cd986b","#cc986d","#cb986e","#ca986f","#c99871","#c99872","#c89873","#c79874","#c69876","#c59877","#c49878","#c39879","#c2987a","#c1987c","#c0987d","#bf987e","#be987f","#bd9881","#bc9882","#bb9883","#ba9884","#b99885","#b89886","#b79888","#b69889","#b5988a","#b4988b","#b3988c","#b2988d","#b1988f","#b09890","#af9891","#ae9892","#ad9893","#ac9894","#ab9895","#aa9896","#a99897","#a89899","#a7989a","#a5989b","#a4989c","#a3989d","#a2989e","#a1989f","#a098a0","#9f98a1","#9e98a2","#9d98a3","#9c98a4","#9b98a5","#9a98a7","#9998a8","#9798a9","#9698aa","#9598ab","#9498ac","#9398ad","#9298ae","#9198af","#9098b0","#8f98b1","#8d98b2","#8c98b3","#8b98b4","#8a98b5","#8998b6","#8898b7","#8698b8","#8598b9","#8498ba","#8398bb","#8298bc","#8198bd","#7f98be","#7e98bf","#7d98c0","#7c98c1","#7a98c2","#7998c3","#7898c4","#7798c5","#7698c6","#7498c7","#7398c8","#7298c9","#7198c9","#6f98ca","#6e98cb","#6d98cc","#6b98cd","#6a98ce","#6998cf","#6798d0","#6698d1","#6598d2","#6398d3","#6298d4","#6198d5","#5f98d6","#5e98d7","#5c98d8","#5b98d8","#5a98d9","#5898da","#5798db","#5598dc","#5498dd","#5298de","#5198df","#4f98e0","#4e98e1","#4c98e2","#4b98e3","#4998e3","#4798e4","#4698e5","#4498e6","#4398e7","#4198e8","#3f98e9","#3e98ea","#3c98eb","#3a98eb","#3898ec","#3698ed","#3598ee","#3398ef","#3198f0","#2f98f1","#2d98f2","#2b98f2","#2998f3","#2798f4","#2498f5","#2298f6","#2098f7","#1d98f8","#1b98f9","#1898f9","#1598fa","#1298fb","#0f98fc","#0b98fd","#0798fe","#0099ff"], ["#ff9900","#0099ff"]
+        );
+        intro(words.words, function () {
+            if (render.init) {
+                render.init();
+            }
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/82 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:46 GMT -->
+</html>

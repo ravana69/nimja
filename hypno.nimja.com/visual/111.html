@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/111 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:27:06 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Spiral Words - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A spiral shape, highlighting the words hiding behind." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Spiral Words - Nimja Hypnosis" />
+    <meta property="og:description" content="A spiral shape, highlighting the words hiding behind." />
+    <meta property="og:url" content="111.html" />
+    <meta property="og:image" content="thumb/Spiral_Words-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="112.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/111.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="110.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Spiral Words</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/111.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    
+/**
+ * By Nimja - Spiral Words
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors, colorSet) {
+    var t = this;
+    this.canvas = new Canvas(canvas);
+    this.context = this.canvas.context;
+    this.pos = this.canvas.pos;
+    this.colors = colors;
+    this.colorList = (new Colors(colors)).colors;
+    this.colorSet = colorSet;
+    var defaults = {
+        font: { type: 'int', val: 0, min: 0, max: 5 },
+        style: { type: 'int', val: 0, min: 0, max: 3 },
+        effect: { type: 'int', val: 0, min: 0, max: 4 },
+        bright: { type: 'float', val: .1, min: 0, max: 1 },
+        delay: { type: 'int', val: 10, min: 0, max: 60 },
+        arms: { type: 'int', val: 3, min: 1, max: 10 },
+        turns: { type: 'int', val: 2, min: 0, max: 10 },
+        width: { type: 'float', val: .5, min: 0.01, max: .99 },
+        color: { type: 'adjust', val: 1.9 },
+        spread: { type: 'adjust', val: 1 },
+        speed: { type: 'ratio' },
+        size: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.fonts = [
+        'Arial',
+        'Georgia',
+        'Courier New',
+        'Lucida Console',
+        'Impact, Charcoal, sans-serif',
+        'Comic Sans MS',
+    ];
+    this.settings = config.get(defaults);
+    this.spiral = new Spiral(t.settings.arms, 100, t.settings.turns, 2.5, this.settings.width);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.settings.speed *= 2 * (t.settings.turns * .5 + 1);
+    this.lines = [];
+    this.words = [];
+    this.lineCount = 0;
+    this.textColor = 'black';
+    this.cur = 0;
+    this.firstFrame = true;
+    this.currentLine = 0;
+    this.minLineLength = 0;
+    this.update = function (time) {
+        var ctx = t.context,
+            speed = time * t.settings.speed * t.settings.dir,
+            changeWord = t.firstFrame,
+            cTime = time * t.settings.color;
+
+        t.cur++;
+        if (t.cur > t.settings.delay && t.settings.delay < 60) {
+            t.switchWord();
+            t.cur = 0;
+            changeWord = true;
+        }
+
+        ctx.fillStyle = t.textColor;
+        if (changeWord) {
+            t.canvas.style();
+            ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+            cur = .5;
+            var y;
+            for (var i = 0; i < t.lineCount; i++) {
+                y = t.pos.fontOffset + i * t.pos.font;
+                ctx.fillText(t.lines[i].slice(0, t.lineLength).join(' '), t.pos.x, y);
+            }
+            t.canvas.style('source-atop');
+        } else {
+            ctx.fillRect(0, 0, t.pos.w, t.pos.h);
+        }
+
+        gradient.setShiftSpread(cTime, t.settings.spread);
+        ctx.fillStyle = gradient.createRadial(t.context, t.colorList, t.pos.x, t.pos.y, 0, t.pos.dist);
+        t.spiral.draw(ctx, t.pos, t.pos.dist, speed);
+
+        t.firstFrame = false;
+        t.growLines();
+    };
+    this.switchWord = function () {
+        var i = Math.floor(Math.random() * t.lineCount),
+            line = t.lines[i];
+        line[Math.floor(Math.random() * line.length)] = t.getRandomWord();
+        t.growLine(line);
+    };
+    this.resize = function (width, height) {
+        t.canvas.resize(width, height);
+        t.pos.font = t.pos.dist * .04 * t.settings.size, .3;
+        t.lineCount = Math.floor(t.pos.h / t.pos.font);
+        t.pos.fontOffset = t.pos.y - t.pos.font * Math.floor(t.lineCount * .5) - t.pos.font * .2;
+        t.lineCount += 2;
+        t.context.font = t.getFontStyle(t.pos.font);
+        t.context.textAlign = 'center';
+        var col = Math.round(t.settings.bright * 255);
+        t.textColor = 'rgb(' + col + ', ' + col + ', ' + col + ')';
+        t.firstFrame = true;
+        t.updateLines();
+    };
+    this.getFontStyle = function (size) {
+        result = '';
+        switch (t.settings.style) {
+            case 1: result += 'bold '; break;
+            case 2: result += 'italic '; break;
+            case 3: result += 'italic bold '; break;
+
+        }
+        result += size + 'px ';
+        result += t.fonts[t.settings.font];
+        return result;
+    }
+    this.updateLines = function () {
+        t.minLineLength = Math.floor(t.pos.w * .9 / (t.getWidth(t.words.join(' ')) / t.words.length));
+        if (t.lines.length > t.lineCount) {
+            for (var i = t.lineCount; i < t.lines.length; i++) {
+                t.lines.pop();
+            }
+        }
+        for (var i = 0; i < t.lineCount; i++) {
+            if (t.lines.length < (i + 1)) {
+                t.lines.push([]);
+            }
+        }
+        t.currentLine = 0;
+    }
+    this.growLines = function () {
+        if (t.currentLine >= t.lineCount) {
+            return;
+        }
+        var max = Math.min(t.currentLine + 10, t.lineCount);
+        for (var i = t.currentLine; i < max; i++) {
+            t.growLine(t.lines[i]);
+        }
+        t.firstFrame = true;
+        t.currentLine = max;
+    }
+    this.getWidth = function (text) {
+        return t.context.measureText(text).width;
+    }
+    this.growLine = function (line) {
+        // If line is empty, grow to minimum without calculating.
+        if (line.length == 0) {
+            for (var i = 0; i < t.minLineLength; i++) {
+                line.push(t.getRandomWord());
+            }
+        }
+        // Grow line to length.
+        while (t.getWidth(line.join(' ')) < t.pos.w) {
+            line.push(t.getRandomWord());
+        }
+        // Shrink line if too long.
+        while (t.getWidth(line.join(' ')) - t.getWidth(line[line.length - 1]) > t.pos.w) {
+            line.pop();
+        }
+    };
+    this.getRandomWord = function () {
+        var word = t.words[Math.floor(t.words.length * Math.random())];
+        if (t.settings.effect == 4) {
+            var result = '';
+            for (var p = 0; p < word.length; p++) {
+                result += Math.random() < .5 ? word[p].toLowerCase() : word[p].toUpperCase();
+            }
+            word = result;
+        }
+        return word;
+    };
+    this.init = function () {
+        var source = 'accept air allowed answer arms arousal aroused asleep attention awake awaken aware background beautiful beautifully beauty bed big bit blank blissful body breath breathe breathing building calm care carefully caress change chest choice clean clear close closer comfortable command complete completely continue control controlled cool count crave craving dark day deep deeper deeply delicious desire desires difficult dream dreams drift drifting drip drop ears easier easily easy edge effort embrace emptiness empty energy enjoy enjoying exhale experience eyes face fact fade fading fall falling fantasy faster feel feeling feelings feels felt file filled finally find fine fingers fingertips float floating flow flowing focus focused follow forget forward free front full fun game gentle gently girl glow good grow growing guide hand hands happen happened happening happy hard head headphones hear heat heavier heavy helping helps hidden higher hips hold hope horny hot hypnosis idea imagine incredibly induction innocent inside intense interesting kind kinds knees knowing lay laying learn left legs letting life light lips listen listening long longer lot love lower making massage matter melt melting memories mind mindless moment moments mouth move movement movements moving muscles natural naughty neck needed needing nice nimja normal notice obedience obedient obey obeying open opening owner pain parts pat peace people perfect perfectly permission person pet place places play playful playing pleasant pleasure point position powerful pull pulled pulling puppy pure purpose question quiet ready real realize refreshed relax relaxation relaxed relaxing release remain remember repeat repeating rest reward rhythm room ropes rush safe sensation sensations sensitive serve serving sexy shape shoulders side simple simply single sink sit sitting skin slave sleep slow slowly slut small smile snap soft softly sort sound sounds space spank speak special spine spread spreading spreads stand standing stare staring start started starting starts state stay step stomach story strange strong stronger subconscious submission submissive submit subtle suddenly surprise surrender sweet takes taking talk talking tap tease teasing telling ten tentacles thighs thing things thinking thought thoughts thrust tickle tied time times tingling told touch touching toy trance true trust voice waiting wake waking walk walking wanted wanting warm warmth watching water wave ways wonderful wonderfully word words world wrapped'.split(' ');
+
+        if (words && words.words.length > 1) {
+            words.setVisible(false);
+            source = words.words;
+        }
+        t.words = t.cleanWords(source);
+    };
+    this.cleanWords = function (arr) {
+        var result = [];
+        for (var i in arr) {
+            var word = arr[i].toString().trim();
+            if (word.length > 0) {
+                result.push(t.applyEffect(word));
+            }
+        }
+        return result;
+    };
+    this.applyEffect = function (word) {
+        switch (t.settings.effect) {
+            case 3: // Alternating letters.
+                var result = '';
+                for (var p = 0; p < word.length; p++) {
+                    result += p % 2 == 1 ? word[p].toLowerCase() : word[p].toUpperCase();
+                }
+                word = result;
+                break;
+            case 2: word = word.toUpperCase(); break;
+            case 1: word = word.toLowerCase(); break;
+        }
+        return word;
+    };
+    t.init();
+}
+function Spiral(arms, steps, turns, curve, width) {
+    this.arms = arms;
+    this.steps = steps;
+    this.turns = turns;
+    this.turnAngle = turns * TAU;
+    this.curve = 1 / curve;
+    this.step = 1 / (this.steps * (Math.abs(turns * .5) + 1));
+    this.angleOffset = TAU / arms;
+    this.angleArmWidth = this.angleOffset * width;
+}
+Spiral.prototype = {
+    draw: function (ctx, c, radius, angle) {
+        angle = angle % TAU;
+        for (var r = 0; r < this.arms; r++) {
+            this.drawArm(ctx, c, radius, r * this.angleOffset + angle);
+        }
+    },
+    drawArm: function (ctx, c, radius, angle) {
+        var i, p;
+        ctx.beginPath();
+        ctx.moveTo(c.x, c.y);
+        for (i = 0; i < 1; i += this.step) {
+            p = this.getCoord(c, radius, angle, i);
+            ctx.lineTo(p.x, p.y);
+        }
+        var angle2 = angle + this.angleArmWidth;
+        ctx.arc(c.x, c.y, radius, this.getAngle(angle, 1), this.getAngle(angle2, 1), false);
+        for (i = 1 - this.step; i > 0; i -= this.step) {
+            p = this.getCoord(c, radius, angle2, i);
+            ctx.lineTo(p.x, p.y);
+        }
+        ctx.lineTo(c.x, c.y);
+        ctx.fill();
+    },
+    getCoord: function (c, radius, angle, i) {
+
+        var va = this.getAngle(angle, i);
+        radius *= i;
+        return {
+            x: c.x + radius * Math.cos(va),
+            y: c.y + radius * Math.sin(va)
+        };
+    },
+    getAngle: function (angle, i) {
+        return angle + this.turnAngle * Math.pow(i, this.curve);
+    }
+};
+    var render = new Render(document.getElementById('canvas'), ["#ffffff","#fcfeff","#f9fdff","#f6fcff","#f3fbff","#f0faff","#edf9ff","#ebf7ff","#e8f6ff","#e5f5ff","#e3f4ff","#e0f3ff","#ddf2ff","#daf1ff","#d8efff","#d5eeff","#d3edff","#d0ebff","#ceeaff","#cbe9ff","#c9e7ff","#c6e6ff","#c3e5ff","#c1e4ff","#bfe2ff","#bce1ff","#badfff","#b8ddff","#b5dcff","#b2dbff","#b1d9ff","#aed8ff","#acd6ff","#a9d5ff","#a7d3ff","#a5d2ff","#a2d0ff","#a1ceff","#9ecdff","#9ccbff","#9ac9ff","#98c8ff","#95c6ff","#93c5ff","#91c2ff","#8fc1ff","#8cc0ff","#8bbdff","#89bcff","#86baff","#85b8ff","#83b6ff","#80b5ff","#7eb3ff","#7db1ff","#7aafff","#78aeff","#77abff","#75a9ff","#72a8ff","#71a5ff","#6fa4ff","#6da2ff","#6aa1ff","#699eff","#679cff","#659bfe","#6598fd","#6497fb","#6395f9","#6393f9","#6291f7","#6290f5","#618df4","#618cf2","#608bf0","#5f8aee","#5f87ee","#5e86ec","#5d85ea","#5d82e9","#5c81e7","#5b80e5","#5b7de4","#5a7ce2","#597be0","#597ade","#5877dd","#5776db","#5775d9","#5673d9","#5672d7","#5570d5","#546ed4","#546dd2","#536cd0","#526bce","#5268cd","#5167cb","#5066c9","#5064c8","#4f63c6","#4e62c4","#4e5fc3","#4d5ec1","#4c5dbf","#4b5cbd","#4b5abc","#4a59ba","#4958b8","#4955b6","#4855b4","#4754b2","#4751b1","#4650af","#454fad","#444eab","#444caa","#434ba8","#424aa6","#4248a5","#4147a2","#4046a0","#3f449f","#3f439d","#3e429b","#3d4199","#3c3f98","#3b3e95","#3b3e93","#3a3c92","#393b90","#383a8e","#38388c","#37378a","#363688","#363585","#353483","#353381","#34327f","#34317c","#33317a","#323078","#322f75","#312e73","#302d71","#302c6e","#2f2b6c","#2e2a6a","#2d2968","#2d2865","#2c2763","#2b2761","#2b265f","#2a255d","#29245a","#292358","#282256","#272154","#262052","#261f4f","#251f4d","#241e4b","#231d49","#221c47","#211b45","#211a42","#201940","#1f193e","#1e183c","#1d173a","#1c1638","#1b1536","#1b1434","#1a1432","#181330","#18122d","#17112b","#161029","#150f27","#140f25","#130e23","#120d21","#110c1f","#100b1d","#0f0b1b","#0e0a19","#0d0917","#0c0815","#0a0713","#0a0711","#08060f","#07050d","#06040b","#050309","#040307","#030205","#020103","#010001","#000000"], ["#6699ff"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/111 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:27:08 GMT -->
+</html>

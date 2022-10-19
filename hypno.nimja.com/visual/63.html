@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/63 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:52 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Magic Shapes - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Multiplying shapes, linked to each other, magically appearing and disappearing." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Magic Shapes - Nimja Hypnosis" />
+    <meta property="og:description" content="Multiplying shapes, linked to each other, magically appearing and disappearing." />
+    <meta property="og:url" content="63.html" />
+    <meta property="og:image" content="thumb/Magic_Shapes-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="64.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/63.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="62.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Magic Shapes</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/63.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    var maxDepth = 3;
+var maxDivide = 5;
+var tick = 1;
+var countRadii = [1, 1, 1];
+var globalColors = ['red', 'green', 'blue'];
+var shape;
+var thickness;
+/**
+ * By Nimja - Magic Shapes
+ * @param {element} canvas
+ * @param {array} colors
+ * @param {array} colorSet
+ * @returns {Render}
+ */
+function Render(canvas, colors, colorSet) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    this.pos = {x: 0, y: 0, w: 0, h: 0, canvas: {}};
+    this.angleMax = 1;
+    this.angleOffset = HPI;
+    var defaults = {
+        width: {type: 'ratio'},
+        max: {type: 'int', val: 5, min: 3, max: 7},
+        depth: {type: 'int', val: 3, min: 1, max: 3},
+        shape: {type: 'int', val: 0, min: 0, max: 10},
+        color: {type: 'adjust', val: 2},
+        spread: {type: 'adjust', val: 2},
+        ratio: {type: 'float', val: 0, min: 0, max: .8},
+        solid: {type: 'bool', val: false}
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.circle = new Circle(0, 1);
+    this.colorList = []
+    this.previous = Date.now();
+    this.update = function (time) {
+        var ctx = t.context, diff = time - t.previous, cSpeed = time * t.settings.color, color;
+        for (var i = 0; i < t.settings.depth; i++) {
+            cur = i / t.settings.depth;
+            color = t.colorList[i].adjustHsl(cSpeed + cur * t.settings.spread, 0, 0);
+            globalColors[i] = !t.settings.solid ? color.toRgba(1 - i * .3) : color.toHex();
+        }
+        t.previous = time;
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        t.circle.update(diff);
+        t.circle.calculate(t.pos.x, t.pos.y, t.pos.radius, 0);
+        t.circle.draw(ctx, t.pos.radius);
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.context.lineCap = "round";
+        t.context.lineJoin = "round";
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.pos.max = coordMath.distance(t.pos);
+        t.pos.radius = t.pos.max * .1;
+        thickness = t.pos.radius * .1 * t.settings.width;
+        if (!t.settings.solid) {
+            t.context.globalCompositeOperation = 'lighter';
+        }
+    };
+    this.init = function() {
+        shape = new Shape(t.settings.shape, 1, t.settings.ratio, true);
+        maxDivide = t.settings.max;
+        maxDepth = t.settings.depth;
+        for (var i = 3; i <= maxDivide; i++) {
+            var cShape = new Shape(i, 1);
+            countRadii.push(cShape.calculateForCirclePoints());
+        }
+        globalColors.push(colorSet[0]);
+        var max = colorSet.length;
+        for (var i = 0; i < maxDepth; i++) {
+            t.colorList.push(new Color(colorSet[i % max]));
+        }
+    };
+    t.init();
+}
+
+
+function Circle(depth, dir, count) {
+    var t = this;
+    this.alive = true;
+    this.timer = 0;
+    this.timerStart = 0;
+    this.cur = 0;
+    this.state = 0;
+    this.dist = 0;
+    this.dir = dir;
+    this.count = limit.int(count, 1, 10);
+    this.depth = depth;
+    this.isRoot = depth === 0;
+    this.radiusMultiplier = depth == 1 ? countRadii[count] : 2;
+    this.angleMultiplier = Math.pow(0.7, depth - 1);
+    this.angleOffset = !t.isRoot ? TAU / t.count : 1.1;
+    this.age = 10;
+    this.child = false;
+    this.coords = [];
+    this.update = function(diff) {
+        var previous = t.cur;
+        t.coords = [];
+        t.cur = t.timer % tick;
+        if (t.cur < previous) {
+            t.runTick();
+        }
+        t.timer += diff;
+        if (t.alive) {
+            t.updateState();
+        }
+        if (t.child) {
+            t.child.update(diff);
+        }
+    };
+    this.updateState = function() {
+        var diff = (t.timer - t.timerStart) * .5;
+        if (t.state === 0 && diff < 1) {
+            t.dist = curveBoth(diff);
+        } else if (t.state === 2) {
+            t.dist = curveBoth(1 - diff);
+            if (diff > 1) {
+                t.alive = false;
+                t.dist = 0;
+            }
+        } else {
+            t.state = 1;
+            t.dist = 1;
+        }
+    };
+    this.declining = function()
+    {
+        return t.state === 2 && t.dist < .5;
+    };
+    this.runTick = function() {
+        if (!t.isRoot) {
+            if (t.state < 2 && t.age <= 0 && (!t.child || t.child.declining())) {
+                t.state = 2;
+                t.timerStart = t.timer;
+            }
+            t.age--;
+        }
+        if (!t.child) {
+            t.considerChildren();
+        }
+    };
+    /**
+     * Recursive calculate cycle.
+     */
+    this.calculate = function(x, y, radius, parentOffset) {
+        var px, py, angle, angleOffset,
+                r = radius * t.radiusMultiplier * t.dist;
+        parentOffset = 0;
+        for (var i = 0; i < t.count; i++) {
+            angleOffset = t.angleOffset * i * t.dir + parentOffset;
+            angle = t.timer * t.angleMultiplier * t.dir + angleOffset;
+            if (t.isRoot) {
+                px = x;
+                py = y;
+                r = 0;
+            } else {
+                px = x + r * Math.cos(angle);
+                py = y + r * Math.sin(angle);
+            }
+            if (t.child && t.child.alive) {
+                t.child.calculate(px, py, radius, -t.angleOffset);
+            } else if (t.child) {
+                delete(t.child);
+                if (t.isRoot) {
+                    t.dir *= -1;
+                }
+            }
+            t.coords.push({x: px, y:py, a: angle});
+        }
+    };
+    /**
+     * Recursive draw cycle.
+     */
+    this.draw = function(ctx, radius) {
+        if (t.child) {
+            t.child.draw(ctx, radius);
+        }
+        if (t.isRoot) {
+            return;
+        }
+        ctx.beginPath();
+        var c;
+        for (var i in t.coords) {
+            c = t.coords[i];
+            shape.draw(ctx, c.x, c.y, c.a, true, radius);
+        }
+        ctx.lineWidth = thickness * t.dist;
+        ctx.strokeStyle = globalColors[t.depth];
+        ctx.stroke();
+    };
+
+    this.considerChildren = function() {
+        var hasChance = t.isRoot || Math.random() < .5;
+        if (t.depth < maxDepth && t.age > 2 && hasChance) {
+            var middle = Math.round(maxDivide * .5);
+            var maxCount = t.count > middle ? middle : maxDivide;
+            var count = randomInt(2, maxCount);
+            var minAge = Math.max(2, Math.floor(t.age * .5));
+            var maxAge = randomInt(minAge, t.age * 2 - t.depth * 2);
+            t.child = new Circle(t.depth + 1, -t.dir, count);
+            t.child.age = maxAge;
+        }
+    };
+}
+
+function randomInt(min, max) {
+    var range = max - min + 1;
+    return Math.floor(Math.random() * range) + min;
+}
+
+    var render = new Render(document.getElementById('canvas'), ["#00ffff","#00fefe","#00fdfe","#00fcfe","#00fbfe","#00fafe","#00f9fe","#00f8fe","#00f7fe","#00f6fe","#00f5fe","#00f4fe","#00f3fe","#00f3fe","#00f2fe","#00f1fe","#00f0fe","#00effe","#00eefe","#00edfe","#00ecfe","#00ebfe","#00eafe","#00e9fe","#00e8fe","#00e7fe","#00e6fe","#00e5fe","#00e4fe","#00e3fe","#00e2fe","#00e1fe","#00e0fe","#00e0fe","#00dffe","#00defe","#00ddfe","#00dcfe","#00dbfe","#00dafe","#00d9fe","#00d8fe","#00d7fe","#00d6fe","#00d5fe","#00d4fe","#00d3fe","#00d2fe","#00d1fe","#00d0fe","#00cffe","#00cefe","#00cdfe","#00ccfe","#00cbfe","#00cafe","#00c9fe","#00c8fe","#00c7fe","#00c6fe","#00c4fe","#00c3fe","#00c2fe","#00c1fe","#00c0fe","#00bffe","#00befe","#00bdfe","#00bcfe","#00bbfe","#00bafe","#00b9fe","#00b8fe","#00b7fe","#00b6fe","#00b5fe","#00b4fe","#00b2fe","#00b1fe","#00b0fe","#00affe","#00aefe","#00adfe","#00acfe","#00abfe","#00aafe","#00a9fe","#00a7fe","#00a6fe","#00a5fe","#00a4fe","#00a3fe","#00a2fe","#00a1fe","#009ffe","#009efe","#009dfe","#009cfe","#009bfe","#009afe","#0099ff","#0797fe","#0b96fe","#0e95fe","#1194fe","#1493fe","#1792fe","#1991fe","#1c90fe","#1e8ffe","#208efe","#238dfe","#258cfe","#278bfe","#298afe","#2b89fe","#2d88fe","#2e87fe","#3086fe","#3284fe","#3483fe","#3682fe","#3781fe","#3980fe","#3b7ffe","#3c7efe","#3e7dfe","#3f7cfe","#417afe","#4379fe","#4478fe","#4677fe","#4776fe","#4975fe","#4a73fe","#4b72fe","#4d71fe","#4e70fe","#506ffe","#516efe","#536cfe","#546bfe","#556afe","#5769fe","#5867fe","#5966fe","#5b65fe","#5c64fe","#5d62fe","#5f61fe","#6060fe","#615ffe","#625dfe","#645cfe","#655bfe","#6659fe","#6758fe","#6957fe","#6a55fe","#6b54fe","#6c53fe","#6e51fe","#6f50fe","#704efe","#714dfe","#724bfe","#734afe","#7549fe","#7647fe","#7746fe","#7844fe","#7943fe","#7a41fe","#7c3ffe","#7d3efe","#7e3cfe","#7f3bfe","#8039fe","#8137fe","#8236fe","#8334fe","#8432fe","#8630fe","#872efe","#882dfe","#892bfe","#8a29fe","#8b27fe","#8c25fe","#8d23fe","#8e20fe","#8f1efe","#901cfe","#9119fe","#9217fe","#9314fe","#9411fe","#950efe","#960bfe","#9707fe","#9900ff"], ["#00ffff","#0099ff","#9900ff"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/63 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:54 GMT -->
+</html>

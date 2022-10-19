@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/71 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Liquid Waves - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Fluid movement and reflections, pulling you deeper into a pool of color." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Liquid Waves - Nimja Hypnosis" />
+    <meta property="og:description" content="Fluid movement and reflections, pulling you deeper into a pool of color." />
+    <meta property="og:url" content="71.html" />
+    <meta property="og:image" content="thumb/Liquid_Waves-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="72.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/71.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="70.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Liquid Waves</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/71.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <script src="http://assets.nimja.com/js/three.min.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/threehelper.js"></script>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<!-- https://threejs.org/docs/index.html -->
+<script>
+    var renderer_canvas = document.getElementById('canvas');
+    function hasWebGL() {
+        try {
+            return !!(window.WebGLRenderingContext && (renderer_canvas.getContext('webgl') || renderer_canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    }
+    if (false && !hasWebGL()) {
+        alert("WebGL not supported.");
+    } else {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: renderer_canvas });
+
+        function resize(w, h) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            if (render.resize) {
+                render.resize(w, h);
+            }
+        }
+
+        function perFrame(time, diff) {
+            words.update();
+            render.update(time, diff);
+            renderer.render(scene, camera);
+        }
+        var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+        config = new Config([]);
+        //Spiral.
+        /**
+ * By Nimja - Liquid Waves
+ *
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(colors, colorSet)
+{
+    var t = this;
+    this.colors = colors;
+    if (video) {
+        renderer.domElement.style.mixBlendMode = 'hard-light';
+    }
+    this.colorSet = colorSet;
+    this.lights = [];
+    this.max = t.colorSet.length;
+    var defaults = {
+        type: {type: 'int', value: 0, min: 0, max: 3},
+        wave: {type: 'bool'},
+        move: {type: 'bool'},
+        color: {type: 'adjust', val: 2},
+        speed: {type: 'ratio'},
+        curve: {type: 'ratio'},
+        dir: {type: 'dir'}
+    };
+    this.settings = config.get(defaults);
+//    this.settings.curve = 1 / t.settings.curve;
+    this.size = 100;
+    this.width = 50;
+    this.waves = t.size / 5;
+    this.step = t.width / t.size;
+    this.ratioX = 1;
+    this.adjust = t.settings.curve > 1 ? 1 / t.settings.curve : 1;
+    this.threeHelper = new ThreeHelper(colors, colorSet);
+    this.light;
+    this.shape;
+    this.update = function (time) {
+        if (t.settings.move) {
+            t.light.position.x = Math.cos(time * .3);
+            t.light.position.y = Math.sin(time * .4);
+        }
+        var index, xh, yh, z, angle, dist,
+                geo = t.shape.geometry,
+                cur = time * 1.5 * t.settings.dir * t.settings.speed;
+        for (var y = 0; y < t.size; y++) {
+            for (var x = 0; x < t.size; x++) {
+                index = x + y * t.size;
+                xh = (x / t.size * 2 - 1) * t.ratioX;
+                yh = y / t.size * 2 - 1;
+                angle = !t.settings.wave ? Math.atan2(yh, xh) : 0;
+                dist = Math.sqrt(xh * xh + yh * yh);
+                z = Math.sin(Math.pow(dist, t.settings.curve) * TAU * 2 - cur + angle);
+                geo.vertices[index].z = z * dist * t.adjust;
+            }
+        }
+        geo.verticesNeedUpdate = true;
+        geo.computeVertexNormals();
+        if (t.settings.color !== 0) {
+            renderer.domElement.style.filter = 'hue-rotate(' + Math.floor(time * t.settings.color * 360 % 360) + 'deg)';
+        }
+    };
+    this.resize = function (w, h) {
+        t.ratioX = w / h;
+        t.shape.scale.x = t.ratioX;
+    };
+    this.init = function () {
+        var geometry = new THREE.PlaneGeometry(t.width, t.width, t.size - 1, t.size - 1);
+        var material = t.threeHelper.getMaterial(t.settings.type, true, t.settings.depth);
+        t.shape = new THREE.Mesh(geometry, material);
+        scene.add(t.shape);
+
+        camera.position.z = 30;
+        t.light = t.addLight('#ffffff');
+        t.light.position.x = -1;
+        t.light.position.y = .5;
+        t.light.position.z = .75;
+    };
+    this.addLight = function (color)
+    {
+        //Create a DirectionalLight
+        var light = new THREE.DirectionalLight(new Color(color).toInt(), 1, 100);
+        scene.add(light);
+        return light;
+    };
+}
+
+        var render = new Render(
+            ["#ffcc99","#fdcb99","#fbcb9a","#f9ca9a","#f8ca9b","#f6c99b","#f4c99c","#f2c89c","#f1c89d","#efc79d","#edc79e","#ebc69e","#eac69f","#e8c5a0","#e6c5a0","#e4c4a1","#e3c4a1","#e1c3a2","#dfc3a2","#ddc2a3","#dbc2a3","#d9c1a4","#d8c1a4","#d6c0a5","#d4c0a5","#d2bfa6","#d0bfa6","#cebea7","#ccbea8","#cabda8","#c9bda9","#c7bca9","#c5bcaa","#c3bbaa","#c1bbab","#bfbaab","#bdbaac","#bbb9ac","#b9b9ad","#b7b8ad","#b5b8ae","#b3b7ae","#b1b7af","#afb6af","#adb6b0","#abb5b0","#a9b5b1","#a7b4b1","#a4b4b2","#a2b3b2","#a0b3b3","#9eb2b3","#9cb2b4","#9ab1b4","#97b1b5","#95b0b5","#93b0b6","#91afb6","#8fafb7","#8caeb7","#8aaeb8","#88adb8","#85adb9","#83acb9","#81acba","#7eabba","#7cabbb","#79aabb","#77aabc","#74a9bc","#72a9bd","#6fa8bd","#6da8be","#6aa7be","#67a6bf","#65a6bf","#62a5c0","#5fa5c0","#5ca4c1","#5aa4c1","#57a3c2","#54a3c2","#51a2c3","#4ea2c3","#4ba1c4","#47a1c4","#44a0c5","#41a0c5","#3e9fc6","#3a9ec6","#369ec7","#339dc7","#2f9dc8","#2b9cc8","#279cc9","#229bc9","#1d9bca","#189aca","#129acb","#0b99cb","#0099cc","#0497cb","#0796cb","#0995ca","#0b94ca","#0d93c9","#0f92c9","#1191c8","#1290c8","#148fc7","#158ec7","#178dc6","#188cc6","#1a8bc5","#1b8ac5","#1c89c4","#1e88c4","#1f87c3","#2086c3","#2184c2","#2283c2","#2482c1","#2581c1","#2680c0","#277fc0","#287ebf","#297dbf","#2a7cbe","#2b7abe","#2c79bd","#2d78bd","#2e77bc","#2f76bc","#3075bb","#3173bb","#3272ba","#3371ba","#3470b9","#356fb9","#366eb8","#376cb8","#386bb7","#396ab7","#3a69b6","#3b67b6","#3b66b5","#3c65b5","#3d64b4","#3e62b4","#3f61b3","#4060b3","#415fb2","#415db2","#425cb1","#435bb1","#4459b0","#4558b0","#4657af","#4655af","#4754ae","#4853ae","#4951ad","#4a50ad","#4a4eac","#4b4dac","#4c4bab","#4d4aab","#4e49aa","#4e47aa","#4f46a9","#5044a9","#5143a8","#5141a8","#523fa7","#533ea6","#543ca6","#543ba5","#5539a5","#5637a4","#5736a4","#5734a3","#5832a3","#5930a2","#5a2ea2","#5a2da1","#5b2ba1","#5c29a0","#5c27a0","#5d259f","#5e239e","#5f209e","#5f1e9d","#601c9d","#61199c","#61179c","#62149b","#63119b","#630e9a","#640b9a","#650799","#660099"], ["#ffcc99","#0099cc","#660099"]
+        );
+        intro(words.words, function () {
+            if (render.init) {
+                render.init();
+            }
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/71 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:16 GMT -->
+</html>

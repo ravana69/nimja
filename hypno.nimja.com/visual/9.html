@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/9 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:22:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Spiral Large (rainbow) - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Full-screen spiral with rainbow colours, where you can select the center color." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Spiral Large (rainbow) - Nimja Hypnosis" />
+    <meta property="og:description" content="Full-screen spiral with rainbow colours, where you can select the center color." />
+    <meta property="og:url" content="9.html" />
+    <meta property="og:image" content="thumb/Spiral_Large_(rainbow)-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="10.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/9.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="8.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Spiral Large (rainbow)</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/9.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <style>
+    @keyframes rotating {
+        from {
+            transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+        }
+    }
+
+    @-webkit-keyframes rotating
+
+    /* Safari and Chrome */
+        {
+        from {
+            transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+        }
+    }
+
+    .rotating {
+        -webkit-animation: rotating 1s linear infinite;
+        -moz-animation: rotating 1s linear infinite;
+        -ms-animation: rotating 1s linear infinite;
+        -o-animation: rotating 1s linear infinite;
+        animation: rotating 1s linear infinite;
+    }
+
+    .rotating2 {
+        -webkit-animation: rotating 2s linear infinite;
+        -moz-animation: rotating 2s linear infinite;
+        -ms-animation: rotating 2s linear infinite;
+        -o-animation: rotating 2s linear infinite;
+        animation: rotating 2s linear infinite;
+    }
+</style>
+<canvas class="rotating" id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<canvas class="rotating2" id="canvas2" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    function perFrame(time, diff) {
+        words.update();
+    }
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    nanimate(animate);
+    //Spiral.
+    var size = 0;
+    var hsize = 0;
+    var PI = Math.PI;
+    var TAU = PI * 2;
+    function positionCanvas(canvas, wwidth, wheight) {
+        var radius = Math.pow(Math.pow(wwidth / 2, 2) + Math.pow(wheight / 2, 2), .5);
+        size = Math.ceil(radius) * 2;
+        hsize = size / 2;
+        canvas.width = size;
+        canvas.height = size;
+        canvas.style.left = ((wwidth / 2) - hsize) + 'px';
+        canvas.style.top = ((wheight / 2) - hsize) + 'px';
+    }
+    function Spiral() {
+        this.draw = function draw(ctx, placement, rot, settings) {
+            ctx.beginPath();
+            ctx.moveTo(settings.centerX, settings.centerY);
+            var steps = 180 * settings.turns;
+            var step = 1 / steps;
+            for (var i = 0; i <= 1; i += step) {
+                var coords = this.calculatePos(placement, rot, settings, i);
+                ctx.lineTo(coords.x, coords.y);
+            }
+            var wRot = rot - settings.width;
+            var start = 1 + settings.width / settings.turns;
+            for (var i = start; i >= 0; i -= step) {
+                var coords = this.calculatePos(placement, wRot, settings, i);
+                ctx.lineTo(coords.x, coords.y);
+            }
+            ctx.closePath();
+            var grd = ctx.createRadialGradient(placement.x, placement.y, 0, placement.x, placement.y, settings.radius);
+            for (var i in placement.colors) {
+                var cur = 1 / (placement.colors.length - 1) * i;
+                grd.addColorStop(cur, placement.colors[i]);
+            }
+            ctx.fillStyle = grd;
+            ctx.fill();
+        };
+        this.calculatePos = function (placement, rot, settings, cur) {
+            var curRot = (cur * settings.turns * TAU) + (placement.offset + rot) * TAU;
+            var curSmooth = Math.pow(cur, settings.curve);
+            var curRadius = settings.radius * curSmooth;
+            if (placement.dir < 0) {
+                curRot = TAU - curRot;
+            }
+            var x = placement.x + curRadius * Math.cos(curRot);
+            var y = placement.y + curRadius * Math.sin(curRot);
+            return { x: x, y: y };
+        };
+    }
+    function redraw(width, height) {
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        var canvas2 = document.getElementById('canvas2');
+        var ctx2 = canvas2.getContext('2d');
+        var spiral = new Spiral();
+        positionCanvas(canvas, width, height);
+        positionCanvas(canvas2, width, height);
+        var placement = {
+            x: hsize,
+            y: hsize,
+            dir: 1,
+            colors: ["rgba(87, 155, 223, 0.2)","rgba(168, 100, 32, 0.2)"],
+            offset: 0
+        };
+        var settings = {
+            turns: 8,
+            radius: hsize,
+            curve: 2.5,
+            width: .5
+        };
+        spiral.draw(ctx, placement, 0, settings);
+        placement = {
+            x: hsize,
+            y: hsize,
+            dir: -1,
+            colors: ["rgba(99, 179, 255, 0.9)","rgba(172, 96, 248, 0.9)","rgba(223, 87, 155, 0.9)","rgba(223, 155, 87, 0.9)","rgba(119, 172, 67, 0.9)","rgba(47, 84, 121, 0.9)"],
+            offset: 0
+        };
+        settings = {
+            turns: 10,
+            radius: hsize,
+            curve: 2.5,
+            width: .5
+        };
+        spiral.draw(ctx2, placement, -.5, settings);
+    }
+    intro(words.words, function () {
+        resize = redraw;
+        nimja.callResize();
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/9 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:22:28 GMT -->
+</html>

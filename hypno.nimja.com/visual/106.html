@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/106 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:26:50 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Tunnel Dive - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="GAME: Go through the marks as you dive deeper into the tunnel." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Tunnel Dive - Nimja Hypnosis" />
+    <meta property="og:description" content="GAME: Go through the marks as you dive deeper into the tunnel." />
+    <meta property="og:url" content="106.html" />
+    <meta property="og:image" content="thumb/Tunnel_Dive-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="107.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/106.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="105.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Tunnel Dive</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/106.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <script src="http://assets.nimja.com/js/three.min.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/threehelper.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/gamehelper.js"></script>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<!-- https://threejs.org/docs/index.html -->
+<style>
+    #fullscreen {
+        top: 33%;
+        left: 33%;
+        right: 33%;
+    }
+</style>
+<script>
+    var renderer_canvas = document.getElementById('canvas');
+    function hasWebGL() {
+        try {
+            return !!(window.WebGLRenderingContext && (renderer_canvas.getContext('webgl') || renderer_canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    }
+    if (false && !hasWebGL()) {
+        alert("WebGL not supported.");
+    } else {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: renderer_canvas });
+        var config = new Config([]);
+        var control = new Control(config.values.hasOwnProperty('auto') ? config.values.auto : false, ["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"]);
+
+        function resize(w, h) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            if (render.resize) {
+                render.resize(w, h);
+            }
+        }
+        function perFrame(time, diff) {
+            control.update(diff)
+            render.update(time, diff);
+            renderer.render(scene, camera);
+        }
+
+        //Spiral.
+        /**
+ * By Nimja - Tunnel Dive
+ *
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(colors, colorList) {
+    var t = this;
+    this.colors = colors;
+    this.colorList = (new Colors(colorList)).colors;
+    this.debug = false;
+    var defaults = {
+        type: { type: 'int', val: 1, min: 0, max: 4 },
+        p: { type: 'float', val: 1, min: 0, max: 3 },
+        glow: { type: 'float', val: .45, min: 0, max: 1},
+        drift: { type: 'float', val: 1, min: 0, max: 4},
+        color: { type: 'adjust', val: 1.9 },
+        pull: { type: 'int', val: 2, min: 0, max: 10 },
+        level: { type: 'int', val: 0, min: 0, max: 10 },
+        max: { type: 'int', val: 50, min: 0, max: 50 },
+        size: {type: 'ratio'}
+    };
+    this.settings = config.get(defaults);
+    this.settings.drift *= t.settings.size;
+    this.settings.color *= 180;
+    this.settings.pull *= this.settings.pull;
+    this.noise = new ValueNoise();
+    this.pieces = [];
+    this.walls = [];
+    this.almosts = ['Almost', 'Close', 'Keep it up', 'Nearly', 'You can do it', 'Getting there', 'Focus', 'Keep going'];
+    this.wallGeometries = [];
+    this.wallMaterials = [];
+    this.group = new THREE.Group();
+    this.shapeData = {shapes: [], from: 0, to: 0};
+    this.collissions = [0, 1, -1, 0];
+    this.parts = { rad: 60, len: 20 };
+    this.parts.total = (this.parts.len + 1) * this.parts.rad;
+    this.blocks = 13;
+    this.prev = { z: 0, dir: 0, time: 0 };
+    this.max = 5;
+    this.level = { cur: Math.min(this.settings.level, this.settings.max), hurt: false, length: control.disabled ? this.max : 10, pos: 0 };
+    this.radius = 2 * t.settings.size;
+    this.moveDist = this.radius * .375;
+    this.material;
+    this.cur = 0;
+    this.curz = 0;
+    this.speed = { cur: 0, intended: 0, offset: 10, max: 40 };
+    this.prevwall = { type: 0, count: 0 };
+    this.light = null;
+    this.update = function (time, diff) {
+        if (control.isFirst) {
+            return;
+        }
+        var cTime = t.settings.color * time;
+        t.prev.time = time;
+        var sdiff = Math.abs(t.speed.intended - t.speed.cur);
+        if (sdiff < .1) {
+            t.speed.cur = t.speed.intended;
+        } else if (sdiff >= .1) {
+            sdiff = Math.min(sdiff, diff * 50);
+            if (t.speed.cur > t.speed.intended) {
+                sdiff *= -1;
+            }
+            t.speed.cur += sdiff;
+        }
+        t.curz = (t.curz + diff * t.speed.cur) % t.blocks;
+        if (t.curz < t.prev.z) {
+            t.refreshPiece();
+        }
+        t.updateGroup(cTime);
+        t.prev.z = t.curz;
+    };
+
+    this.updateGroup = function(cTime) {
+        var offset = t.getAngleForOffset((t.cur - t.pieces.length + 1) * t.blocks + t.curz);
+        t.group.position.set(0, t.settings.drift, t.curz);
+        t.group.rotation.z = -offset.a;
+        var offset2 = t.getAngleForOffset((t.cur - t.pieces.length + 1.75) * t.blocks + t.curz, -offset.a);
+        t.light.color.setHex(!t.level.hurt ? t.colorList[0].adjustHsl(cTime, 0, 0).toInt() : 0x663333);
+        t.light.position.set(offset2.x, t.settings.drift + offset2.y, t.blocks * -.75);
+    }
+
+    this.getAngleForOffset = function (offset, offsetAngle) {
+        var cur = offset < 250 ? offset * .004 * TAU : TAU,
+            offsetAngle = isNaN(offsetAngle) ? 0 : offsetAngle,
+            angle = t.noise.getValueOctaves(offset * .01, 2) * cur + offsetAngle;
+        return {a: angle, x: t.settings.drift * Math.cos(angle - HPI), y: t.settings.drift * Math.sin(angle - HPI)}
+    }
+
+    this.reactFrame = function (dir) {
+        camera.position.x = dir * t.moveDist;
+        camera.lookAt(0, 0, t.pieces.length * -t.blocks);
+    };
+    this.react = function (dir) {
+        setTimeout(function () { t.prev.dir = dir; }, 200);
+    }
+    this.init = function () {
+        t.setSpeed(0);
+        control.callback = t.react;
+        control.callbackFrame = t.reactFrame;
+        var shapeOptions = [
+            new Shape(0, 1, 0, true),
+            new Shape(0, 1, 0, true),
+            new Shape(0, 1, 0, true),
+            new Shape(3, 1, 0, true),
+            new Shape(4, 1, 0, true),
+            new Shape(5, 1, 0, true),
+            new Shape(6, 1, 0, true),
+            new Shape(3, 1, .2, true),
+            new Shape(4, 1, .3, true),
+            new Shape(5, 1, .45, true),
+            new Shape(6, 1, .3, true)
+        ];
+        for (var s in shapeOptions) {
+            var shape = shapeOptions[s],
+                angleOffset = HPI,
+                step = TAU / t.parts.rad, angle, angle2, angleh, isCircle;
+            var result = [];
+            shape.resetRadius();
+            // shape.angleOffset = shape.cornerAngle * .5 + HPI;
+            for (var i = 0; i < t.parts.rad; i++) {
+                angle = i * step;
+                angleh = angle + step * .5;
+                angle2 = angle + step;
+                isCircle = shape.sides < 3;
+                result.push({
+                    a1: angle + angleOffset,
+                    r1: shape.calculateDistance(angle),
+                    n1: shape.calculateNormal((isCircle ? angle : angleh)) + angleOffset,
+                    a2: angle2 + angleOffset,
+                    r2: shape.calculateDistance(angle2),
+                    n2: shape.calculateNormal((isCircle ? angle2 : angleh)) + angleOffset
+                });
+            }
+            t.shapeData.shapes.push(result);
+        }
+
+        // Setup the walls.
+        var small = .4
+        var smallGeometry = new THREE.PlaneBufferGeometry(t.radius * small, t.radius * small);
+        var wallLeft = smallGeometry.clone();
+        wallLeft.translate(t.moveDist, 0, 0);
+        var wallRight = smallGeometry.clone();
+        wallRight.scale(-1, 1, 1);
+        wallRight.translate(-t.moveDist, 0, 0);
+        t.wallGeometries = [
+            new THREE.PlaneBufferGeometry(t.radius, t.radius),
+            wallLeft,
+            wallRight,
+            smallGeometry
+        ];
+        t.setUpWallMaterials();
+
+        t.material = t.getOutsideMaterial();
+        for (var i = 0; i < t.max; i++) {
+            t.addPiece();
+        }
+        t.level.pos = 1;
+        scene.add(t.group);
+        camera.position.z = .25;
+        if (t.debug) {
+            camera.position.set(0, 0, 10);
+        }
+        camera.lookAt(0, 0, t.pieces.length * -t.blocks);
+
+        var limit = t.blocks * (t.pieces.length - 1);
+
+        t.light = new THREE.PointLight(0xffffff, 1);
+        t.light.position.z = t.blocks * -.75;
+        scene.add(t.light);
+        if (t.debug) {
+            scene.add(new THREE.PointLightHelper(t.light, .5));
+        }
+        scene.fog = new THREE.Fog(0x000000, limit * .25, limit);
+        t.updateGroup(0);
+    };
+    this.createArrays = function (squares) {
+        // 18 because 3 coords for 2 faces (3 points each, 2 for uvs).
+        return {
+            vertices: new Float32Array(squares * 18),
+            normals: new Float32Array(squares * 18),
+            uvs: new Float32Array(squares * 12),
+        }
+    }
+    this.getGeometryForArrays = function (data) {
+        var geometry = new THREE.BufferGeometry();
+        geometry.addAttribute('position', new THREE.BufferAttribute(data.vertices, 3));
+        geometry.addAttribute('normal', new THREE.BufferAttribute(data.normals, 3));
+        geometry.addAttribute('uv', new THREE.BufferAttribute(data.uvs, 2));
+        return geometry;
+    }
+
+    this.addPiece = function () {
+        t.cur++;
+        // Add piece.
+        var offset = t.cur * t.blocks;
+        var mesh = new THREE.Mesh(t.createBlock(offset), t.material);
+        mesh.position.z = t.pieces.length * -t.blocks;
+        t.group.add(mesh);
+        t.pieces.push(mesh);
+        // Add wall.
+        if (t.cur % t.level.length == 0) {
+            var walltype = 0;
+        } else {
+            var walltype = t.getNormalWallType();
+        }
+        var mesh = new THREE.Mesh(t.wallGeometries[walltype], t.wallMaterials[walltype]);
+        mesh.userData.id = walltype;
+        var offset = t.getAngleForOffset(offset);
+        mesh.position.set(offset.x, offset.y, t.walls.length * -t.blocks);
+        mesh.rotation.z = offset.a;
+        t.group.add(mesh);
+        t.walls.push(mesh);
+    }
+    this.getNormalWallType = function () {
+        if (control.disabled) {
+            return 3;
+        }
+        var walltype = Math.floor(Math.random() * 3);
+        var samewall = t.prevwall.type == walltype;
+        // Don't allow the same wall to repeat more than 3 times.
+        if (samewall && t.prevwall.count > 2) {
+            walltype = (walltype + 1) % (t.wallGeometries.length - 1);
+            t.prevwall.count = 0;
+        } else if (!samewall) {
+            t.prevwall.count = 0;
+        }
+        t.prevwall.type = walltype;
+        t.prevwall.count += 1;
+
+        walltype += 1;
+        return walltype;
+    }
+    this.checkCollision = function () {
+        var curType = t.walls[0].userData.id;
+        if (curType > 0) {
+            var needDir = t.collissions[curType], leeway = t.max + 1;
+            if (needDir != control.dir && needDir != t.prev.dir) {
+                if (!t.level.hurt && t.cur > leeway) {
+                    t.level.hurt = true;
+                    t.level.cur = Math.max(0, t.level.cur - 1);
+                    t.updateLevelText();
+                }
+            }
+            if (t.level.hurt) {
+                var adjust = 1 - (t.level.pos / t.level.length);
+                t.setSpeed(t.settings.pull * adjust);
+            }
+        } else {
+            t.level.pos = 0;
+            if (!t.level.hurt && t.level.cur < t.settings.max) {
+                t.level.cur += 1;
+            }
+            t.shapeData.from = t.shapeData.to;
+            t.shapeData.to = Math.floor(Math.random() * t.shapeData.shapes.length);
+            t.level.hurt = false;
+            t.updateLevelText();
+            t.setSpeed(0);
+        }
+    }
+    this.setSpeed = function (extra) {
+        t.speed.intended = Math.min(t.speed.max, t.level.cur + t.speed.offset) + extra;
+        control.maxSpeed = 15 + t.level.cur * .5;
+    }
+    this.updateLevelText = function () {
+        var lines = [];
+        if (t.level.hurt) {
+            lines.push(getIndex(t.almosts, Math.random() + "..."));
+        } else if (!control.disabled) {
+            lines.push("Level " + (t.level.cur + 1));
+        }
+        if (control.lines.length > 0) {
+            lines.push(getIndex(control.lines, Math.random()));
+        }
+        t.updateWordTexture(lines, t.level.hurt ? '#ffcc99' : '#99ffcc');
+    }
+
+    this.refreshPiece = function () {
+        var piece = t.pieces.shift();
+        t.group.remove(piece);
+        for (var index in t.pieces) {
+            t.pieces[index].position.z = index * -t.blocks;
+        }
+        var wall = t.walls.shift();
+        t.group.remove(wall);
+        for (var index in t.walls) {
+            t.walls[index].position.z = index * -t.blocks;
+        }
+        t.addPiece();
+        t.checkCollision();
+    }
+
+    this.createBlock = function (offset) {
+        var r, i, index, voffset, a, b, c, d, sf, st, na1, na2, fade, z,
+            data = t.createArrays(t.parts.total),
+            points = [];
+        // Creating a new block in the level.
+        t.level.pos++;
+        var sFrom = t.shapeData.shapes[t.shapeData.from],
+            sTo = t.shapeData.shapes[t.shapeData.to];
+
+        // Do the calculations first, one per vertex.
+        for (r = 0; r <= t.parts.len; r++) {
+            z = r / t.parts.len * t.blocks;
+            fade = (t.level.pos - 1 + r / t.parts.len) / t.level.length;
+            voffset = t.getAngleForOffset(z + offset);
+            for (i = 0; i < t.parts.rad; i++) {
+                sf = sFrom[i]
+                st = sTo[i]
+                a = sf.a1 + voffset.a;
+                b = sf.a2 + voffset.a;
+                c = this.radius * fadeValue(sf.r1, st.r1, fade);
+                d = this.radius * fadeValue(sf.r2, st.r2, fade);
+                na1 = fadeAngle(sf.n1, st.n1, fade, TAU) + voffset.a;
+                na2 = fadeAngle(sf.n2, st.n2, fade, TAU) + voffset.a;
+                points.push({
+                    a: {
+                        x: voffset.x + c * Math.cos(a),
+                        y: voffset.y + c * Math.sin(a),
+                        z: -z,
+                        nx: Math.cos(na1),
+                        ny: Math.sin(na1)
+                    },
+                    b: {
+                        x: voffset.x + d * Math.cos(b),
+                        y: voffset.y + d * Math.sin(b),
+                        z: -z,
+                        nx: Math.cos(na2),
+                        ny: Math.sin(na2)
+                    }
+                });
+            }
+        }
+        // Assign them to points, 18 because 3 coords for 2 faces (3 vertices each).
+        for (r = 0; r < t.parts.len; r++) {
+            for (i = 0; i < t.parts.rad; i++) {
+                index = r * t.parts.rad + i;
+                voffset = index * 18;
+                a = points[index].a;
+                b = points[index + t.parts.rad].a;
+                c = points[index + t.parts.rad].b;
+                d = points[index].b;
+                data.vertices.set([
+                    c.x, c.y, c.z, b.x, b.y, b.z, a.x, a.y, a.z,
+                    a.x, a.y, a.z, d.x, d.y, d.z, c.x, c.y, c.z
+                ], voffset);
+                data.normals.set([
+                    c.nx, c.ny, 0, b.nx, b.ny, 0, a.nx, a.ny, 0,
+                    a.nx, a.ny, 0, d.nx, d.ny, 0, c.nx, c.ny, 0
+                ], voffset);
+                a = i / t.parts.rad;
+                b = (i + 1) / t.parts.rad;
+                c = r / t.parts.len;
+                d = (r + 1) / t.parts.len;
+                data.uvs.set([
+                    b, d, a, d, a, c,
+                    a, c, b, c, b, d
+                ], index * 12);
+            }
+        }
+        return t.getGeometryForArrays(data);
+    }
+
+    this.getOutsideMaterial = function (color) {
+        if (t.debug) {
+            return material = new THREE.MeshBasicMaterial({color: 0x99ff99, wireframe: true});
+        }
+        var texture = t.getTexture(),
+            grey = t.settings.glow * 0xff,
+            color = new Color();
+        var settings = {
+            color: 0xffffff,
+            map: texture,
+            emissive: color.setRgb(grey, grey, grey).toInt(),
+            emissiveMap: texture,
+            flatShading: false,
+            roughness: .5,
+            metalness: .3
+        };
+        var material = new THREE.MeshStandardMaterial(settings);
+        return material;
+    };
+    /**
+     * Draw the outside texture.
+     */
+    this.getTexture = function () {
+        var res = 512;
+        var tr = new TextureRenderer(res, t.colors, false);
+        tr.adjust = t.settings.p;
+        switch (t.settings.type) {
+            case 4:
+                tr.drawPixels(tr.calculatePointRoad);
+                break;
+            case 3:
+                tr.drawPixels(tr.calculatePointGradient);
+                break;
+            case 2:
+                tr.drawPixels(tr.calculatePointWavey);
+                break;
+            case 1:
+                var max = 12, step = 1 / max * res, width = step * .1 * Math.max(.05, Math.pow(t.settings.p, 2)), offset = (step - width) * .5
+                tr.ctx.fillStyle = 'rgba(255, 255, 255, .25)';
+                for (var i = 0; i < max; i++) {
+                    tr.ctx.fillRect(0, offset + i * step, res, width);
+                }
+                tr.ctx.fillStyle = 'white';
+                for (var i = 0; i < max; i++) {
+                    tr.ctx.fillRect(offset + i * step, 0, width, res);
+                }
+                break;
+            default:
+                tr.drawPixels(tr.calculatePointWater);
+        }
+        var texture = tr.getTexture();
+        texture.generateMipmaps = false;
+        return texture;
+    }
+    this.setUpWallMaterials = function () {
+        var res = 256;
+
+        var settings = {
+            color: 0xffffff,
+            blending: THREE.AdditiveBlending,
+            transparent: true
+        };
+        var wallTexture =  t.getWallTexture(res, 1);
+        t.wallMaterials = [
+            new THREE.MeshBasicMaterial(Object.assign({ map: t.updateWordTexture("Interesting...", '#00ff00') }, settings)),
+            new THREE.MeshBasicMaterial(Object.assign({ map: wallTexture }, settings)),
+            new THREE.MeshBasicMaterial(Object.assign({ map: wallTexture, side: THREE.BackSide}, settings)),
+            new THREE.MeshBasicMaterial(Object.assign({ map: t.getWallTexture(res, 0) }, settings)),
+        ];
+        t.updateLevelText();
+    };
+    this.getWallTexture = function (res, pos) {
+        var tr = new TextureRenderer(res, t.colors, pos == 2), ctx = tr.ctx;
+        var hres = res * .5;
+        if (pos == 0) {
+            ctx.beginPath();
+            ctx.arc(hres, hres, hres * .8, 0, TAU);
+        } else {
+            var max = 128;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "milter";
+            if (pos == 2) {
+                ctx.scale(-1, 1);
+                ctx.translate(-res, 0);
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(res * .1, res * .1);
+            ctx.lineTo(res * .9, res * .5);
+            ctx.lineTo(res * .1, res * .9);
+            ctx.lineTo(res * .3, res * .5);
+            ctx.closePath();
+        }
+        var steps = 20;
+        for (var i = 0; i < steps; i++) {
+            var cur = 1 - (i / steps);
+            ctx.lineWidth = cur * .1 * res ;
+            ctx.strokeStyle = getIndex(t.colors, cur);
+            ctx.stroke();
+        }
+        fade = control.disabled ? .9 : .2;
+        ctx.fillStyle = 'rgba(0, 0, 0, ' + fade + ')';
+        ctx.fillRect(0, 0, res, res);
+        var texture = tr.getTexture();
+        texture.generateMipmaps = false;
+        return texture;
+    };
+    this.updateWordTexture = function (lines, color) {
+        var res = 1024, hres = res * .5, textheight = Math.floor(res * .1);
+        if (!t.wordTexture) {
+            var tr = new TextureRenderer(res, t.colors, false);
+            var texture = tr.getTexture();
+            tr.ctx.font = textheight + 'px arial';
+            tr.ctx.textAlign = 'center';
+            tr.ctx.textBaseline = 'middle';
+            texture.generateMipmaps = false;
+            t.wordTexture = { ctx: tr.ctx, texture: texture }
+        }
+        var ctx = t.wordTexture.ctx, texture = t.wordTexture.texture;
+        ctx.clearRect(0, 0, res, res);
+        var grad = ctx.createRadialGradient(hres, hres, 0, hres, hres, hres);
+        var col = new Color(color);
+        fade = control.disabled ? .5 : .9;
+        grad.addColorStop(0.0, col.toRgba(0));
+        grad.addColorStop(0.5, col.toRgba(0));
+        grad.addColorStop(0.9, col.toRgba(fade));
+        grad.addColorStop(1.0, col.toRgba(0));
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, res, res);
+        ctx.fillStyle = col.toRgba(fade);
+        var max = lines.length;
+        for (var i = 0; i < max; i++) {
+            var line = lines[i];
+            ctx.fillText(line, res * .5, (res - max * textheight) * .5 + textheight * i + textheight * .5);
+        }
+        texture.needsUpdate = true;
+        return texture;
+    };
+}
+        var render = new Render(
+            ["#ffffff","#fcfeff","#f9fdff","#f6fcff","#f3fbff","#f0faff","#edf9ff","#ebf7ff","#e8f6ff","#e5f5ff","#e3f4ff","#e0f3ff","#ddf2ff","#daf1ff","#d8efff","#d5eeff","#d3edff","#d0ebff","#ceeaff","#cbe9ff","#c9e7ff","#c6e6ff","#c3e5ff","#c1e4ff","#bfe2ff","#bce1ff","#badfff","#b8ddff","#b5dcff","#b2dbff","#b1d9ff","#aed8ff","#acd6ff","#a9d5ff","#a7d3ff","#a5d2ff","#a2d0ff","#a1ceff","#9ecdff","#9ccbff","#9ac9ff","#98c8ff","#95c6ff","#93c5ff","#91c2ff","#8fc1ff","#8cc0ff","#8bbdff","#89bcff","#86baff","#85b8ff","#83b6ff","#80b5ff","#7eb3ff","#7db1ff","#7aafff","#78aeff","#77abff","#75a9ff","#72a8ff","#71a5ff","#6fa4ff","#6da2ff","#6aa1ff","#699eff","#679cff","#659bfe","#6598fd","#6497fb","#6395f9","#6393f9","#6291f7","#6290f5","#618df4","#618cf2","#608bf0","#5f8aee","#5f87ee","#5e86ec","#5d85ea","#5d82e9","#5c81e7","#5b80e5","#5b7de4","#5a7ce2","#597be0","#597ade","#5877dd","#5776db","#5775d9","#5673d9","#5672d7","#5570d5","#546ed4","#546dd2","#536cd0","#526bce","#5268cd","#5167cb","#5066c9","#5064c8","#4f63c6","#4e62c4","#4e5fc3","#4d5ec1","#4c5dbf","#4b5cbd","#4b5abc","#4a59ba","#4958b8","#4955b6","#4855b4","#4754b2","#4751b1","#4650af","#454fad","#444eab","#444caa","#434ba8","#424aa6","#4248a5","#4147a2","#4046a0","#3f449f","#3f439d","#3e429b","#3d4199","#3c3f98","#3b3e95","#3b3e93","#3a3c92","#393b90","#383a8e","#38388c","#37378a","#363688","#363585","#353483","#353381","#34327f","#34317c","#33317a","#323078","#322f75","#312e73","#302d71","#302c6e","#2f2b6c","#2e2a6a","#2d2968","#2d2865","#2c2763","#2b2761","#2b265f","#2a255d","#29245a","#292358","#282256","#272154","#262052","#261f4f","#251f4d","#241e4b","#231d49","#221c47","#211b45","#211a42","#201940","#1f193e","#1e183c","#1d173a","#1c1638","#1b1536","#1b1434","#1a1432","#181330","#18122d","#17112b","#161029","#150f27","#140f25","#130e23","#120d21","#110c1f","#100b1d","#0f0b1b","#0e0a19","#0d0917","#0c0815","#0a0713","#0a0711","#08060f","#07050d","#06040b","#050309","#040307","#030205","#020103","#010001","#000000"], ["#6699ff"]
+        );
+        intro(control.lines, function () {
+            if (render.init) {
+                render.init();
+            }
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/106 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:26:55 GMT -->
+</html>

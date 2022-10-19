@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/39 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:23:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Lined Circles - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Concentric circles with a line-like texture." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Lined Circles - Nimja Hypnosis" />
+    <meta property="og:description" content="Concentric circles with a line-like texture." />
+    <meta property="og:url" content="39.html" />
+    <meta property="og:image" content="thumb/Lined_Circles-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="40.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/39.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="38.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Lined Circles</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/39.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <style>
+    @keyframes rotating {
+        from {
+            transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+        }
+    }
+
+    @-webkit-keyframes rotating
+
+    /* Safari and Chrome */
+        {
+        from {
+            transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+        }
+    }
+
+    .rotating {
+        -webkit-animation: rotating 2s linear infinite;
+        -moz-animation: rotating 2s linear infinite;
+        -ms-animation: rotating 2s linear infinite;
+        -o-animation: rotating 2s linear infinite;
+        animation: rotating 2s linear infinite;
+        -webkit-animation-direction: normal;
+        animation-direction: normal;
+    }
+
+    .rotating2 {
+        -webkit-animation: rotating 2.1s linear infinite;
+        -moz-animation: rotating 2.1s linear infinite;
+        -ms-animation: rotating 2.1s linear infinite;
+        -o-animation: rotating 2.1s linear infinite;
+        animation: rotating 2.1s linear infinite;
+        -webkit-animation-direction: reverse;
+        animation-direction: reverse;
+    }
+</style>
+<canvas class="rotating2" id="canvas2" width="100" height="100" style="left: 0px; top: 0px; display: none;">Canvas not
+    supported.</canvas>
+<canvas class="rotating" id="canvas" width="100" height="100" style="left: 0px; top: 0px; display: block;">Canvas not
+    supported.</canvas>
+<script>
+    function perFrame(time, diff) {
+        if (render.update) {
+            render.update(time, diff);
+        }
+        words.update();
+    }
+    function resizeCanvas(canvas, visible, width, height, duration, direction) {
+        if (!visible) {
+            canvas.style.display = 'none';
+            return;
+        }
+        var x = width / 2;
+        var y = height / 2;
+        var radius = Math.sqrt(x * x + y * y);
+        var size = Math.ceil(radius) * 2;
+        var hsize = size / 2;
+        canvas.width = size;
+        canvas.height = size;
+        canvas.style.left = (x - hsize) + 'px';
+        canvas.style.top = (y - hsize) + 'px';
+        canvas.style.display = 'block';
+        if (duration) {
+            canvas.style.animationDuration = duration + 's';
+            canvas.style.webkitAnimationDuration = duration + 's';
+            canvas.style.msAnimationDuration = duration + 's';
+            canvas.style.mozAnimationDuration = duration + 's';
+        }
+        if (direction) {
+            direction = direction < 0 ? 'reverse' : 'normal';
+            canvas.style.animationDirection = direction;
+            canvas.style.webkitAnimationDirection = direction;
+            canvas.style.msAnimationDirectionn = direction;
+            canvas.style.mozAnimationDirection = direction;
+        }
+        return size;
+    }
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    //Spiral.
+    /**
+ * By Nimja - The Render class.
+ * @param {element} canvas
+ * @param {element} canvas2
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, canvas2, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.context.globalCompositeOperation = "source-over";
+    this.canvas2 = canvas2;
+    this.context2 = t.canvas2.getContext('2d');
+    this.context2.globalCompositeOperation = "source-over";
+    this.colors = colors;
+    this.pos = { x: 0, y: 0, w: 0, h: 0 };
+    this.draw = function () {
+        t.drawCircles(t.context, false);
+        t.drawCircles(t.context2, true);
+    };
+    this.drawCircles = function (ctx, counterClockwise) {
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        t.cur += 0.05;
+        var cur, angle, radius, colorIndex, x, y, xs, ys,
+            thickRadius = t.pos.thickness * .5,
+            circleThickness = thickRadius * .5,
+            circleRadius = thickRadius + circleThickness * 1.5,
+            start = counterClockwise ? 1 : 2,
+            end = t.pos.steps;
+        if (!counterClockwise) {
+            ctx.beginPath();
+            ctx.arc(t.pos.x, t.pos.y, thickRadius, 0, TAU, false);
+            ctx.fillStyle = gradient.createRadial(t.context, t.colors, t.pos.x, t.pos.y, 0, thickRadius);
+            ctx.fill();
+        }
+        /**
+         * Draw big circles.
+         */
+        ctx.lineWidth = t.pos.thickness;
+        ctx.globalCompositeOperation = "source-over";
+        ctx.lineCap = "round";
+        for (var i = start; i < end; i += 2) {
+            cur = i / t.pos.steps;
+            radius = cur * t.pos.size;
+            colorIndex = Math.floor(cur * t.colors.length);
+            ctx.beginPath();
+            ctx.strokeStyle = t.colors[colorIndex];
+
+            ctx.arc(t.pos.x, t.pos.y, radius, 0, TAU, false);
+            ctx.stroke();
+        }
+        /**
+         * Draw black overlay circles.
+         */
+        ctx.globalCompositeOperation = "source-atop";
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = circleThickness;
+        ctx.beginPath();
+        for (var i = start; i < end; i += 2) {
+            cur = i / t.pos.steps;
+            radius = cur * t.pos.size;
+            var max = Math.floor(radius / t.pos.thickness * 9),
+                step = 1 / max;
+            for (var i2 = 0; i2 < 1; i2 += step) {
+                angle = TAU * i2;
+                x = t.pos.x + radius * Math.cos(angle),
+                    y = t.pos.y + radius * Math.sin(angle);
+                xs = x + circleRadius * Math.cos(angle),
+                    ys = y + circleRadius * Math.sin(angle);
+                ctx.moveTo(xs, ys);
+                ctx.arc(x, y, circleRadius, angle, angle - TAU * .5, counterClockwise);
+            }
+        }
+        ctx.stroke();
+    };
+    this.redraw = function (width, height) {
+        var speed = 15;
+        var size = resizeCanvas(t.canvas, true, width, height, speed);
+        resizeCanvas(t.canvas2, true, width, height, speed);
+        t.pos.w = size;
+        t.pos.h = size;
+        t.pos.max = size;
+        t.pos.size = t.pos.max / 2;
+        t.pos.x = t.pos.size;
+        t.pos.y = t.pos.size;
+        t.pos.thickness = t.pos.max / 30;
+        t.pos.steps = Math.ceil(t.pos.size / t.pos.thickness);
+        t.draw();
+    };
+}
+
+    var render = new Render(
+        document.getElementById('canvas'),
+        document.getElementById('canvas2'),
+        ["#ffffff","#fdfefd","#fbfdfc","#f9fdfb","#f7fcf9","#f5fbf8","#f3fbf7","#f1faf5","#eff9f4","#edf9f3","#ecf8f2","#eaf7f0","#e8f7ef","#e6f6ee","#e4f5ed","#e2f5eb","#e0f4ea","#def3e9","#dcf3e8","#daf2e7","#d8f1e5","#d6f1e4","#d4f0e3","#d2efe2","#d0eee1","#ceeee0","#cceddf","#caecdd","#c8ecdc","#c6ebdb","#c4eada","#c2ead9","#bfe9d8","#bee8d7","#bce7d6","#b9e7d5","#b7e6d4","#b5e5d3","#b3e5d2","#b1e4d1","#afe3d0","#ade2cf","#aae1ce","#a8e1cd","#a6e0cc","#a4dfcb","#a2dfca","#a0dec9","#9eddc8","#9bdcc8","#99dcc7","#97dbc5","#95dac5","#93d9c4","#90d9c3","#8ed8c3","#8cd7c2","#8ad6c1","#87d5c0","#85d5bf","#83d4be","#81d3bd","#7ed2bd","#7cd1bc","#7ad1bb","#77d0bb","#75cfba","#73ceb9","#70cdb9","#6ecdb8","#6cccb7","#6acbb6","#67cab6","#64c9b5","#62c9b4","#5fc8b4","#5dc7b3","#5bc6b2","#58c5b3","#56c4b2","#54c3b1","#51c3b0","#4ec2b0","#4cc1af","#4ac0ae","#47bfaf","#45beae","#42bead","#3fbcae","#3dbcad","#3bbbac","#39baab","#35b9ac","#33b8ab","#31b7aa","#2db6ab","#2bb5aa","#29b5a9","#25b3aa","#23b3a9","#21b2a8","#1fb1a7","#1faea7","#1faca5","#1eaaa3","#1ea7a3","#1da6a1","#1da49f","#1da19f","#1c9f9d","#1c9d9b","#1c9c9a","#1b9999","#1b9797","#1a9595","#1a9395","#1a9193","#1a8f91","#1a8c90","#198a8e","#19898d","#19878b","#18848a","#188388","#188186","#187e85","#177c84","#177b82","#177881","#16767f","#16757d","#16727c","#16707a","#156f78","#156d77","#156a76","#146974","#146772","#146471","#14636f","#13616d","#135f6c","#135d6a","#125b68","#125a66","#125765","#115663","#115461","#115260","#11505e","#104e5c","#104c5b","#104a59","#0f4957","#0f4755","#0f4554","#0e4352","#0e4250","#0e404f","#0d3e4d","#0d3c4b","#0d3a49","#0c3948","#0c3746","#0c3644","#0b3442","#0b3240","#0b313e","#0b2e3d","#0a2d3b","#0a2b39","#0a2937","#092835","#092633","#082531","#082330","#08222e","#07202c","#071e2a","#071d28","#061b26","#061a24","#061822","#051720","#05151e","#05141c","#04121a","#041118","#040f16","#030e14","#030c12","#020b10","#02090e","#02080c","#01060a","#010508","#010406","#000204","#000102","#000000"], ["#20b2aa"]
+    );
+    intro(words.words, function () {
+        resize = render.redraw.bind(render);
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/39 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:23:50 GMT -->
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/68 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:05 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Growing Light - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Soft glows that spread across the screen and entice you with subtle movement and color." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Growing Light - Nimja Hypnosis" />
+    <meta property="og:description" content="Soft glows that spread across the screen and entice you with subtle movement and color." />
+    <meta property="og:url" content="68.html" />
+    <meta property="og:image" content="thumb/Growing_Light-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="69.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/68.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="67.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Growing Light</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/68.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    
+/**
+ * By Nimja - Growing Light
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors, colorSet) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    this.colorList = new Colors(colors);
+    this.colorSet = colorSet;
+    this.gradientColors = [];
+    this.pos = { x: 0, y: 0, w: 0, h: 0 };
+    var defaults = {
+        size: { type: 'ratio' },
+        speed: { type: 'ratio' },
+        pulse: { type: 'ratio' },
+        color: { type: 'adjust', val: 2 },
+        spread: { type: 'adjust', val: 2 },
+        layers: { type: 'int', val: 3, min: 1, max: 8 },
+        light: { type: 'boolean', val: false },
+        dir: { type: 'boolean', val: false }
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.count = 50;
+    this.sets = [];
+    this.prev = 0;
+    this.colorBack = t.settings.light ? '#FFFFFF' : '#000000';
+    this.colorEdge = t.settings.light ? 'rgba(255, 255, 255, 0)' : 'rgba(0, 0, 0, 0)';
+    this.composition = t.settings.light ? 'multiply' : 'lighter';
+    this.update = function (time) {
+        var diff = time - t.prev,
+            ctx = t.context,
+            cTime = time * t.settings.color;
+        t.prev = time;
+        var ctx = t.context;
+        if (t.settings.light) {
+            ctx.fillStyle = t.colorBack;
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillRect(0, 0, t.pos.w, t.pos.h);
+            ctx.globalCompositeOperation = t.composition;
+        } else {
+            ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        }
+        var index, cur, i, angle, x, y, alpha, radius;
+        for (index in t.sets) {
+            cur = t.sets[index];
+            cur.life -= diff * cur.speed * t.settings.pulse;
+            if (cur.life < 0) {
+                t.sets[index] = t.randomSet();
+                continue;
+            }
+            alpha = cur.life > 1 ? curveIn(0 - (cur.life - 2)) : curveOut(cur.life);
+            radius = cur.radius * t.pos.radius;
+            radius *= t.settings.dir ? cur.life : (2 - cur.life);
+            for (i = 0; i < cur.max; i++) {
+                angle = i / cur.max * TAU + time * cur.speed * t.settings.speed;
+                x = t.pos.x + radius * Math.cos(angle);
+                y = t.pos.y + radius * Math.sin(angle);
+                t.drawGradient(ctx, cur.color, x, y, t.pos.radius, cTime, alpha, cur.life * .5);
+            }
+        }
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.context.globalCompositeOperation = t.composition;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.pos.max = coordMath.distance(t.pos);
+        t.pos.radius = t.pos.max * .75 * t.settings.size;
+    };
+    this.randomSet = function () {
+        return {
+            life: 2,
+            max: Math.floor(Math.random() * 4) + 2,
+            radius: Math.random() * .5 + .1,
+            speed: Math.random() * .8 + .2,
+            color: getIndex(t.colorList.colors, Math.random())
+        };
+    };
+    this.drawGradient = function (ctx, color, x, y, size, cTime, alpha, age) {
+        var grd = ctx.createRadialGradient(x, y, 0, x, y, size);
+        grd.addColorStop(0, color.adjustHsl(cTime + age * t.settings.spread, 0, 0).toRgba(alpha));
+        grd.addColorStop(1, t.colorEdge);
+        ctx.fillStyle = grd;
+        ctx.fillRect(x - size, y - size, size * 2, size * 2);
+    };
+    this.init = function () {
+        for (var i = 0; i < t.settings.layers; i++) {
+            t.sets.push(t.randomSet());
+        }
+    };
+    t.init();
+}
+
+    var render = new Render(document.getElementById('canvas'), ["#ffff22","#fefd21","#fefb21","#fefa21","#fef821","#fef621","#fef521","#fef320","#fef120","#fef020","#feee20","#feec20","#feeb20","#fee920","#fee71f","#fee61f","#fee41f","#fee21f","#fee01f","#fedf1f","#fedd1f","#fedb1e","#feda1e","#fed81e","#fed61e","#fed41e","#fed21e","#fed11d","#fecf1d","#fecd1d","#fecb1d","#feca1d","#fec81d","#fec61c","#fec41c","#fec21c","#fec01c","#febe1c","#febd1c","#febb1c","#feb91b","#feb71b","#feb51b","#feb31b","#feb11b","#feaf1b","#fead1a","#feab1a","#fea91a","#fea71a","#fea51a","#fea31a","#fea119","#fe9f19","#fe9d19","#fe9b19","#fe9919","#fe9719","#fe9518","#fe9318","#fe9118","#fe8e18","#fe8c18","#fe8a17","#fe8817","#fe8617","#fe8317","#fe8117","#fe7f17","#fe7d16","#fe7a16","#fe7816","#fe7616","#fe7316","#fe7116","#fe6e15","#fe6c15","#fe6915","#fe6715","#fe6415","#fe6214","#fe5f14","#fe5c14","#fe5a14","#fe5714","#fe5413","#fe5113","#fe4e13","#fe4c13","#fe4913","#fe4513","#fe4212","#fe3f12","#fe3c12","#fe3912","#fe3512","#fe3111","#fe2e11","#fe2a11","#fe2611","#ff2211","#fd2116","#fb211c","#fa2121","#f82125","#f62129","#f5212d","#f32031","#f12035","#f02038","#ee203c","#ec203f","#eb2043","#e92046","#e71f49","#e61f4c","#e41f4f","#e21f52","#e01f55","#df1f58","#dd1f5b","#db1e5d","#da1e60","#d81e63","#d61e66","#d41e68","#d21e6b","#d11d6d","#cf1d70","#cd1d72","#cb1d75","#ca1d77","#c81d7a","#c61c7c","#c41c7e","#c21c81","#c01c83","#be1c85","#bd1c88","#bb1c8a","#b91b8c","#b71b8f","#b51b91","#b31b93","#b11b95","#af1b97","#ad1a99","#ab1a9c","#a91a9e","#a71aa0","#a51aa2","#a31aa4","#a119a6","#9f19a8","#9d19aa","#9b19ac","#9919ae","#9719b0","#9518b2","#9318b4","#9118b6","#8e18b8","#8c18ba","#8a17bc","#8817be","#8617c0","#8317c2","#8117c4","#7f17c6","#7d16c8","#7a16ca","#7816cb","#7616cd","#7316cf","#7116d1","#6e15d3","#6c15d5","#6915d6","#6715d8","#6415da","#6214dc","#5f14de","#5c14df","#5a14e1","#5714e3","#5413e5","#5113e7","#4e13e8","#4c13ea","#4913ec","#4513ee","#4212ef","#3f12f1","#3c12f3","#3912f4","#3512f6","#3111f8","#2e11f9","#2a11fb","#2611fd","#2211ff"], ["#ffff22","#ff2211","#2211ff"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/68 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:08 GMT -->
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/18 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:22:49 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Soft Spiral - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Fuzzy-edged spiral." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Soft Spiral - Nimja Hypnosis" />
+    <meta property="og:description" content="Fuzzy-edged spiral." />
+    <meta property="og:url" content="18.html" />
+    <meta property="og:image" content="thumb/Soft_Spiral-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="19.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/18.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="17.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Soft Spiral</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/18.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <style>
+    #canvas {
+        /* Anchor to the upper left */
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        /* Scale out 2X from the corner */
+        -webkit-transform: scale(2.0, 2.0);
+        -webkit-transform-origin: 0 0 0;
+        -ms-transform: scale(2.0, 2.0);
+        -ms-transform-origin: 0 0 0;
+        transform: scale(2.0, 2.0);
+        transform-origin: 0 0 0;
+    }
+</style>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script src="https://hypno.nimja.com/version/22.01/js/webgl-utils.js"></script>
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+    attribute vec2 a_position;
+    varying vec2 vTextureCoord;
+    void main() {
+    gl_Position = vec4(a_position, 0, 1);
+    vTextureCoord = (a_position + 1.0) / 2.0;
+    }
+</script>
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+    precision lowp float;
+
+varying vec2 vTextureCoord;
+
+uniform vec2 iResolution;
+uniform float iGlobalTime;
+uniform float iHue;
+uniform float iSaturation;
+
+const float offHue = -0.20;
+const float parts = 3.0;
+const float twists = 50.0;
+
+vec3 rgb2hsv(vec3 c)
+{
+    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);
+    vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+void main(void)
+{
+	vec2 p = -.5 + vTextureCoord.xy;
+	p.x *= iResolution.x / iResolution.y;
+    float dist = pow(1.0 - length(p) * .5, 5.0);
+    float angle = atan(p.x, p.y) + iGlobalTime;
+    float shimmer = sin(dist * 20.0 + iGlobalTime * 3.0);
+    float c = (sin(angle * parts + dist * twists + shimmer) + 1.0) * .5;
+    vec3 color = vec3(c, pow(c, 4.0), pow(c, 8.0));
+    vec3 hsvCol = rgb2hsv( color ) ;
+    hsvCol.x += c / 5.0;
+    hsvCol.x += iHue + offHue;
+    hsvCol.y = hsvCol.y * iSaturation;
+	gl_FragColor = vec4(hsv2rgb(hsvCol), 1.0);
+}
+</script>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    // Get A WebGL context
+    var canvas = document.getElementById("canvas");
+    if (video) {
+        canvas.style.mixBlendMode = 'hard-light';
+    }
+    var gl = getWebGLContext(canvas);
+    if (!gl) {
+        alert("WebgGL not supported...");
+    } else {
+        var defaults = {
+            speed: { type: 'ratio' },
+            dir: { type: 'dir' }
+        };
+        var config = new Config([]);
+        var set = config.get(defaults);
+
+        // setup GLSL program
+        vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
+        fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
+        program = createProgram(gl, [vertexShader, fragmentShader]);
+        if (!program) {
+            alert("Problem with shader?");
+        }
+        gl.useProgram(program);
+
+        for (var i in set) {
+            if (i == 'speed' || i == 'dir') {
+                continue;
+            }
+            // Add settings to values.
+            var floatVar = gl.getUniformLocation(program, "set_" + i);
+            gl.uniform1f(floatVar, parseFloat(set[i]));
+        }
+
+        // look up where the vertex data needs to go.
+        var positionLocation = gl.getAttribLocation(program, "a_position");
+
+        // set the resolution
+        var iResolution = gl.getUniformLocation(program, "iResolution");
+        gl.uniform2f(iResolution, canvas.width, canvas.height);
+
+        // set the timing
+        var iGlobalTime = gl.getUniformLocation(program, "iGlobalTime");
+        gl.uniform1f(iGlobalTime, Date.now());
+
+        // set the hue
+        var iHue = gl.getUniformLocation(program, "iHue");
+        gl.uniform1f(iHue, 0.58333333333333);
+
+        // set the sat
+        var iSaturation = gl.getUniformLocation(program, "iSaturation");
+        gl.uniform1f(iSaturation, 0.4);
+
+        // Create a buffer and put a single clipspace rectangle in
+        // it (2 triangles)
+        var buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -1.0, -1.0,
+            1.0, -1.0,
+            -1.0, 1.0,
+            -1.0, 1.0,
+            1.0, -1.0,
+            1.0, 1.0]), gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(positionLocation);
+        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+        // set the resolution
+        var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+        gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+
+        function perFrame(time, diff) {
+            gl.uniform1f(iGlobalTime, time * set.speed * set.dir);
+            // draw
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            words.update();
+        }
+
+        function redraw(width, height) {
+            canvas.width = Math.ceil(width / 2);
+            canvas.height = Math.ceil(height / 2);
+            gl.uniform2f(iResolution, canvas.width, canvas.height);
+            gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+        intro(words.words, function () {
+            resize = redraw;
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/18 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:22:52 GMT -->
+</html>

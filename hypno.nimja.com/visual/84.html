@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/84 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:48 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Growing Flower - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="The infinitely growing flower that forever changes and envelops your mind. An echo, of an older time." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Growing Flower - Nimja Hypnosis" />
+    <meta property="og:description" content="The infinitely growing flower that forever changes and envelops your mind. An echo, of an older time." />
+    <meta property="og:url" content="84.html" />
+    <meta property="og:image" content="thumb/Growing_Flower-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="85.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/84.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="83.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Growing Flower</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/84.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - Growing Flower - Originally from: https://nimja.com/other/interactive/flower
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.buffer = {
+        canvas: document.createElement('canvas')
+    };
+    this.buffer.context = t.buffer.canvas.getContext('2d');
+    this.colors = colors;
+    this.colorList = new Colors(colors);
+    this.pos = new Pos();
+    this.stars = [];
+    var defaults = {
+        zoom: { type: 'float', val: 1, min: .5, max: 1.5 },
+        cycle: { type: 'float', val: 11, min: 0, max: 20 },
+        rot: { type: 'int', val: 5, min: 1, max: 10 },
+        count: { type: 'ratio' },
+        turn: { type: 'ratio' },
+        wave: { type: 'ratio' },
+        width: { type: 'ratio' },
+        size: { type: 'ratio' },
+        speed: { type: 'ratio' },
+        sharp: { type: 'bool' },
+        white: { type: 'bool' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.blur = this.settings.zoom == 1;
+    this.settings.zoom = Math.pow(this.settings.zoom, .25);
+    this.settings.cycle = (this.settings.cycle - 10) * -60;
+    this.settings.speed = Math.pow(this.settings.speed, 2);
+    this.settings.width = Math.pow(this.settings.width, 2);
+    this.settings.count = Math.round(t.settings.count * 33);
+    this.prev = 0;
+    this.coords = [];
+    this.drawLine = new DrawLine(this.buffer.context);
+    this.centerPoint = new Point(0, 0);
+    this.centerPoint.c = 0;
+    this.firstDeath = false;
+    this.fillSettings = {
+        composite: t.settings.white ? 'multiply' : 'lighter',
+        bg: t.settings.white ? 'white' : 'black',
+        fill: t.settings.white ? 'rgba(255,255,255,.02)' : 'rgba(0,0,0,.02)',
+        fill2: t.settings.white ? 'rgba(255,255,255,.2)' : 'rgba(0,0,0,.2)'
+    };
+    canvasBlendMode = t.settings.white ? 'multiply' : 'screen';
+    this.update = function (time) {
+        var ctx = t.context;
+        t.draw(time);
+        t.drawFadeAndBlur(ctx);
+        t.drawRotate(ctx);
+    };
+    this.drawFadeAndBlur = function (ctx) {
+        var s = t.pos.scale, blur = 1.5;
+        //        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        //        return;
+        ctx.globalCompositeOperation = "source-over";
+        //Fade col.
+        ctx.fillRect(0, 0, t.pos.w, t.pos.h);
+        if (t.settings.blur) {
+            // Render blur.
+            ctx.globalAlpha = .25;
+            ctx.drawImage(t.canvas, -blur, 0);
+            ctx.drawImage(t.canvas, 0, -blur);
+            ctx.drawImage(t.canvas, blur, 0);
+            ctx.drawImage(t.canvas, 0, blur);
+            ctx.globalAlpha = 1;
+        } else {
+            ctx.drawImage(t.canvas, s.x + blur, s.y, s.w, s.h);
+        }
+        ctx.globalCompositeOperation = t.fillSettings.composite;
+    };
+    this.drawRotate = function (ctx) {
+
+        ctx.translate(t.pos.x, t.pos.y);
+        ctx.drawImage(t.buffer.canvas, -t.pos.buffer.x, -t.pos.buffer.y);
+
+        if (t.settings.rot > 1) {
+            var total = 0, step = TAU / t.settings.rot;
+            for (var i = 1; i < t.settings.rot; i++) {
+                ctx.rotate(step);
+                total += step;
+                ctx.drawImage(t.buffer.canvas, -t.pos.buffer.x, -t.pos.buffer.y);
+            }
+            ctx.rotate(-total);
+        }
+        ctx.translate(-t.pos.x, -t.pos.y);
+    };
+    this.draw = function (time) {
+        var timea = time * t.settings.speed,
+            pos = t.pos.buffer,
+            cshift = time * t.settings.cycle,
+            diff = Math.min(timea - t.prev, 0.04);
+        this.prev = timea;
+
+        diff *= .03;
+        var points = t.calculatePoints(diff * t.settings.dir, diff, pos, cshift);
+
+        t.buffer.context.clearRect(0, 0, pos.w, pos.h);
+        if (t.settings.sharp) {
+            t.drawLine.sharp(points);
+        } else {
+            t.drawLine.smoothB(points);
+        }
+        return true;
+    };
+    this.calculatePoints = function () { };
+    this.calculatePointsOutward = function (diff, diffAbs, pos, cshift) {
+        var points = [], add = false, point, coord, max = t.coords.length - 1;
+        for (var i = max; i >= 0; i--) {
+            coord = t.coords[i];
+            point = coord.update(diff, diffAbs, pos);
+            if (i === 0 && coord.growNew()) {
+                add = true;
+            } else if (i === max && coord.isDead()) {
+                max--;
+                t.coords.pop();
+                continue;
+            }
+            point.color = getIndex(t.colorList.colors, point.c).adjustHsl(cshift, 0, 0).toHex();
+            points.push(point);
+        }
+        if (add) {
+            t.coords.unshift(new Coord(this.settings.dir));
+        }
+        coord = t.coords[max];
+        if (coord.endFraction < 1 && points.length > 1) {
+            var last = points[0],
+                adjusted = last.fadeTo(points[1], coord.endFraction);
+            last.set(adjusted.x, adjusted.y);
+        }
+        points.push(t.centerPoint);
+        t.centerPoint.color = t.colorList.colors[0].adjustHsl(cshift, 0, 0).toHex();
+        return points;
+    };
+    this.calculatePointsInward = function (diff, diffAbs, pos, cshift) {
+        var points = [], add = false, point, coord, max = t.coords.length - 1;
+        for (var i = 0; i <= max; i++) {
+            coord = t.coords[i];
+            point = coord.update(diff, diffAbs, pos);
+            if (i === 0 && coord.growNew()) {
+                add = true;
+            } else if (i === max && coord.isDead()) {
+                t.firstDeath = true;
+                t.coords.pop();
+                continue;
+            }
+            point.color = getIndex(t.colorList.colors, point.c).adjustHsl(cshift, 0, 0).toHex();
+            points.push(point);
+        }
+        if (add) {
+            t.coords.unshift(new Coord(this.settings.dir));
+        }
+        if (t.firstDeath) {
+            points.push(t.centerPoint);
+            t.centerPoint.color = t.colorList.colors[0].adjustHsl(cshift, 0, 0).toHex();
+        }
+        return points;
+    };
+
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.set(width, height);
+        t.pos.radius = t.pos.dist * t.settings.size;
+        t.pos.rot = t.settings.rot;
+        t.pos.step = TAU / t.settings.rot;
+        t.pos.scale = {
+            x: t.pos.x - t.pos.x * t.settings.zoom,
+            y: t.pos.y - t.pos.y * t.settings.zoom,
+            w: t.pos.w * t.settings.zoom,
+            h: t.pos.h * t.settings.zoom
+        };
+        var size = Math.ceil(t.pos.dist * 2);
+        var sizeH = Math.ceil(size * .5);
+        t.pos.buffer = {
+            x: sizeH,
+            y: sizeH,
+            w: size,
+            h: size,
+            radius: t.pos.radius,
+            width: t.pos.dist * .005 * t.settings.width,
+            turn: t.settings.turn * .5
+        };
+        t.buffer.canvas.width = size;
+        t.buffer.canvas.height = size;
+        t.buffer.context.lineCap = 'round';
+        t.buffer.context.lineJoin = 'round';
+        t.centerPoint.set(t.pos.buffer.x, t.pos.buffer.y);
+        t.centerPoint.width = t.pos.buffer.width;
+
+        t.context.fillStyle = t.fillSettings.bg;
+        t.context.fillRect(0, 0, t.pos.w, t.pos.h);
+        t.context.fillStyle = gradient.createRadial(
+            t.context,
+            [t.fillSettings.fill, t.fillSettings.fill2],
+            t.pos.x,
+            t.pos.y,
+            t.pos.dist * .8,
+            t.pos.dist, -2
+        );
+        t.context.lineCap = 'round';
+        t.context.lineJoin = 'round';
+    };
+    this.init = function () {
+        var count = t.settings.count;
+        Coord.prototype.parts = count;
+        Coord.prototype.start = 1 / count;
+        Coord.prototype.end = 1 - (1 / count);
+        Coord.prototype.fullCycle = TAU * .8 * t.settings.wave;
+        if (t.settings.dir > 0) {
+            t.calculatePoints = t.calculatePointsOutward;
+            t.coords.push(new Coord(this.settings.dir));
+        } else {
+            t.calculatePoints = t.calculatePointsInward;
+            var part = Math.max(2, Math.round(count * .1));
+            for (var i = 0; i < part; i++) {
+                var coord = new Coord(this.settings.dir);
+                coord.cur = 1 - (i / count);
+                t.coords.push(coord);
+            }
+        }
+        if (t.settings.white) {
+            t.colorList.call('reverse');
+        }
+    };
+    this.init();
+}
+
+function Coord(dir) {
+    this.angle = Math.random() * TAU * 2 - TAU;
+    this.outward = dir > 0;
+    this.cur = dir > 0 ? 0 : 1;
+    this.rand = 0.8 + Math.random() * 0.4;
+    this.cycle = this.rand * this.fullCycle;
+    this.point = new Point();
+    this.endFraction = 1;
+}
+Coord.prototype = {
+    parts: 20,
+    end: 0,
+    start: 0,
+    fullCycle: TAU * .8,
+    isDead: function () {
+        return this.cur > 1 || this.cur < 0;
+    },
+    growNew: function () {
+        return this.outward ? this.cur > this.start : this.cur < this.end;
+    },
+    update: function (diff, diffAbs, pos) {
+        var radius = 1.6 * pos.radius * this.cur * Math.sin(this.cur * this.cycle);
+        this.point.set(
+            pos.x + radius * Math.cos(this.angle),
+            pos.y + radius * Math.sin(this.angle)
+        );
+        this.point.c = this.cur;
+        this.point.width = (1 - curveIn(this.cur)) * pos.width;
+        this.cur += diff;
+        this.endFraction = this.cur < this.end ? 1 : (this.cur - this.end) * this.parts;
+        var angleAdjust = diffAbs * TAU * this.rand * pos.turn;
+        this.angle += (this.angle > 0) ? angleAdjust : -angleAdjust;
+        return this.point;
+    }
+};
+
+function DrawLine(ctx) {
+    this.ctx = ctx;
+}
+DrawLine.prototype = {
+    drawPoint: function (p, color, size, text) {
+        this.ctx.fillStyle = color;
+        this.ctx.fillRect(p.x - size * .5, p.y - size * .5, size, size);
+        this.ctx.fillStyle = 'white';
+        this.ctx.font = "30px Georgia";
+        this.ctx.fillText(text, p.x + 5, p.y - 3);
+    },
+    drawPoints: function (points) {
+        for (var i = 0; i < points.length; i++) {
+            this.drawPoint(points[i], 'red', 10, i);
+        }
+    },
+    sharp: function (points) {
+        var max = points.length,
+            ctx = this.ctx,
+            p = null,
+            prev = points[0];
+        for (var i = 1; i < max; i++) {
+            p = points[i];
+            ctx.beginPath();
+            ctx.moveTo(prev.x, prev.y);
+            ctx.strokeStyle = p.color;
+            ctx.lineWidth = p.width;
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+            prev = p;
+        }
+    },
+    /**
+     * Draw from out to in.
+     */
+    smoothB: function (points) {
+        if (points.length < 2) {
+            return;
+        }
+        var max = points.length - 1,
+            ctx = this.ctx,
+            p0 = points[0],
+            p1 = p0.fadeTo(points[1], .5),
+            p2 = points[1],
+            p3 = null,
+            p4 = null;
+        // Draw half to end.
+        ctx.beginPath();
+        ctx.strokeStyle = p2.color;
+        ctx.lineWidth = p2.width;
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.stroke();
+        if (max > 1) {
+            //Draw the curved middle pieces.
+            for (var i = 2; i <= max; i++) {
+                p4 = points[i];
+                p3 = p2.fadeTo(p4, .5);
+                ctx.beginPath();
+                ctx.strokeStyle = p2.color;
+                ctx.lineWidth = p2.width;
+                ctx.moveTo(p1.x, p1.y);
+                ctx.quadraticCurveTo(p2.x, p2.y, p3.x, p3.y);
+                ctx.stroke();
+                p2 = p4;
+                p1 = p3;
+            }
+        } else {
+            p3 = p1;
+            p4 = p2;
+        }
+        //Draw last half of the last line.
+        ctx.beginPath();
+        ctx.strokeStyle = p4.color;
+        ctx.lineWidth = p4.width;
+        ctx.moveTo(p3.x, p3.y);
+        ctx.lineTo(p4.x, p4.y);
+        ctx.stroke();
+    }
+};
+    var render = new Render(document.getElementById('canvas'), ["#224444","#224344","#224244","#224144","#224044","#223e44","#223e44","#223d44","#223c44","#223a44","#223944","#223844","#223844","#223644","#223544","#223444","#223344","#223344","#223144","#223044","#222f44","#222e44","#222d44","#222c44","#222b44","#222a44","#222944","#222844","#222744","#222644","#222544","#222444","#222344","#222244","#222244","#232244","#242244","#252244","#272244","#272244","#282244","#292244","#2b2244","#2c2244","#2d2244","#2d2244","#2f2244","#302244","#312244","#322244","#332244","#342244","#352244","#362244","#372244","#382244","#392244","#3a2244","#3b2244","#3c2244","#3d2244","#3e2244","#3f2244","#402244","#412244","#422244","#442244","#442243","#442242","#442241","#442240","#44223e","#44223e","#44223d","#44223c","#44223a","#442239","#442238","#442238","#442236","#442235","#442234","#442233","#442233","#442231","#442230","#44222f","#44222e","#44222d","#44222c","#44222b","#44222a","#442229","#442228","#442227","#442226","#442225","#442224","#442223","#442222","#442222","#442322","#442422","#442522","#442722","#442722","#442822","#442922","#442b22","#442c22","#442d22","#442d22","#442f22","#443022","#443122","#443222","#443322","#443422","#443522","#443622","#443722","#443822","#443922","#443a22","#443b22","#443c22","#443d22","#443e22","#443f22","#444022","#444122","#444222","#444422","#434422","#424422","#414422","#404422","#3e4422","#3e4422","#3d4422","#3c4422","#3a4422","#394422","#384422","#384422","#364422","#354422","#344422","#334422","#334422","#314422","#304422","#2f4422","#2e4422","#2d4422","#2c4422","#2b4422","#2a4422","#294422","#284422","#274422","#264422","#254422","#244422","#234422","#224422","#224422","#224423","#224424","#224425","#224427","#224427","#224428","#224429","#22442b","#22442c","#22442d","#22442d","#22442f","#224430","#224431","#224432","#224433","#224434","#224435","#224436","#224437","#224438","#224439","#22443a","#22443b","#22443c","#22443d","#22443e","#22443f","#224440","#224441","#224442"], ["#224444","#222244","#442244","#442222","#444422","#224422"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/84 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:51 GMT -->
+</html>

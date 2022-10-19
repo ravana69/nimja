@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/48 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Geometric Shapes - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A large shape, made out of smaller shapes that appear to interlock." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Geometric Shapes - Nimja Hypnosis" />
+    <meta property="og:description" content="A large shape, made out of smaller shapes that appear to interlock." />
+    <meta property="og:url" content="48.html" />
+    <meta property="og:image" content="thumb/Geometric_Shapes-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="49.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/48.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="47.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Geometric Shapes</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/48.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - Geometric Shapes
+ *
+ * Loosely inspired by: http://patakk.tumblr.com/post/33304597365
+ *
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.context.globalCompositeOperation = "source-over";
+    this.colors = colors;
+    this.colorList = (new Colors(colors)).colors;
+    this.pos = {x: 0, y: 0, w: 0, h: 0};
+    var defaults = {
+        large: {type: 'int', val: 5, min: 3, max: 10},
+        small: {type: 'int', val: 4, min: 0, max: 10},
+        twists: {type: 'int', val: 1, min: 1, max: 4},
+        color: {type: 'adjust', val: 2},
+        spread: {type: 'adjust', val: 2},
+        speed: {type: 'ratio'},
+        ratio: {type: 'float', val: 0, min: 0, max: .8},
+        flat: {type: 'bool', val: false}
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    //Limit settings, shapes cannot be less than 3 (triangle).
+    this.buffer = {canvas: document.createElement('canvas')};
+    this.buffer.context = t.buffer.canvas.getContext('2d');
+    this.smallShape;
+    /**
+     * Drawing cycle, first draw in buffer, then on screen.
+     * @param {Number} time
+     */
+    this.update = function (time) {
+        t.drawSmallInBuffer(time);
+        t.drawLargeOnScreen(time);
+    };
+    this.resize = function (width, height) {
+        //Setup canvas.
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = t.pos.w / 2;
+        t.pos.y = t.pos.h / 2;
+        var largeShape = new Shape(t.settings.large);
+        largeShape.init();
+        // Calculate edge and radius of shape.
+        var lengthM = largeShape.calculateForSide(),
+                radiusM = largeShape.calculateForRadius(),
+                minM = Math.min(lengthM * .75, radiusM * .99);
+        t.pos.radius = Math.min(t.pos.x, t.pos.y) / (1 + minM);
+        t.pos.step = 1 / 30;
+        // Set the edge and radius of our large shape.
+        t.pos.sideLength = lengthM * t.pos.radius;
+        t.pos.sideRadius = radiusM * t.pos.radius;
+        t.pos.size = minM * t.pos.radius;
+        t.smallShape = new Shape(t.settings.small, t.pos.size, t.settings.ratio, true);
+
+        // Calculate the angles of our large and small shapes.
+        t.pos.angleSmall = t.smallShape.rotationAngle;
+        if (t.settings.small == 2) {
+            t.pos.angleSmall = TAU;
+        }
+        t.pos.angleLarge = TAU / t.settings.large;
+        // The 'mid' angle is how far the small shapes turn.
+        t.pos.angleMid = t.pos.angleSmall * t.settings.twists - (t.pos.angleLarge - t.pos.angleSmall);
+        // Buffer setup.
+        t.buffer.x = Math.ceil(t.pos.size);
+        t.buffer.y = t.buffer.x + Math.ceil(t.pos.sideLength);
+        t.buffer.w = t.buffer.x * 2;
+        t.buffer.h = t.buffer.y * 2;
+        t.buffer.canvas.width = t.buffer.w;
+        t.buffer.canvas.height = t.buffer.h;
+    };
+    /**
+     * Draw one single edge in the buffer.
+     *
+     * Each edge consists of X smaller shapes. There is an interesting challenge in the ending angle, because
+     * of the large shape being a different one than the small one.
+     *
+     * @param {Number} time
+     */
+    this.drawSmallInBuffer = function(time) {
+        var bfr = t.buffer.context, cTime = time * t.settings.color, col;
+        bfr.strokeStyle = 'white';
+        bfr.clearRect(0, 0, t.buffer.w, t.buffer.h);
+        //Draw one side, consisting of smaller shapes, into the buffer.
+        for (var cur = 0; cur < 1; cur += t.pos.step) {
+            bfr.beginPath();
+            var x, y,
+                curB = cur * 2 - 1,
+                xp = t.buffer.x,
+                yp = t.buffer.y - curB * t.pos.sideLength,
+                angle = cur * t.pos.angleMid + time * t.settings.speed;
+            // Set the fill for this shape.
+            col = getIndex(t.colorList, cur).adjustHsl(cTime + cur * t.settings.spread, 0, 0).toHex();
+            if (!t.settings.flat) {
+                x = t.smallShape.radiusInside * Math.cos(angle + t.pos.angleSmall * .5);
+                y = t.smallShape.radiusInside * Math.sin(angle + t.pos.angleSmall * .5);
+                var gradient = bfr.createLinearGradient(xp - x, yp - y, xp + x, yp + y);
+                gradient.addColorStop(0, col);
+                gradient.addColorStop(1, getIndex(t.colorList, 1 - cur).adjustHsl(cTime + 1 - cur * t.settings.spread, 0, 0).toHex());
+                bfr.fillStyle = gradient;
+            } else {
+                bfr.fillStyle = col;
+            }
+            t.smallShape.draw(bfr, xp, yp, angle, true, 1);
+            bfr.fill();
+            bfr.stroke();
+        }
+    };
+    /**
+     * Draw the large shape on the screen, using the buffer for each 'side'.
+     *
+     * This redraws the 'upper half' of the first edge again, to close it off.
+     * @param {Number} time
+     */
+    this.drawLargeOnScreen = function(time) {
+        var ctx = t.context;
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        ctx.save();
+        ctx.translate(t.pos.x, t.pos.y);
+        ctx.rotate(time * -.1);
+        for (var i = 0; i < t.settings.large; i++) {
+            ctx.rotate(-t.pos.angleLarge);
+            ctx.drawImage(t.buffer.canvas, t.pos.sideRadius - t.buffer.x, -t.buffer.y);
+        }
+        ctx.rotate(-t.pos.angleLarge);
+        ctx.drawImage(
+                t.buffer.canvas,
+                0, t.buffer.y, t.buffer.w, t.buffer.y,
+                t.pos.sideRadius - t.buffer.x, 0, t.buffer.w, t.buffer.y
+        );
+        ctx.restore();
+    };
+}
+
+    var render = new Render(document.getElementById('canvas'), ["#ffff66","#fefd65","#fefb64","#fef963","#fef863","#fef662","#fef461","#fef261","#fef160","#feef5f","#feed5f","#feeb5e","#feea5d","#fee85c","#fee65c","#fee45b","#fee35a","#fee15a","#fedf59","#fedd58","#fedb57","#fed957","#fed856","#fed655","#fed454","#fed254","#fed053","#fece52","#fecc51","#feca51","#fec950","#fec74f","#fec54e","#fec34e","#fec14d","#febf4c","#febd4b","#febb4a","#feb94a","#feb749","#feb548","#feb347","#feb146","#feaf46","#fead45","#feab44","#fea943","#fea742","#fea441","#fea241","#fea040","#fe9e3f","#fe9c3e","#fe9a3d","#fe973c","#fe953b","#fe933b","#fe913a","#fe8f39","#fe8c38","#fe8a37","#fe8836","#fe8535","#fe8334","#fe8133","#fe7e32","#fe7c31","#fe7930","#fe772f","#fe742e","#fe722d","#fe6f2c","#fe6d2b","#fe6a2a","#fe6729","#fe6528","#fe6227","#fe5f26","#fe5c25","#fe5a24","#fe5722","#fe5421","#fe5120","#fe4e1f","#fe4b1e","#fe471c","#fe441b","#fe411a","#fe3e18","#fe3a17","#fe3615","#fe3314","#fe2f12","#fe2b11","#fe270f","#fe220d","#fe1d0b","#fe1809","#fe1207","#fe0b04","#ff0000","#fd0004","#fb0007","#f90009","#f8000b","#f6000d","#f4000f","#f20011","#f10012","#ef0014","#ed0015","#eb0017","#ea0018","#e8001a","#e6001b","#e4001c","#e3001e","#e1001f","#df0020","#dd0021","#db0022","#d90024","#d80025","#d60026","#d40027","#d20028","#d00029","#ce002a","#cc002b","#ca002c","#c9002d","#c7002e","#c5002f","#c30030","#c10031","#bf0032","#bd0033","#bb0034","#b90035","#b70036","#b50037","#b30038","#b10039","#af003a","#ad003b","#ab003b","#a9003c","#a7003d","#a4003e","#a2003f","#a00040","#9e0041","#9c0041","#9a0042","#970043","#950044","#930045","#910046","#8f0046","#8c0047","#8a0048","#880049","#85004a","#83004a","#81004b","#7e004c","#7c004d","#79004e","#77004e","#74004f","#720050","#6f0051","#6d0051","#6a0052","#670053","#650054","#620054","#5f0055","#5c0056","#5a0057","#570057","#540058","#510059","#4e005a","#4b005a","#47005b","#44005c","#41005c","#3e005d","#3a005e","#36005f","#33005f","#2f0060","#2b0061","#270061","#220062","#1d0063","#180063","#120064","#0b0065","#000066"], ["#ffff66","#ff0000","#000066"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/48 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:14 GMT -->
+</html>

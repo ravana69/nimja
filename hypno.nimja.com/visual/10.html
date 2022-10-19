@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/10 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:22:28 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Spiral Dots - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A single strain of dots, moving around fast, creating a complex optical illusion." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Spiral Dots - Nimja Hypnosis" />
+    <meta property="og:description" content="A single strain of dots, moving around fast, creating a complex optical illusion." />
+    <meta property="og:url" content="10.html" />
+    <meta property="og:image" content="thumb/Spiral_Dots-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="11.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/10.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="9.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Spiral Dots</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/10.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - The render class.
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.context.globalCompositeOperation = "source-over";
+    this.pos = { x: 0, y: 0, w: 0, h: 0 };
+    this.radius = 0;
+    this.cur = Math.random() * 1000;
+    this.rotation = 0;
+    this.colors = colors;
+    this.update = function () {
+        var ctx = t.context;
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        t.beginFill();
+        ctx.beginPath();
+        var step = 1 / 1200;
+        var posSpeed = t.radius / 28;
+        for (var pos = 0; pos <= 1; pos += step) {
+            var posR = 1 - pos * 2;
+            var posSmooth = Math.pow(pos, 1.5);
+            var curR = t.radius * posSmooth;
+            var curT = t.rotation + TAU * (t.cur * posR * .5);
+            var radius = 0.1 + pos * posSpeed;
+            var x = t.pos.x + curR * Math.cos(curT);
+            var y = t.pos.y + curR * Math.sin(curT);
+            ctx.moveTo(x, y);
+            ctx.arc(x, y, radius, 0, TAU, true);
+        }
+        ctx.fill();
+        t.cur += 0.02;
+        t.rotation -= 0.01;
+    };
+    this.beginFill = function () {
+        t.context.fillStyle = gradient.createRadial(t.context, t.colors, t.pos.x, t.pos.y, 0, t.radius);
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.radius = Math.pow(t.pos.x * t.pos.x + t.pos.y * t.pos.y, .5);
+    };
+}
+
+    var render = new Render(document.getElementById('canvas'), ["#ffffff","#fffdfc","#fffbfa","#fff9f8","#fff7f6","#fff6f4","#fff4f2","#fff2f0","#fff1ee","#ffefec","#ffede9","#ffebe7","#ffeae5","#ffe8e3","#ffe7e1","#ffe5de","#ffe3dc","#ffe2da","#ffe0d8","#ffded6","#ffddd3","#ffdbd1","#ffdacf","#ffd8cc","#ffd7ca","#ffd5c8","#ffd4c5","#ffd3c3","#ffd1c0","#ffcfbe","#ffcebb","#ffcdb9","#ffcbb7","#ffcab5","#ffc9b2","#ffc7af","#ffc6ad","#ffc5aa","#ffc3a8","#ffc2a5","#ffc1a2","#ffbfa0","#ffbe9e","#ffbc9b","#ffbc98","#ffba96","#ffb993","#ffb890","#ffb78e","#ffb58b","#ffb588","#ffb485","#ffb283","#ffb180","#ffb17d","#ffaf7a","#ffae78","#ffae74","#ffac72","#ffab6f","#ffab6b","#ffaa69","#ffa866","#ffa764","#ffa760","#ffa65d","#ffa45b","#ffa557","#ffa454","#ffa252","#ffa34d","#ffa24b","#ffa048","#ffa143","#ffa041","#ff9e3e","#ff9d3c","#ff9e37","#ff9d34","#ff9c32","#ff9d2d","#ff9b2a","#ff9a28","#ff9b22","#ff9a20","#ff991d","#ff981a","#ff9915","#ff9812","#ff9710","#ff990a","#ff9808","#ff9605","#fe9800","#fc9700","#f99500","#f79400","#f29500","#f09400","#ed9200","#e99300","#e69200","#e49000","#df9100","#dd8f00","#db8e00","#d88c00","#d48d00","#d18b00","#cf8a00","#cb8a00","#c88900","#c68700","#c28800","#c08600","#bd8400","#bb8300","#b78300","#b58100","#b38000","#af8000","#ac7e00","#aa7d00","#a67d00","#a47b00","#a27900","#a07800","#9c7800","#9a7600","#987400","#947400","#927200","#907100","#8c7000","#8a6f00","#886d00","#856c00","#836b00","#816900","#7e6700","#7b6700","#796500","#776300","#746200","#726100","#705f00","#6d5e00","#6b5c00","#695b00","#665900","#645800","#615600","#5f5400","#5d5300","#5b5100","#595000","#564f00","#544d00","#524b00","#504900","#4d4800","#4b4600","#494400","#464300","#444100","#433f00","#403e00","#3e3c00","#3c3a00","#3a3800","#383700","#363500","#343300","#313100","#303000","#2e2e00","#2b2c00","#292a00","#282800","#262600","#232500","#222300","#202100","#1d1f00","#1c1d00","#1a1b00","#181900","#161700","#141500","#121300","#101200","#0e1000","#0c0e00","#0a0c00","#090a00","#070800","#050600","#030400","#010200","#000000"], ["#ff9900"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/10 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:22:30 GMT -->
+</html>

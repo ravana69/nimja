@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/78 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:32 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>3D Spiral Stairs - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Infinite steps, going down in a sweet spiral. Just let yourself fall in a world of your choice." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="3D Spiral Stairs - Nimja Hypnosis" />
+    <meta property="og:description" content="Infinite steps, going down in a sweet spiral. Just let yourself fall in a world of your choice." />
+    <meta property="og:url" content="78.html" />
+    <meta property="og:image" content="thumb/3D_Spiral_Stairs-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="79.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/78.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="77.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>3D Spiral Stairs</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/78.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <script src="http://assets.nimja.com/js/three.min.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/threehelper.js"></script>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<!-- https://threejs.org/docs/index.html -->
+<script>
+    var renderer_canvas = document.getElementById('canvas');
+    function hasWebGL() {
+        try {
+            return !!(window.WebGLRenderingContext && (renderer_canvas.getContext('webgl') || renderer_canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    }
+    if (false && !hasWebGL()) {
+        alert("WebGL not supported.");
+    } else {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: renderer_canvas });
+
+        function resize(w, h) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            if (render.resize) {
+                render.resize(w, h);
+            }
+        }
+
+        function perFrame(time, diff) {
+            words.update();
+            render.update(time, diff);
+            renderer.render(scene, camera);
+        }
+        var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+        config = new Config([]);
+        //Spiral.
+        /**
+ * By Nimja - 3D Spiral Stairs
+ *
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(colors, colorSet) {
+    var t = this;
+    this.colors = colors;
+    this.colorSet = colorSet;
+    this.cubes = [];
+    this.max = 20;
+    var defaults = {
+        turns: { type: 'int', val: 8, min: 2, max: 32 },
+        steps: { type: 'int', val: 210, min: 50, max: 500 },
+        height: { type: 'ratio' },
+        inside: { type: 'float', val: 2, min: 1, max: 10 },
+        width: { type: 'ratio' },
+        step: { type: 'float', val: .95, min: 0, max: 2 },
+        move: { type: 'float', val: .2, min: 0, max: 1 },
+        color: { type: 'adjust', val: 2 },
+        speed: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.max = Math.round(t.settings.count * 100);
+    this.settings.move = this.settings.move;
+    this.settings.moveDir = t.settings.cmove < 0 ? -1 : 1;
+    this.threeHelper = new ThreeHelper(colors, colorSet);
+    this.previous = 0;
+    this.cap;
+    this.light;
+    this.shape;
+    this.edges;
+    this.stairs = {
+        steps: t.settings.steps,
+        turns: t.settings.turns,
+        zHeight: 60 * t.settings.height,
+        inside: t.settings.inside,
+        outside: t.settings.inside + t.settings.width * 2
+    };
+    this.texture = 0;
+    var center = { x: 0, y: 0 };
+    /**
+     * Every frame.
+     * @param {Number} time
+     */
+    this.update = function (time) {
+        var ta = time * t.settings.speed * t.settings.dir * .5;
+        var cur = (ta % 1 + 1) % 1;
+        var angle = HPI - ta * TAU;
+        var angleOffset = t.stairs.blockAngleOffset * cur;
+        var z = t.stairs.zHeight - t.stairs.block * cur;
+        var c = coordMath.rotate(center, t.stairs.outside * 2, angle - angleOffset);
+        t.light.position.set(c.x, c.y, z - t.stairs.lightOffset);
+        //Camera, cap and texture.
+        camera.position.set(0, 0, z - t.stairs.stepHeight * 2);
+        camera.rotation.z = angle * t.settings.move - angleOffset;
+        t.texture.offset.y = cur * t.stairs.blockPart;
+        t.cap.position.z = z - t.stairs.zHeight + t.stairs.block;
+        if (t.settings.color !== 0) {
+            renderer.domElement.style.filter = 'hue-rotate(' + Math.floor(time * t.settings.color * 360 % 360) + 'deg)';
+        }
+    };
+    /**
+     * Build the stairs.
+     * @returns {undefined}
+     */
+    this.init = function () {
+        t.calculateExtras();
+
+        var geometry = t.createStairs();
+        t.edges = t.threeHelper.addWireframe(geometry, false, 70);
+        t.edges.material.depthTest = true;
+        t.edges.material.color.set(0x000000);
+        t.edges.material.opacity = .2;
+
+        t.cap = t.createCap();
+
+        var shape = new THREE.Mesh(geometry, t.getGradientMaterial());
+        scene.add(shape);
+        t.shape = shape;
+
+        camera.up = new THREE.Vector3(0, 0, 1);
+        camera.position.z = t.stairs.zHeight + 2;
+
+
+        //Create a PointLight
+        t.light = new THREE.PointLight(new Color('#ffffff').toInt(), 1, t.stairs.zHeight * 2);
+        //        t.light.position.set(-t.stairs.outside + 1, 0, t.stairs.zHeight + 2);
+        scene.add(t.light);
+
+        var pointLightHelper = new THREE.PointLightHelper(t.light, .1);
+        scene.add(pointLightHelper);
+    };
+    this.calculateExtras = function () {
+        var stepsPerTurn = Math.floor(t.stairs.steps / t.stairs.turns);
+        var turnFraction = stepsPerTurn / t.stairs.steps;
+
+        var turnAngle = turnFraction * t.stairs.turns * TAU;
+        var turnHeight = turnFraction * t.stairs.zHeight;
+
+        var anglePerStep = t.stairs.turns / t.stairs.steps * TAU;
+        var stepHeight = t.stairs.zHeight / t.stairs.steps;
+        t.stairs.block = turnHeight;
+        t.stairs.blockAngleOffset = 0 - (TAU - turnAngle);
+        t.stairs.blockPart = turnFraction;
+        t.stairs.lightOffset = t.stairs.block * .2;
+        t.stairs.stepHeight = stepHeight;
+        t.stairs.middle = (t.stairs.inside + t.stairs.outside) * .5;
+        t.stairs.angleStepAdjust = anglePerStep * (t.settings.step - 1);
+    };
+    this.createStairs = function () {
+        var geometry = new THREE.Geometry();
+
+        var max = t.stairs.steps;
+        var verts = 6;
+        var rInside = t.stairs.inside;
+        var rOutside = t.stairs.outside;
+        var stairHeight = t.stairs.zHeight;
+        var stepHeight = stairHeight / max;
+        var turns = t.stairs.turns;
+        var angleStepAdust = t.stairs.angleStepAdjust;
+        var c = { x: 0, y: 0 };
+        for (var i = 0; i < max; i++) {
+            var cur = i / max;
+            var z1 = cur * stairHeight;
+            var z2 = z1 - stepHeight;
+            var z3 = z1 - stepHeight * 2;
+            var angle = cur * TAU * turns;
+            var c1 = coordMath.rotate(c, rInside, angle);
+            var c2 = coordMath.rotate(c, rOutside, angle);
+            var c1a = coordMath.rotate(c, rInside, angle - angleStepAdust);
+            var c2a = coordMath.rotate(c, rOutside, angle - angleStepAdust);
+            geometry.vertices.push(new THREE.Vector3(c1a.x, c1a.y, z1));
+            geometry.vertices.push(new THREE.Vector3(c2a.x, c2a.y, z1));
+            geometry.vertices.push(new THREE.Vector3(c1.x, c1.y, z2));
+            geometry.vertices.push(new THREE.Vector3(c2.x, c2.y, z2));
+            geometry.vertices.push(new THREE.Vector3(c1.x, c1.y, z3));
+            geometry.vertices.push(new THREE.Vector3(c2.x, c2.y, z3));
+            var index = i * verts;
+            if (index > 0) {
+                var prev = index - verts;
+                //front
+                geometry.faces.push(new THREE.Face3(prev + 0, prev + 2, prev + 1));
+                geometry.faces.push(new THREE.Face3(prev + 1, prev + 2, prev + 3));
+                //Top
+                geometry.faces.push(new THREE.Face3(prev + 0, prev + 1, index + 2));
+                geometry.faces.push(new THREE.Face3(prev + 1, index + 3, index + 2));
+                //Side
+                geometry.faces.push(new THREE.Face3(prev + 4, prev + 2, index + 4));
+                geometry.faces.push(new THREE.Face3(prev + 2, prev + 0, index + 4));
+                geometry.faces.push(new THREE.Face3(prev + 0, index + 2, index + 4));
+                //Bottom
+                //                geometry.faces.push(new THREE.Face3(prev + 5, prev + 4, index + 5));
+                //                geometry.faces.push(new THREE.Face3(prev + 4, index + 4, index + 5));
+            }
+        }
+
+
+        //the face normals and vertex normals can be calculated automatically if not supplied above
+        geometry.computeFaceNormals();
+        geometry.computeVertexNormals();
+
+        t.threeHelper.wrapUV(geometry, 'x', 'z');
+        return geometry;
+    };
+
+    this.createCap = function () {
+
+        // Cap
+        var endColor = (new Color(t.colors[0]).toInt());
+        var material = t.getMaterial({ color: endColor });
+        var geometry = new THREE.CircleGeometry(t.stairs.outside, 16);
+        var cap = new THREE.Mesh(geometry, material);
+        scene.add(cap);
+        cap.position.z = 0;
+
+        // Scene.background
+        var fogEnd = t.stairs.zHeight - t.stairs.block;
+        scene.fog = new THREE.Fog(endColor, fogEnd * .7, fogEnd);
+        return cap;
+    };
+
+    this.getMaterial = function (config) {
+        var material = new THREE.MeshStandardMaterial(config);
+        material.flatShading = true;
+        material.metalness = 0;
+        material.roughness = .8;
+        return material;
+    }
+
+
+    this.getGradientMaterial = function () {
+        var canvas = document.createElement("canvas");
+        var res = 256;
+        canvas.width = res;
+        canvas.height = res;
+        var ctx = canvas.getContext('2d');
+        var grd = ctx.createLinearGradient(0, res, 0, 0);
+        var curIndex, max = 14;
+        for (var i = 0; i < max; i++) {
+            curIndex = i / (max - 1);
+            grd.addColorStop(curIndex, getIndex(colors, Math.pow(curIndex, 2)));
+        }
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, res, res);
+
+        var texture = new THREE.Texture(canvas);
+        texture.needsUpdate = true;
+        t.texture = texture;
+
+        var material = t.getMaterial({ color: 0xffffff, map: texture });
+        return material;
+    };
+
+}
+
+        var render = new Render(
+            ["#ffffff","#fffdfc","#fffcf9","#fffbf6","#fffaf3","#fff9f0","#fff9ed","#fff8ea","#fff8e6","#fff8e2","#fff8de","#fff8da","#fff8d6","#fff9d1","#fffacc","#fffcc7","#fffdc1","#ffffbc","#fcffbb","#faffb9","#f7ffb8","#f5ffb7","#f2ffb5","#f1ffb3","#eeffb2","#ebffb1","#e8ffb0","#e5ffaf","#e3ffad","#e0ffac","#ddffab","#daffab","#d7ffaa","#d4ffa9","#d2ffa7","#ceffa7","#cbffa6","#c8ffa6","#c4ffa5","#c2ffa4","#bfffa3","#bbffa3","#b8ffa2","#b4ffa2","#b1ffa1","#aeffa0","#abffa0","#a7ff9f","#a4ff9f","#a0ff9f","#9dff9d","#9aff9d","#97fc9e","#95f99f","#93f6a1","#91f3a2","#90f0a2","#8eeda3","#8ceaa4","#8ae7a5","#89e4a6","#87e2a5","#86dfa6","#84dca7","#82d9a8","#80d6a8","#7fd3a9","#7dd1a9","#7ccea9","#7accaa","#78c9aa","#77c6ab","#76c4aa","#74c2aa","#72bfab","#71bcab","#6fbaab","#6eb7ab","#6db5ab","#6bb3ab","#6ab1ab","#68aeab","#67acab","#66aaaa","#65a7a9","#65a4a9","#65a1a8","#649ea7","#649ba7","#6399a5","#6396a5","#6294a4","#6291a3","#618ea3","#618ca2","#6089a1","#6087a0","#6084a0","#5f819f","#5f7e9e","#5e7c9d","#5d7a9c","#5d779b","#5d749b","#5c729a","#5b7099","#5b6d98","#5a6b97","#5a6896","#596595","#596395","#586193","#585f92","#575c92","#575a91","#565790","#55558e","#56548c","#565289","#565187","#564f84","#564e82","#564c80","#564b7d","#56497b","#564878","#564776","#554574","#554472","#55436f","#54416d","#54406b","#543f69","#533d67","#523c65","#523b62","#513a60","#51385e","#50375c","#4f365a","#4f3558","#4e3456","#4d3254","#4d3152","#4c3051","#4b2f4f","#4a2e4d","#492d4b","#482c49","#472b47","#462a45","#452943","#442841","#43283f","#41273d","#40263b","#3f2639","#3e2537","#3c2436","#3b2334","#3a2232","#382230","#37212e","#36202c","#351f2b","#331f29","#321e27","#301d26","#2f1c24","#2e1b22","#2c1a21","#2b191f","#29191e","#28181c","#26171b","#251619","#231517","#221416","#201315","#1f1213","#1d1112","#1c1011","#1a0f0f","#180f0e","#160e0d","#140d0c","#120c0b","#110b0a","#0f0a09","#0d0908","#0b0807","#0a0706","#080605","#060403","#040302","#030201","#010100","#000000"], ["#ffffff","#d4ffa9","#7fd3a9","#5f7e9e","#543f69","#331f29"]
+        );
+        intro(words.words, function () {
+            if (render.init) {
+                render.init();
+            }
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/78 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:35 GMT -->
+</html>

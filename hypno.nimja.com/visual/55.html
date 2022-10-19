@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/55 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Strange Strands - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Slowly moving, strangely enticing and colorful strands." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Strange Strands - Nimja Hypnosis" />
+    <meta property="og:description" content="Slowly moving, strangely enticing and colorful strands." />
+    <meta property="og:url" content="55.html" />
+    <meta property="og:image" content="thumb/Strange_Strands-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="56.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/55.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="54.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Strange Strands</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/55.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja & Wouter - Strange Strands
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.context.globalCompositeOperation = "screen";
+    this.colors = colors;
+    this.colorList = (new Colors(colors)).colors;
+    this.pos = { x: 0, y: 0, w: 0, h: 0, canvas: {} };
+    var defaults = {
+        speed: { type: 'ratio' },
+        width: { type: 'ratio' },
+        amp: { type: 'ratio' },
+        amount: { type: 'ratio' },
+        color: { type: 'adjust', val: 2 },
+        spread: { type: 'adjust', val: 2 },
+        mode: { type: 'int', val: 0, min: 0, max: 3 },
+        flat: { type: 'bool', val: true },
+        dir: { type: 'dir', val: 0 }
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.strands = [];
+    this.backgroundColor = 'black';
+    this.drawMode = 'screen';
+    canvasBlendMode = (t.settings.mode % 2 == 1) ? 'multiply' : 'screen';
+    this.update = function (time) {
+        var ctx = t.context, strand, cTime = time * t.settings.color;
+        ctx.globalCompositeOperation = "source-over";
+        ctx.fillStyle = t.backgroundColor;
+        ctx.fillRect(0, 0, t.pos.w, t.pos.h);
+        ctx.globalCompositeOperation = t.drawMode;
+        gradient.setShiftSpread(cTime, t.settings.spread);
+        for (var index in t.strands) {
+            strand = t.strands[index]
+            if (t.settings.color != 0) {
+                if (t.settings.flat) {
+                    var colorIndex = t.settings.invert ? 1 - strand.lengthRatio : strand.lengthRatio;
+                    strand.color = getIndex(t.colorList, colorIndex).adjustHsl(cTime + colorIndex * t.settings.spread, 0, 0).toHex();;
+                } else {
+                    strand.color = gradient.createRadial(t.context, t.colorList, t.pos.x, t.pos.y, 0, t.pos.radius * strand.length);
+                }
+            }
+            strand.draw(ctx, time);
+        }
+    };
+    this.resize = function (width, height) {
+        t.totalFrames = Math.round((1 / t.settings.speed) * 80);
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.pos.radius = Math.sqrt(t.pos.x * t.pos.x + t.pos.y * t.pos.y);
+        t.pos.thickness = t.pos.radius * .005 * t.settings.width;
+        //        t.pos.radius = Math.min(t.pos.x, t.pos.y);
+        t.context.lineWidth = t.pos.thickness;
+        t.context.globalCompositeOperation = "lighter";
+        t.context.lineCap = "round";
+        t.context.lineJoin = "round";
+        if (!t.settings.flat) {
+            gradient.setShiftSpread(0, t.settings.spread);
+            for (var i in t.strands) {
+                var strand = t.strands[i];
+                t.strands[i].color = gradient.createRadial(t.context, t.colorList, t.pos.x, t.pos.y, 0, t.pos.radius * strand.length);
+            }
+        }
+    };
+    this.init = function () {
+        if (t.settings.mode == 1 || t.settings.mode == 3) {
+            t.drawMode = (t.settings.mode == 1) ? 'multiply' : 'source-over';
+            t.backgroundColor = 'white';
+            t.colors = t.colors.reverse();
+        } else if (t.settings.mode == 2) {
+            t.drawMode = 'source-over';
+        } else {
+            t.drawMode = 'screen';
+        }
+        t.settings.count = Math.floor(60 * t.settings.amount);
+        for (var i = 0; i < t.settings.count; i++) {
+            var cur = i / (t.settings.count - 1);
+            var strand = new Strand(t.pos, 1 - cur, t.settings.dir, t.settings.speed, t.settings.amp);
+            var colorIndex = t.settings.invert ? 1 - strand.lengthRatio : strand.lengthRatio;
+            strand.color = getIndex(t.colorList, colorIndex).adjustHsl(colorIndex * t.settings.spread, 0, 0).toHex();
+            t.strands.push(strand);
+        }
+    };
+    t.init();
+}
+function Strand(pos, lengthRatio, dir, speed, amp) {
+    var t = this;
+    this.moveSpeed = (Math.random() * .4 + .3) * speed;
+    this.amplitude = (Math.random() * Math.PI + .2) * .9 * amp;
+    this.lengthRatio = lengthRatio;
+    this.length = lengthRatio * .7 + .3;
+    this.phase = t.amplitude * t.moveSpeed * .5 + Math.random();
+    this.step = 1 / Math.round(this.length * 100 * amp);
+    this.dir = dir;
+    this.color = 'white';
+    this.angle = Math.random() * TAU;
+    this.pos = pos;
+    this.draw = function (ctx, time) {
+        ctx.beginPath();
+        ctx.strokeStyle = t.color;
+        ctx.moveTo(t.pos.x, t.pos.y);
+        var x, y, angle, radius, baseAngle = t.angle + time * t.moveSpeed * .1;
+        for (var i = 0; i < 1; i += t.step) {
+            angle = t.amplitude * Math.sin(i * t.phase * t.dir + time * t.moveSpeed) + baseAngle;
+            radius = t.pos.radius * t.length * i;
+            x = t.pos.x + radius * Math.cos(angle);
+            y = t.pos.y + radius * Math.sin(angle);
+            ctx.lineTo(x, y);
+        }
+        ctx.arc(x, y, t.pos.thickness * .75, 0, TAU);
+        ctx.stroke();
+    };
+}
+    var render = new Render(document.getElementById('canvas'), ["#ffff66","#fefd65","#fefb64","#fef963","#fef863","#fef662","#fef461","#fef261","#fef160","#feef5f","#feed5f","#feeb5e","#feea5d","#fee85c","#fee65c","#fee45b","#fee35a","#fee15a","#fedf59","#fedd58","#fedb57","#fed957","#fed856","#fed655","#fed454","#fed254","#fed053","#fece52","#fecc51","#feca51","#fec950","#fec74f","#fec54e","#fec34e","#fec14d","#febf4c","#febd4b","#febb4a","#feb94a","#feb749","#feb548","#feb347","#feb146","#feaf46","#fead45","#feab44","#fea943","#fea742","#fea441","#fea241","#fea040","#fe9e3f","#fe9c3e","#fe9a3d","#fe973c","#fe953b","#fe933b","#fe913a","#fe8f39","#fe8c38","#fe8a37","#fe8836","#fe8535","#fe8334","#fe8133","#fe7e32","#fe7c31","#fe7930","#fe772f","#fe742e","#fe722d","#fe6f2c","#fe6d2b","#fe6a2a","#fe6729","#fe6528","#fe6227","#fe5f26","#fe5c25","#fe5a24","#fe5722","#fe5421","#fe5120","#fe4e1f","#fe4b1e","#fe471c","#fe441b","#fe411a","#fe3e18","#fe3a17","#fe3615","#fe3314","#fe2f12","#fe2b11","#fe270f","#fe220d","#fe1d0b","#fe1809","#fe1207","#fe0b04","#ff0000","#fd0004","#fb0007","#f90009","#f8000b","#f6000d","#f4000f","#f20011","#f10012","#ef0014","#ed0015","#eb0017","#ea0018","#e8001a","#e6001b","#e4001c","#e3001e","#e1001f","#df0020","#dd0021","#db0022","#d90024","#d80025","#d60026","#d40027","#d20028","#d00029","#ce002a","#cc002b","#ca002c","#c9002d","#c7002e","#c5002f","#c30030","#c10031","#bf0032","#bd0033","#bb0034","#b90035","#b70036","#b50037","#b30038","#b10039","#af003a","#ad003b","#ab003b","#a9003c","#a7003d","#a4003e","#a2003f","#a00040","#9e0041","#9c0041","#9a0042","#970043","#950044","#930045","#910046","#8f0046","#8c0047","#8a0048","#880049","#85004a","#83004a","#81004b","#7e004c","#7c004d","#79004e","#77004e","#74004f","#720050","#6f0051","#6d0051","#6a0052","#670053","#650054","#620054","#5f0055","#5c0056","#5a0057","#570057","#540058","#510059","#4e005a","#4b005a","#47005b","#44005c","#41005c","#3e005d","#3a005e","#36005f","#33005f","#2f0060","#2b0061","#270061","#220062","#1d0063","#180063","#120064","#0b0065","#000066"], ["#ffff66","#ff0000","#000066"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/55 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:33 GMT -->
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/37 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:23:42 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Growing Vines - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Slowly growing vines that come towards you." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Growing Vines - Nimja Hypnosis" />
+    <meta property="og:description" content="Slowly growing vines that come towards you." />
+    <meta property="og:url" content="37.html" />
+    <meta property="og:image" content="thumb/Growing_Vines-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="38.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/37.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="36.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Growing Vines</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/37.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    function rand(base, plus) {
+    return base + Math.random() * plus;
+}
+/**
+ * By Nimja - Growing Vines.
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    this.pos = { x: 0, y: 0, w: 0, h: 0, colors: colors };
+    var defaults = {
+        fade: { type: 'float', val: 1, min: 0, max: 1 },
+        zoom: { type: 'float', val: 1.05, min: .5, max: 1.5 },
+        type: { type: 'int', val: 0, min: 0, max: 3 },
+        count: { type: 'ratio' },
+        width: { type: 'ratio' },
+        speed: { type: 'ratio' }
+    };
+    this.settings = config.get(defaults);
+    //    this.settings.zoom = Math.pow(this.settings.zoom, .25);
+    this.settings.zoom = Math.pow(this.settings.zoom, .1);
+    this.settings.fade = Math.pow(this.settings.fade, .25);
+    this.settings.max = Math.round(this.settings.count * 150);
+    this.stalks = [];
+    this.fade = (new Color('#000000')).toRgba(1 - t.settings.fade);
+
+    this.curFrame = 0;
+    this.framePause = Math.round((1 / this.settings.count) * 30);
+    this.max = Math.round(this.settings.count * 150);;
+    this.backup = {
+        canvas: document.createElement('canvas')
+    };
+    this.backup.context = t.backup.canvas.getContext('2d');
+    this.backup.context.scale(t.settings.zoom, t.settings.zoom);
+    this.update = function (time) {
+        var ctx = this.context, aTime = time * t.settings.speed;
+        t.curFrame++;
+        if (t.curFrame > t.framePause && t.stalks.length < t.max) {
+            t.stalks.push(t.newStalk());
+            t.curFrame = 0;
+        }
+        t.backup.context.clearRect(0, 0, t.pos.w, t.pos.h);
+        var s = t.pos.scale;
+        t.backup.context.drawImage(t.canvas, s.x, s.y, s.w, s.h);
+        ctx.drawImage(t.backup.canvas, 0, 0);
+        if (t.settings.fade < 1) {
+            ctx.fillStyle = t.fade;
+            ctx.fillRect(0, 0, t.pos.w, t.pos.h);
+        }
+        var removed = [],
+            stalk,
+            branch;
+        for (var index in t.stalks) {
+            stalk = t.stalks[index];
+            branch = stalk.update(ctx);
+            if (branch && t.stalks.length < t.max) {
+                t.stalks.push(branch);
+            }
+            if (stalk.dead) {
+                removed.unshift(index);
+            }
+        }
+        for (var index in removed) {
+            t.stalks.splice(removed[index], 1);
+        }
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.backup.canvas.width = width;
+        t.backup.canvas.height = height;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.pos.scale = {
+            x: t.pos.x - t.pos.x * t.settings.zoom,
+            y: t.pos.y - t.pos.y * t.settings.zoom,
+            w: t.pos.w * t.settings.zoom,
+            h: t.pos.h * t.settings.zoom
+        };
+        t.pos.zoom = t.settings.zoom;
+        t.pos.speed = t.settings.speed;
+        t.pos.type = t.settings.type;
+        t.pos.colors = t.colors;
+        t.pos.max = coordMath.distance(t.pos);
+        t.pos.maxWidth = t.pos.max / 33 * t.settings.width;
+        t.pos.minWidth = t.pos.max / 400 * t.settings.width;
+        t.pos.deltaWidth = t.pos.maxWidth - t.pos.minWidth;
+        t.context.globalCompositeOperation = 'source-over';
+        t.context.fillStyle = "black";
+        t.context.fillRect(0, 0, t.pos.w, t.pos.h);
+        t.context.lineCap = 'round';
+        t.context.globalCompositeOperation = 'source-over';
+        t.stalks = [];
+        t.curFrame = 0;
+        t.stalks.push(t.newStalk());
+    };
+    this.newStalk = function () {
+        var angle = TAU * Math.random();
+        var dir = Math.random() < .5 ? 1 : -1;
+        var adjust = angle + (TAU * -.4 * dir);
+        return new Stalk(
+            t.pos,
+            Math.random(),
+            angle,
+            t.pos.maxWidth * rand(.5, .5),
+            t.pos.max * Math.cos(adjust) * 1,
+            t.pos.max * Math.sin(adjust) * 1,
+            dir
+        );
+    };
+}
+
+function Stalk(pos, colorIndex, angle, thickness, x, y, direction) {
+    var t = this;
+    this.pos = pos;
+    this.colorIndex = colorIndex;
+    this.color = getIndex(t.pos.colors, colorIndex);
+    this.angle = angle;
+    this.minWidth = t.pos.minWidth;
+    this.thickness = thickness;
+    this.speed = this.thickness * rand(.1, .5);
+    this.dead = false;
+    this.size = 0;
+    this.cur = { x: x, y: y, inFrame: false };
+    this.prev = { x: x, y: y, inFrame: false };
+    this.update = function (ctx) {
+        t.angle += t.angleSpeed * t.pos.speed;
+        t.thickness *= .995;
+        t.size = (t.thickness - t.pos.minWidth) / t.pos.deltaWidth;
+        t.cur.x += t.speed * Math.cos(t.angle) * t.pos.speed;
+        t.cur.y += t.speed * Math.sin(t.angle) * t.pos.speed;
+        var dist = coordMath.distance(t.cur);
+        if (dist > t.pos.max && !t.flipped) {
+            t.angle = Math.atan2(t.cur.y, t.cur.x) - Math.PI;
+        }
+        // Don't draw outside the screen.
+        var drawPos = {
+            x: t.pos.x + t.cur.x,
+            y: t.pos.y + t.cur.y
+        };
+        drawPos.inFrame = coordMath.isInView(drawPos, t.pos.w, t.pos.h, t.thickness);
+        if (drawPos.inFrame || t.prev.inFrame) {
+            ctx.beginPath();
+            ctx.moveTo(t.pos.x + t.prev.x, t.pos.y + t.prev.y);
+            ctx.lineTo(drawPos.x, drawPos.y);
+            t.draw(ctx);;
+        }
+        t.prev.x = t.cur.x * t.pos.zoom;
+        t.prev.y = t.cur.y * t.pos.zoom;
+        t.prev.inFrame = drawPos.inFrame;
+        t.life -= 1 * t.pos.speed;
+        if (t.life < 0) {
+            if (t.thickness > t.minWidth) {
+                return t.branch();
+            } else {
+                t.dead = true;
+            }
+        }
+        return false;
+    };
+
+    this.draw = function (ctx) {
+        ctx.lineWidth = t.thickness * 1.5;
+        ctx.strokeStyle = 'black';
+        ctx.lineCap = 'butt';
+        ctx.stroke();
+        ctx.lineWidth = t.thickness;
+        ctx.strokeStyle = t.color;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+    };
+    this.drawTinted = function (ctx) {
+        ctx.lineWidth = t.thickness * 1.5;
+        ctx.strokeStyle = 'black';
+        ctx.lineCap = 'butt';
+        ctx.stroke();
+        ctx.lineWidth = t.thickness;
+        ctx.strokeStyle = getIndex(t.pos.colors, 1 - t.size);
+        ctx.lineCap = 'round';
+        ctx.stroke();
+    };
+    this.drawHollow = function (ctx) {
+        ctx.lineCap = 'butt';
+        ctx.lineWidth = t.thickness * 1.5;
+        ctx.strokeStyle = t.color;
+        ctx.stroke();
+        ctx.lineWidth = t.thickness * 1;
+        ctx.strokeStyle = getIndex(t.pos.colors, (t.colorIndex + .33) % 1);;
+        ctx.stroke();
+        ctx.lineWidth = t.thickness * .5;
+        ctx.strokeStyle = getIndex(t.pos.colors, (t.colorIndex + .66) % 1);
+        ctx.lineCap = 'round';
+        ctx.stroke();
+    };
+    this.drawHollowTint = function (ctx) {
+        ctx.lineCap = 'butt';
+        ctx.lineWidth = t.thickness * 1.5;
+        ctx.strokeStyle = 'black';
+        ctx.stroke();
+        ctx.lineWidth = t.thickness * 1;
+        ctx.strokeStyle = getIndex(t.pos.colors, .9 - t.size);
+        ctx.stroke();
+        ctx.lineWidth = t.thickness * .5;
+        ctx.strokeStyle = getIndex(t.pos.colors, 1 - t.size);
+        ctx.lineCap = 'round';
+        ctx.stroke();
+    };
+
+    this.getColor = function (cur) {
+        return getIndex(t.render.colors, cur);
+    };
+    this.branch = function () {
+        //        var curChance = .9 - t.size;
+        var curChance = 1 - t.thickness / t.pos.maxWidth;
+        t.speed *= .9;
+        t.angleSpeed *= -.9;
+        t.life = t.getLife();
+        if (Math.random() < curChance) {
+            var curl = rand(.6, .8);
+            var stalk = new Stalk(
+                t.pos,
+                t.colorIndex,
+                t.angle,
+                t.thickness * .9,
+                t.cur.x * t.pos.zoom,
+                t.cur.y * t.pos.zoom,
+                t.angleSpeed < 0 ? curl : -curl
+            );
+            return stalk;
+        }
+    };
+    this.getLife = function () {
+        return Math.floor(rand(50, 50));
+    };
+    this.life = t.getLife();
+    this.angleSpeed = rand(TAU * .2, TAU * .3) / t.life * direction;
+    this.flipped = false;
+    switch (t.pos.type) {
+        case 3: t.draw = t.drawHollowTint; break;
+        case 2: t.draw = t.drawHollow; break;
+        case 1: t.draw = t.drawTinted; break;
+    }
+}
+    var render = new Render(document.getElementById('canvas'), ["#ffffff","#fffefc","#fffdf9","#fffcf6","#fffbf3","#fffaf0","#fff9ed","#fff8ea","#fff7e7","#fff7e4","#fff6e1","#fff5de","#fff4db","#fff3d8","#fff3d4","#fff2d1","#fff2ce","#fff1ca","#fff1c7","#fff0c4","#fff0c0","#ffefbd","#ffeeba","#ffeeb7","#ffeeb3","#ffedb0","#ffedac","#ffeda8","#ffeda5","#ffeca2","#ffed9d","#ffec9a","#ffeb97","#ffeb93","#ffec8e","#ffeb8b","#ffeb88","#ffec83","#ffeb7f","#ffeb7c","#ffec77","#ffec73","#ffec70","#ffeb6d","#ffed67","#ffec64","#ffec60","#ffee5a","#ffee57","#ffed53","#fff04d","#ffef4a","#ffef46","#ffef42","#fff23c","#fff138","#fff135","#fff42e","#fff42a","#fff426","#fff71f","#fff71c","#fff718","#fff714","#fffa0d","#fffa09","#fffa05","#fdfd00","#fbfb00","#f9f900","#f5fa00","#f3f800","#f2f600","#eef600","#ecf400","#eaf200","#e8f000","#e4f000","#e2ee00","#e0ec00","#dcec00","#daea00","#d9e800","#d5e800","#d3e600","#d1e400","#cfe200","#cbe200","#cae000","#c8de00","#c4de00","#c2dc00","#c0da00","#bdda00","#bbd800","#b9d600","#b7d400","#b4d300","#b2d100","#b0cf00","#accf00","#abcd00","#a9cb00","#a5cb00","#a4c900","#a2c600","#a0c400","#9dc400","#9bc200","#99c000","#96bf00","#94bd00","#92bb00","#8fbb00","#8db800","#8cb600","#8ab400","#87b400","#85b100","#83af00","#80af00","#7eac00","#7daa00","#79aa00","#78a700","#76a500","#75a300","#71a200","#70a000","#6e9e00","#6b9d00","#6a9b00","#689900","#659800","#639500","#629300","#5f9200","#5d9000","#5c8e00","#5a8b00","#578a00","#568800","#548600","#528500","#508200","#4f8000","#4c7f00","#4a7c00","#497a00","#487800","#457600","#437400","#427200","#3f7000","#3e6e00","#3d6b00","#3a6a00","#396800","#376500","#366300","#346100","#325f00","#315c00","#2f5b00","#2d5800","#2c5600","#2a5400","#295200","#274f00","#264c00","#244b00","#234800","#214500","#1f4400","#1e4100","#1d3e00","#1b3c00","#1a3a00","#193700","#173500","#163200","#143000","#132d00","#122b00","#102800","#0f2500","#0e2300","#0d2000","#0c1e00","#0a1b00","#091900","#081600","#071300","#061000","#050e00","#040b00","#020800","#010500","#000200","#000000"], ["#ffff00"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/37 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:23:44 GMT -->
+</html>

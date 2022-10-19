@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/90 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:26:05 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Chromatic Starfield - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A beautiful, fast-moving star-field with some sweet chromatic aberration." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Chromatic Starfield - Nimja Hypnosis" />
+    <meta property="og:description" content="A beautiful, fast-moving star-field with some sweet chromatic aberration." />
+    <meta property="og:url" content="90.html" />
+    <meta property="og:image" content="thumb/Chromatic_Starfield-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="91.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/90.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="89.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Chromatic Starfield</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/90.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <script src="http://assets.nimja.com/js/three.min.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/threehelper.js"></script>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<!-- https://threejs.org/docs/index.html -->
+<script>
+    var renderer_canvas = document.getElementById('canvas');
+    function hasWebGL() {
+        try {
+            return !!(window.WebGLRenderingContext && (renderer_canvas.getContext('webgl') || renderer_canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    }
+    if (false && !hasWebGL()) {
+        alert("WebGL not supported.");
+    } else {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: renderer_canvas });
+
+        function resize(w, h) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            if (render.resize) {
+                render.resize(w, h);
+            }
+        }
+
+        function perFrame(time, diff) {
+            words.update();
+            render.update(time, diff);
+            renderer.render(scene, camera);
+        }
+        var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+        config = new Config([]);
+        //Spiral.
+        /**
+ * By Nimja - Chromatic Starfield
+ *
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(colors) {
+    var t = this;
+    this.colors = colors;
+    this.cubes = [];
+    var defaults = {
+        count: { type: 'ratio' },
+        abb: { type: 'float', val: 1, min: 0, max: 2 },
+        twist: { type: 'float', val: .1, min: 0, max: 2 },
+        color: { type: 'adjust', val: 2.1 },
+        spread: { type: 'adjust', val: 2 },
+        width: { type: 'ratio' },
+        speed: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.colorList = new Colors(colors);
+    this.layers = [];
+    this.geometry;
+    this.max = Math.floor(75 * t.settings.count);
+    this.layerCount = 40;
+    this.layerSpread = 30;
+    this.sizeBase = 4;
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.settings.speed *= .3;
+    this.settings.twist *= .3;
+    this.settings.width *= this.sizeBase;
+
+    this.update = function (time) {
+        var tspeed = time * t.settings.dir * t.settings.speed, tc = time * t.settings.color;
+        var twist = time * t.settings.twist;
+        for (var i = 0; i < t.layerCount; i++) {
+            var layer = t.layers[i];
+            var cur = ((i / t.layerCount + tspeed) % 1 + 1) % 1;
+            layer.position.z = cur * t.layerCount;
+            layer.rotation.z = twist * (i % 2 * 2 - 1);
+            var color = getIndex(t.colorList.colors, 1 - cur);
+            t.updateColors(layer, color.adjustHsl(tc + cur * t.settings.spread, 0, 0));
+        }
+    };
+
+    this.updateColors = function (layer, color) {
+        var colors = layer.geometry.attributes.color;
+        var data = [color.r / 255, color.g / 255, color.b / 255];
+        for (var i = 0; i < colors.array.length; i++) {
+            colors.array[i] = data[i % 3];
+        }
+        colors.needsUpdate = true;
+    };
+
+    this.init = function () {
+        for (var i = 0; i < t.layerCount; i++) {
+            var layer = t.createLayer();
+            layer.position.z = -i;
+            t.layers.push(layer);
+            scene.add(layer);
+        }
+        camera.position.z = t.layerCount;
+        scene.fog = new THREE.Fog(0x000000, t.layerCount * .7, t.layerCount);
+    };
+
+    this.createLayer = function () {
+        var points = 6;
+        var mv = 3 * points;
+        var mu = 2 * points;
+        var positions = new Float32Array(t.max * mv);
+        var normals = new Float32Array(t.max * mv);
+        var colors = new Float32Array(t.max * mv);
+        var uvs = new Float32Array(t.max * mu);
+
+        var size = Math.max(t.settings.speed * 2, .04) * t.settings.width;
+        var width = .007 * t.settings.width;
+
+        for (var i = 0; i < t.max; i++) {
+            var bi = i * mv;
+            var vi = i * mu;
+            var cur = i / t.max;
+            var z = cur;
+
+            var p = new Point(0, 0);
+            var radius = Math.random() * t.layerSpread + .5;
+            var angle = Math.random() * TAU;
+            p.move(1, angle);
+
+            for (var r = 0; r < 6; r++) {
+                var bir = bi + r * 3;
+                normals[bir + 0] = -p.x; // x
+                normals[bir + 1] = -p.y; // y
+                normals[bir + 2] = 0; // z
+
+                colors[bir + 0] = 1; //r
+                colors[bir + 1] = 1; //g
+                colors[bir + 2] = 1; //b
+            }
+
+            p.multiply(radius);
+            var l1 = p.clone().move(width, angle - HPI);
+            var l2 = p.clone().move(width, angle + HPI);
+            var z1 = z;
+            var z2 = z + size;
+
+
+            positions[bi + 0] = l1.x;
+            positions[bi + 1] = l1.y;
+            positions[bi + 2] = z1;
+
+            positions[bi + 3] = l2.x;
+            positions[bi + 4] = l2.y;
+            positions[bi + 5] = z2;
+
+            positions[bi + 6] = l2.x;
+            positions[bi + 7] = l2.y;
+            positions[bi + 8] = z1;
+
+            positions[bi + 9] = l1.x;
+            positions[bi + 10] = l1.y;
+            positions[bi + 11] = z1;
+
+            positions[bi + 12] = l1.x;
+            positions[bi + 13] = l1.y;
+            positions[bi + 14] = z2;
+
+            positions[bi + 15] = l2.x;
+            positions[bi + 16] = l2.y;
+            positions[bi + 17] = z2;
+
+            uvs[vi + 0] = 0; //x
+            uvs[vi + 1] = 0; //y
+
+            uvs[vi + 2] = 1; //x
+            uvs[vi + 3] = 1; //y
+
+            uvs[vi + 4] = 0; //x
+            uvs[vi + 5] = 1; //y
+
+            uvs[vi + 6] = 0; //x
+            uvs[vi + 7] = 0; //y
+
+            uvs[vi + 8] = 1; //x
+            uvs[vi + 9] = 0; //y
+
+            uvs[vi + 10] = 1; //x
+            uvs[vi + 11] = 1; //y
+        }
+
+        geometry = new THREE.BufferGeometry();
+        geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.addAttribute('normal', new THREE.BufferAttribute(normals, 3));
+        geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3));
+        geometry.addAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+        geometry.computeBoundingSphere();
+
+        var material = t.getMaterial();
+        var mesh = new THREE.Mesh(geometry, material);
+        return mesh;
+    };
+
+    this.getMaterial = function () {
+        var res = 128;
+        var textureRenderer = new TextureRenderer(res, [], false);
+        var ctx = textureRenderer.ctx;
+        ctx.clearRect(0, 0, res, res);
+        t.drawRainbow(ctx, res);
+        var texture = textureRenderer.getTexture();
+        var config = {
+            color: 0xffffff,
+            map: texture,
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            depthTest: false,
+            vertexColors: THREE.VertexColors
+        };
+        return new THREE.MeshBasicMaterial(config);
+    };
+
+    this.drawRainbow = function (ctx, res) {
+        var abb = t.settings.abb, expand = abb < 1;
+        var steps = 30,
+            hres = res * .5,
+            qres = res * (.1 + .2 * abb),
+            scaleY = 5 - Math.pow(abb * .5, .3) * 4.1,
+            opa = .11 + (expand ? Math.pow(1 - abb, 2) * .1 : 0),
+            wres = res - (qres * 2);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.translate(0, hres);
+        ctx.scale(1, scaleY);
+        ctx.globalCompositeOperation = 'lighter';
+        for (var i = 0; i < steps; i++) {
+            var cur = i / steps;
+            var color = new Color();
+            color.setSpectrum(cur);
+            var colString = color.toRgb();
+            var colStrip = colString.substr(4, colString.length - 5);
+            var x = (qres + wres * cur);
+            if (t.settings.dir < 0) {
+                x = res - x;
+            }
+            t.drawCircle(ctx, x, 0, qres, colStrip, opa);
+        }
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+    };
+
+    this.drawCircle = function (ctx, x, y, r, color, a) {
+        var gradient = ctx.createRadialGradient(x, y, 0, x, y, r);
+        gradient.addColorStop(0, 'rgba(' + color + ', ' + a + ')');
+        gradient.addColorStop(.5, 'rgba(' + color + ', ' + a + ')');
+        gradient.addColorStop(1, 'rgba(' + color + ', 0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x - r, y - r, r * 2, r * 2);
+    };
+}
+        var render = new Render(
+            ["#ffffff","#fffbfe","#fff7fe","#fff4fe","#fff1fd","#ffeefc","#ffebfb","#ffe8fa","#ffe5f9","#ffe3f7","#ffe1f6","#ffdef4","#ffdcf2","#ffdaf1","#ffd8ef","#ffd6ec","#ffd5ea","#ffd2e8","#ffd1e6","#ffcfe4","#ffcee1","#ffcddf","#ffcbdc","#ffc9da","#ffc8d8","#ffc7d5","#ffc6d2","#ffc5cf","#ffc3cd","#ffc2ca","#ffc1c7","#ffc0c4","#ffbfc1","#ffbebe","#ffbdbc","#ffbcb9","#ffbcb6","#ffbbb2","#ffbbaf","#ffbaac","#ffb9a8","#ffb9a4","#ffb9a0","#ffba9c","#feba98","#fcba97","#f9bb95","#f6bc93","#f3bd91","#f0be90","#edbe8e","#eabf8c","#e8bf8b","#e5c089","#e2c187","#dfc186","#ddc184","#dac183","#d7c281","#d5c27f","#d2c37e","#d0c27d","#cdc27b","#cbc379","#c8c378","#c6c376","#c3c375","#c1c274","#bec274","#bbc174","#b8c173","#b5c073","#b2bf72","#afbf72","#acbe72","#a9be72","#a6bd71","#a3bc71","#a1bb70","#9ebb70","#9bba70","#98ba6f","#95b96f","#93b86e","#90b76e","#8db76d","#8ab66d","#87b66d","#85b56c","#82b46c","#80b36b","#7db26b","#7ab26a","#77b16a","#75b069","#72af69","#70af69","#6dae68","#6aad68","#67ac67","#66aa67","#64a768","#63a568","#61a269","#5f9f69","#5e9d69","#5c9a69","#5b9869","#599569","#58936a","#56906a","#558e69","#548c69","#528969","#518769","#4f8569","#4e8368","#4d8068","#4b7e68","#4a7c68","#497968","#477767","#467566","#457366","#447166","#426f65","#416d65","#406b64","#3f6963","#3d6763","#3c6562","#3b6361","#3a6161","#395f5f","#385c5e","#385a5d","#37585c","#37565b","#36545a","#355259","#345058","#344d57","#334b56","#334955","#324753","#314552","#304351","#304150","#2f3f4f","#2e3e4d","#2d3c4c","#2d3a4b","#2c384a","#2b3648","#2a3447","#2a3246","#293144","#282f43","#272d42","#262b40","#262a3f","#25283e","#24263c","#23253b","#222339","#212138","#212036","#201f34","#1f1e32","#1f1d30","#1e1b2e","#1d1a2c","#1c192a","#1c1828","#1b1726","#1a1624","#191422","#181321","#17121f","#16111d","#15101b","#140f19","#130e18","#120d16","#110c14","#100b13","#0e0a11","#0d090f","#0c080e","#0b070c","#09060a","#080509","#070407","#050306","#040204","#020103","#010001","#000000"], ["#ffffff","#ffbebe","#c3c375","#67ac67","#3a6161","#212138"]
+        );
+        intro(words.words, function () {
+            if (render.init) {
+                render.init();
+            }
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/90 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:26:07 GMT -->
+</html>

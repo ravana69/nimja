@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/87 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:57 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Teasing Tentacles - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Long, probing tentacles that keep searching for you." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Teasing Tentacles - Nimja Hypnosis" />
+    <meta property="og:description" content="Long, probing tentacles that keep searching for you." />
+    <meta property="og:url" content="87.html" />
+    <meta property="og:image" content="thumb/Teasing_Tentacles-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="88.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/87.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="86.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Teasing Tentacles</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/87.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <script src="http://assets.nimja.com/js/three.min.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/threehelper.js"></script>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<!-- https://threejs.org/docs/index.html -->
+<script>
+    var renderer_canvas = document.getElementById('canvas');
+    function hasWebGL() {
+        try {
+            return !!(window.WebGLRenderingContext && (renderer_canvas.getContext('webgl') || renderer_canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    }
+    if (false && !hasWebGL()) {
+        alert("WebGL not supported.");
+    } else {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: renderer_canvas });
+
+        function resize(w, h) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            if (render.resize) {
+                render.resize(w, h);
+            }
+        }
+
+        function perFrame(time, diff) {
+            words.update();
+            render.update(time, diff);
+            renderer.render(scene, camera);
+        }
+        var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+        config = new Config([]);
+        //Spiral.
+        /**
+ * By Nimja - Teasing Tentacles
+ *
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(colors, colorSet) {
+    var t = this;
+    this.colors = colors;
+    this.hexColors = (new Colors(colors)).toInt();
+    this.colorSet = colorSet;
+    this.cubes = [];
+    this.max = 20;
+    var defaults = {
+        arms: { type: 'int', val: 5, min: 3, max: 12 },
+        layers: { type: 'int', val: 3, min: 1, max: 3 },
+        type: { type: 'int', val: 0, min: 0, max: 4 },
+        twist: { type: 'float', val: 1, min: .2, max: 2 },
+        riba: { type: 'float', val: .2, min: 0, max: 2 },
+        ribc: { type: 'ratio' },
+        ribs: { type: 'adjust', val: 3 },
+        color: { type: 'adjust', val: 2 },
+        len: { type: 'ratio' },
+        speed: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.length = this.settings.len;
+    this.settings.soft = true;
+    this.settings.speed *= 1;
+    this.settings.riba *= .15;
+    this.settings.ribc *= 7 * TAU * t.settings.length;
+    this.settings.color *= 1 / 10;
+    this.settings.twist = Math.pow(this.settings.twist, .5);
+
+    this.layers = this.settings.layers;
+    this.tperlayer = this.settings.arms;
+    this.maxLayers = 3;
+    this.baseRadius = 5;
+    var shape = new Shape(Math.max(this.tperlayer, 4), 1, 0, true);
+    this.width = shape.calculateForSide() * (t.baseRadius - 1);
+    this.pointCount = 30;
+    this.height = 20 * t.settings.length;
+    var curveAdjust = t.settings.length < 1 ? Math.pow(t.settings.length, .5) : 1 + (t.settings.length - 1) * .2;
+    this.minCurve = TAU * this.settings.twist / this.pointCount * .6 * curveAdjust;
+    this.zCurve = TAU / this.pointCount * .5 * curveAdjust;
+    this.resH = t.settings.length < 1 ? 50 : t.settings.length * 50;
+    this.groups = [];
+    this.curves = [];
+    this.pathTubes = [];
+    this.helpers = [];
+    this.moveTime;
+    /**
+     * Every frame.
+     * @param {Number} time
+     */
+    this.update = function (time) {
+        var bendSpeed = time * t.settings.dir * t.settings.speed;
+        this.moveTime = bendSpeed;
+
+        for (var c = 0; c < t.layers; c++) {
+            var cur = c / t.layers,
+                dir = c % 2 == 0 ? -1 : 1;
+
+            t.bendSpeed = bendSpeed * (1 - c * .3) - c * 1000;
+            t.zCurveLayer = (1 - cur * .5) * t.zCurve;
+            t.updateCurve(t.curves[c], t.pathTubes[c], t.bendSpeed, t.getHeightForLayer(c), cur);
+            t.groups[c].rotation.y = bendSpeed * (1 - cur) * .1 * dir;
+        }
+        if (t.settings.color !== 0) {
+            renderer.domElement.style.filter = 'hue-rotate(' + Math.floor(time * t.settings.color * 360 % 360) + 'deg)';
+        }
+    };
+
+    this.updateCurve = function (curve, pathTube, bendSpeed, height) {
+        var boneStep = new THREE.Vector3(0, height / t.pointCount, 0),
+            bone = new THREE.Vector3(0, 0, 0),
+            axisX = new THREE.Vector3(1, 0, 0),
+            axisY = new THREE.Vector3(0, 1, 0),
+            axisZ = new THREE.Vector3(0, 0, 1);
+
+        // Animate
+        bone.add(boneStep);
+        bone.add(boneStep);
+        for (var i = 3; i < t.pointCount; i++) {
+            var cur = i / t.pointCount;
+            var rot = t.rotation(bendSpeed, cur);
+            if (t.minCurve > 0) {
+                boneStep.applyAxisAngle(axisX, rot.x);
+                //                boneStep.applyAxisAngle(axisY, rot.y);
+                boneStep.applyAxisAngle(axisZ, rot.z);
+            }
+            bone.add(boneStep);
+
+            curve.points[i].copy(bone);
+        }
+        pathTube.update();
+    };
+
+    this.rotation = function (angle, cur) {
+        var spreadX = TAU * 1.5 + TAU * Math.sin(angle * .2 + 10),
+            spreadZ = Math.PI + HPI * Math.sin(angle * .3 + 40),
+            curve = .5 + Math.pow(cur, 2);
+        return {
+            x: t.minCurve * 2 * Math.cos(angle * .9 + spreadX * cur) * curve,
+            z: t.minCurve * Math.sin(angle * .8 + spreadZ * cur) * curve + t.zCurveLayer,
+            y: t.minCurve * .2 * Math.sin(angle * .23 + spreadX * cur) * curve
+        };
+    };
+
+    this.callBack = function (cur) {
+        var offset = t.settings.riba + t.settings.riba * Math.sin(t.bendSpeed * t.settings.ribs + cur * t.settings.ribc),
+            vcur = (1 - cur * .99) * (1 - offset);
+        return [vcur, 0];
+    };
+
+    this.getHeightForLayer = function (c) {
+        return t.height + t.height * .5 * c;
+    };
+
+    /**
+     * Initialize.
+     * @returns {undefined}
+     */
+    this.init = function () {
+        var textureRenderer = new TextureRenderer(256, t.colors, false);
+        textureRenderer.drawPixels(t.calculatePointTentacle);
+        var texture = textureRenderer.getTexture();
+
+        t.material = t.createMaterial(texture);
+        var radius = Math.pow(Math.pow(t.baseRadius, 2) - Math.pow(t.width, 2), .5);
+        for (var c = 0; c < t.layers; c++) {
+            var cur = c / t.layers,
+                rcur = (t.layers - c);
+            var height = t.getHeightForLayer(c),
+                zangle = 0 - c * (HPI / t.maxLayers);
+            var group = t.createLayer(height, zangle, radius);
+            group.rotation.x = HPI;
+            group.rotation.y = TAU / t.tperlayer * cur;
+            scene.add(group);
+        }
+        scene.add(t.createSphere(t.baseRadius));
+
+        var side = 0;
+
+        camera.up = new THREE.Vector3(0, 0, 1);
+        if (side) {
+            camera.rotation.x = -HPI;
+            camera.position.y = 30;
+        } else {
+            camera.position.z = 30;
+        }
+        var pointBrightness = .3;
+        if (t.settings.type == 3) {
+            pointBrightness = .5;
+        }
+        var light = new THREE.DirectionalLight(0x99ccff, pointBrightness, 100);
+        light.position.set(-.25, 1, 2);
+        scene.add(light);
+
+        var light = new THREE.DirectionalLight(0xff99cc, pointBrightness, 100);
+        light.position.set(.25, -1, 2);
+        scene.add(light);
+
+        //Create a PointLight
+        var light = new THREE.PointLight(0xffffff, 1.4, t.baseRadius * 3);
+        light.position.z = t.baseRadius * 2;
+        scene.add(light);
+
+    };
+
+    this.createLayer = function (height, zangle, radius) {
+        var res_w = 16;
+        var res_h = t.resH;
+
+        var curve = t.createCurve(t.pointCount, height);
+        t.curves.push(curve);
+        var pathTube = new PathTube(curve, t.width, res_h, res_w, t.callBack);
+        t.pathTubes.push(pathTube);
+
+        var group = new THREE.Group();
+        for (var i = 0; i < t.tperlayer; i++) {
+            var angle = i / t.tperlayer * TAU;
+            var mesh = new THREE.Mesh(pathTube.geometry, t.material);
+            mesh.position.x = radius * Math.cos(angle) * Math.cos(zangle);
+            mesh.position.z = radius * Math.sin(angle) * Math.cos(zangle);
+            mesh.position.y = radius * Math.sin(zangle);
+            mesh.rotation.y = -angle;
+            mesh.rotation.z = -HPI + zangle;
+            group.add(mesh);
+        }
+        t.groups.push(group);
+        return group;
+    };
+
+    this.createCurve = function (pointCount, height) {
+        var points = [];
+        for (var i = 0; i < pointCount; i++) {
+            var cur = i / (pointCount - 1);
+            points.push(new THREE.Vector3(0, cur * height, 0));
+        }
+        return new THREE.CatmullRomCurve3(points);
+    };
+
+    this.createMaterial = function (texture) {
+        var config = { map: texture, color: 0xffffff };
+        var material;
+        switch (t.settings.type) {
+            case 4:
+                material = new THREE.MeshBasicMaterial(config);
+                break;
+            case 3:
+                config.metalness = .7;
+                config.roughness = .6;
+                material = new THREE.MeshStandardMaterial(config);
+                break;
+            case 2:
+                material = new THREE.MeshToonMaterial(config);
+                break;
+            case 1:
+                var material = new THREE.MeshLambertMaterial(config);
+                break;
+            default:
+                config.metalness = 0.05;
+                config.roughness = .2;
+                material = new THREE.MeshStandardMaterial(config);
+
+        }
+        //        material.wireframe = true;
+        return material;
+    };
+
+    this.createSphere = function (radius) {
+        var textureRenderer = new TextureRenderer(256, t.colors, false);
+        textureRenderer.drawPixels(t.calculatePointEye);
+        var texture = textureRenderer.getTexture();
+
+        var material = t.createMaterial(texture);
+        if (t.settings.type == 0) {
+            material.roughness = .4;
+            material.metalness = 0;
+        }
+        var geometry = new THREE.SphereGeometry(radius, 32, 32);
+        var threeHelper = new ThreeHelper(t.colors, t.colorSet);
+        threeHelper.wrapUV(geometry, 'y', 'x');
+        var sphere = new THREE.Mesh(geometry, material);
+        sphere.rotation.x = Math.PI;
+        return sphere;
+    };
+
+    this.calculatePointTentacle = function (xc, yc) {
+        return (1 - xc) + .1 * Math.cos(yc * TAU * 3 - HPI);
+    };
+
+    this.calculatePointEye = function (xc, yc) {
+        var p = new Point(xc < .5 ? xc - .8 : xc - .2, yc - .5),
+            angle = Math.atan2(yc - .5, xc - .5),
+            offset = Math.cos(angle * 20) * .05,
+            eyea = .35,
+            eyeb = .41,
+            dist = p.distance();
+        if (dist < eyea) {
+            return 1;
+        } else if (dist < eyeb) {
+            var fade = 1 - (dist - eyea) / (eyeb - eyea);
+            return fade + offset * (1 - fade);
+        } else {
+            var dist = (dist - eyeb) * 1.6;
+            var fade = dist < .5 ? dist * 2 : 1;
+            return fade + offset * (1 - fade);
+        }
+    };
+
+}
+
+        var render = new Render(
+            ["#ffffff","#fffbfe","#fff8fe","#fff4fd","#fff1fc","#ffeefc","#ffeafb","#ffe7fb","#ffe4fa","#ffe1fa","#ffdef9","#ffdbf8","#ffd8f7","#ffd4f7","#ffd2f6","#ffcef5","#ffcbf4","#ffc8f4","#ffc6f2","#ffc2f1","#ffbff1","#ffbdef","#ffbaee","#ffb7ee","#ffb5ec","#ffb2eb","#ffafeb","#ffabea","#ffaae8","#ffa6e7","#ffa3e6","#ffa2e4","#ff9fe3","#ff9ce2","#ff9ae0","#ff97df","#ff94df","#ff91de","#ff90db","#ff8dda","#ff8ada","#ff88d7","#ff85d6","#ff83d5","#ff81d3","#ff7ed2","#ff7cd1","#ff7ace","#ff77cd","#fd76cc","#fc75ca","#fb75c8","#f974c6","#f873c5","#f773c2","#f572c1","#f371bf","#f371bd","#f170bb","#ef6fba","#ee6fb9","#ed6eb6","#eb6db5","#e96db3","#e96cb1","#e76baf","#e56bae","#e46aab","#e369aa","#e169a9","#df68a7","#de67a5","#dd67a4","#db66a2","#da65a0","#d8659e","#d6649d","#d6639b","#d46399","#d26298","#d06197","#cf6194","#ce6093","#cc5f92","#cb5e8f","#c95e8e","#c75d8d","#c65c8a","#c55c89","#c35b88","#c15a87","#c05984","#be5983","#bd5882","#bc577f","#ba567e","#b8567d","#b7557b","#b55479","#b35378","#b25377","#b05275","#af5173","#ad5072","#ac5070","#aa4f6f","#a84e6e","#a74e6b","#a54d6a","#a34c69","#a24b68","#a04b66","#9f4a65","#9d4963","#9c4861","#9a4760","#98475f","#97465d","#95455c","#93445b","#924459","#904357","#8e4256","#8c4155","#8b4153","#894052","#873f51","#863e4f","#843d4e","#823d4d","#813c4b","#7f3b4a","#7d3a49","#7b3948","#7a3946","#783845","#763744","#753642","#733541","#713440","#70343e","#6e333d","#6c323c","#6a313b","#693139","#673038","#652f37","#632e35","#612d34","#5f2c33","#5e2c31","#5c2b30","#5a2a2f","#58292e","#57282d","#55272c","#53262b","#512629","#4f2528","#4d2427","#4c2326","#4a2225","#482124","#462023","#442021","#421f20","#401e1f","#3f1d1e","#3d1c1d","#3b1b1c","#391a1b","#37191a","#351819","#331818","#311717","#2f1616","#2d1515","#2b1414","#291313","#271212","#251211","#231110","#21100f","#1f0f0e","#1d0e0d","#1b0d0c","#190c0b","#170b0a","#150a0a","#130909","#110808","#0f0707","#0d0606","#0b0605","#090504","#070403","#050302","#030201","#010100","#000000"], ["#ff77cc"]
+        );
+        intro(words.words, function () {
+            if (render.init) {
+                render.init();
+            }
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/87 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:59 GMT -->
+</html>

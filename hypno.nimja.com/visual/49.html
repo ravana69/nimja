@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/49 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Gear Tunnel - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A deeply configurable tunnel of gears inside each other." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Gear Tunnel - Nimja Hypnosis" />
+    <meta property="og:description" content="A deeply configurable tunnel of gears inside each other." />
+    <meta property="og:url" content="49.html" />
+    <meta property="og:image" content="thumb/Gear_Tunnel-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="50.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/49.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="48.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Gear Tunnel</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/49.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - The Render class.
+ *
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    canvasBlendMode = 'hard-light';
+    this.context = t.canvas.getContext('2d');
+    this.context.globalCompositeOperation = "source-over";
+    this.colors = colors;
+    this.colorList = (new Colors(colors)).colors;
+    this.pos = { x: 0, y: 0, w: 0, h: 0 };
+    var defaults = {
+        amount: { type: 'ratio' },
+        teeth: { type: 'int', val: 10, min: 5, max: 30 },
+        color: { type: 'adjust', val: 2 },
+        spread: { type: 'adjust', val: 2 },
+        size: { type: 'float', val: 2, min: 1, max: 3 },
+        ratio: { type: 'float', val: .9, min: 0, max: 1 },
+        dir: { type: 'dir', val: 0 }
+    };
+    t.scale = 13;
+    t.gearSize = .7;
+    t.coords = [];
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    t.settings.count = Math.floor(t.settings.amount * 15) + 1;
+    t.settings.size *= 0.05;
+    /**
+     * Drawing cycle, first draw in buffer, then on screen.
+     * @param {Number} time
+     */
+    this.update = function (time) {
+        var ctx = t.context;
+        var cur, next, curn, curi, angle, cTime = time * t.settings.color,
+            max = t.settings.count - 1;
+        //First calculate the coordinates and sizes.
+        for (var i = 0; i < t.settings.count; i++) {
+            cur = t.coords[i];
+            curn = i / max;
+            curi = 1 - (i / max);
+            angle = curn * 3 + time;
+            cur.c = curn;
+            cur.s = 1 / (1.1 + curi * t.scale);
+            cur.a = (1 / cur.s + 1) * .2 * time * t.settings.dir;
+            cur.x = t.pos.x + curn * t.pos.deviation * Math.cos(angle * 3);
+            cur.y = t.pos.y + curn * t.pos.deviation * Math.sin(angle * 2);
+        }
+        //Draw each inside gear, using the next position for the circle.
+        for (var i = 0; i < t.settings.count; i++) {
+            cur = t.coords[i];
+            next = t.coords[i + 1];
+            ctx.beginPath();
+            ctx.arc(next.x, next.y, t.pos.gearOuter * next.s * 1.1, 0, TAU, true);
+            if (i > 0) {
+                t.drawCog(ctx, cur.a, cur.x, cur.y, cur.s);
+                ctx.stroke();
+            }
+            ctx.fillStyle = getIndex(t.colorList, cur.c).adjustHsl(cTime + cur.c * t.settings.spread, 0, 0).toHex();;
+            ctx.fill();
+        }
+    };
+    this.resize = function (width, height) {
+        //Setup canvas.
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = t.pos.w / 2;
+        t.pos.y = t.pos.h / 2;
+        t.context.strokeStyle = (new Color(t.colors[0])).toRgba(.2);
+        t.pos.radius = coordMath.distance(t.pos);
+        t.pos.deviation = t.pos.radius * .05;
+        //Setup/calculat gear stuff.
+        t.pos.steps = t.settings.teeth * 2;
+        t.pos.step = TAU / t.pos.steps;
+        var size = t.pos.radius * t.settings.size;
+        var gearAngleWithRatio = t.pos.step * t.settings.ratio;
+        // Middle point is the distance we'd use if 2 gears were next to each other.
+        t.pos.gearMiddle = t.pos.radius * t.gearSize;
+        t.pos.gearInner = t.pos.gearMiddle - size * .5;
+        t.pos.gearOuter = t.pos.gearMiddle + size * .5;
+        t.pos.gearInnerAdjust = (t.pos.step - gearAngleWithRatio) * .5;
+        var ratioFromOuterToInner = t.pos.gearInner / t.pos.gearOuter;
+        t.pos.gearOuterAdjust = (t.pos.step - (ratioFromOuterToInner * gearAngleWithRatio)) * .5;
+        t.coords = [];
+        for (var i = 0; i <= t.settings.count; i++) {
+            t.coords.push({ x: 0, y: 0, s: 0, c: 0, r: 0 });
+        }
+        t.coords[t.settings.count].s = 1 / t.gearSize;
+        t.coords[t.settings.count].x = t.pos.x;
+        t.coords[t.settings.count].y = t.pos.y;
+    };
+    //Draw the cog.
+    this.drawCog = function (ctx, a, x, y, size) {
+        var xs, ys, x1, y1, x2, y2, angle;
+        for (var i = 0; i <= t.pos.steps; i++) {
+            angle = i * t.pos.step + a;
+            if ((i % 2 == 0)) {
+                x1 = t.pos.gearInner * Math.cos(angle - t.pos.gearInnerAdjust);
+                y1 = t.pos.gearInner * Math.sin(angle - t.pos.gearInnerAdjust);
+                x2 = t.pos.gearOuter * Math.cos(angle + t.pos.gearOuterAdjust);
+                y2 = t.pos.gearOuter * Math.sin(angle + t.pos.gearOuterAdjust);
+            } else {
+                x1 = t.pos.gearOuter * Math.cos(angle - t.pos.gearOuterAdjust);
+                y1 = t.pos.gearOuter * Math.sin(angle - t.pos.gearOuterAdjust);
+                x2 = t.pos.gearInner * Math.cos(angle + t.pos.gearInnerAdjust);
+                y2 = t.pos.gearInner * Math.sin(angle + t.pos.gearInnerAdjust);
+            }
+            if (i == 0) {
+                xs = x1;
+                ys = y1;
+                ctx.moveTo(x + x1 * size, y + y1 * size);
+            } else {
+                ctx.lineTo(x + x1 * size, y + y1 * size);
+            }
+            if (i < t.pos.steps) {
+                ctx.lineTo(x + x2 * size, y + y2 * size);
+            }
+        }
+        ctx.lineTo(x + x2 * size, y + y2 * size);
+    };
+}
+
+    var render = new Render(document.getElementById('canvas'), ["#ffffcc","#fefecb","#fdfdcb","#fcfccb","#fbfbcb","#fafbcb","#f9facb","#f8f9ca","#f7f8ca","#f6f7ca","#f5f7ca","#f4f6ca","#f3f5c9","#f2f4c9","#f1f4c9","#f0f3c9","#eff2c9","#eef1c9","#edf0c8","#ecf0c8","#ebefc8","#eaeec8","#e8edc8","#e7ecc8","#e6ecc7","#e5ebc7","#e4eac7","#e3e9c7","#e2e8c7","#e1e8c7","#e0e7c6","#dfe6c6","#dee5c6","#dde4c6","#dce3c6","#dbe3c6","#dae2c5","#d9e1c5","#d8e0c5","#d7dfc5","#d6dec5","#d5dec5","#d4ddc4","#d2dcc4","#d1dbc4","#d0dac4","#cfd9c4","#ced9c4","#cdd8c3","#ccd7c3","#cbd6c3","#cad5c3","#c9d4c3","#c8d4c3","#c6d3c2","#c5d2c2","#c4d1c2","#c3d0c2","#c2cfc2","#c1cec2","#c0cec1","#bfcdc1","#bdccc1","#bccbc1","#bbcac1","#bac9c1","#b9c8c0","#b8c8c0","#b7c7c0","#b5c6c0","#b4c5c0","#b3c4c0","#b2c3bf","#b1c2bf","#b0c1bf","#aec0bf","#adc0bf","#acbfbe","#abbebe","#aabdbe","#a8bcbe","#a7bbbe","#a6babe","#a5b9bd","#a4b8bd","#a2b7bd","#a1b7bd","#a0b6bd","#9fb5bd","#9db4bc","#9cb3bc","#9bb2bc","#9ab1bc","#98b0bc","#97afbc","#96aebb","#95adbb","#93acbb","#92abbb","#91aabb","#90aabb","#8fa8b9","#8ea7b8","#8da6b7","#8ca5b6","#8ba4b5","#8aa3b4","#89a1b3","#88a0b2","#879fb1","#869eb0","#859daf","#849cad","#839aac","#8299ab","#8198aa","#8097a9","#7f96a8","#7e94a7","#7d93a6","#7c92a4","#7b91a3","#7a90a2","#788ea1","#778da0","#768c9f","#758b9e","#74899c","#73889b","#72879a","#718699","#708498","#6f8396","#6e8295","#6d8094","#6c7f93","#6a7e92","#697c90","#687b8f","#677a8e","#66788d","#65778c","#64768a","#627489","#617388","#607287","#5f7085","#5e6f84","#5d6d83","#5b6c82","#5a6b80","#59697f","#58687e","#57667c","#55657b","#54637a","#536278","#526077","#505f76","#4f5d74","#4e5c73","#4c5a72","#4b5970","#4a576f","#48566d","#47546c","#46526b","#445169","#434f68","#414d66","#404c65","#3f4a64","#3d4862","#3c4761","#3a455f","#39435e","#37415c","#363f5b","#343d59","#323c57","#313a56","#2f3854","#2d3653","#2c3451","#2a324f","#282f4e","#262d4c","#242b4a","#232949","#212747","#1f2445","#1c2244","#1a1f42","#181c40","#161a3e","#13173c","#10133a","#0d1038","#0a0c37","#060735","#000033"], ["#ffffcc","#90aabb","#000033"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/49 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:17 GMT -->
+</html>

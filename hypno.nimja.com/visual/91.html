@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/91 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:26:07 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Enspiralment - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A complex, multi-layered effect of spirals on top of each other that just keep on moving..." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Enspiralment - Nimja Hypnosis" />
+    <meta property="og:description" content="A complex, multi-layered effect of spirals on top of each other that just keep on moving..." />
+    <meta property="og:url" content="91.html" />
+    <meta property="og:image" content="thumb/Enspiralment-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="92.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/91.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="90.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Enspiralment</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/91.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    
+/**
+ * By Nimja - Enspiralment.
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors, colorSet) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    this.colorList = new Colors(colorSet);
+    this.colorSet = colorSet;
+    var defaults = {
+        mode: { type: 'int', val: 0, min: 0, max: 2 },
+        offset: { type: 'float', val: .5, min: 0, max: 1 },
+        copies: { type: 'int', val: 3, min: 1, max: 5 },
+        arms: { type: 'int', val: 6, min: 1, max: 10 },
+        flash: { type: 'int', val: 0, min: 0, max: 30 },
+        color: { type: 'adjust', val: 2 },
+        cspeed: { type: 'ratio' },
+        speed: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.flash = t.settings.flash == 0 ? 0 : (31 - t.settings.flash) * 2;
+    if (t.settings.copies === 1 || t.settings.offset === 0) {
+        t.settings.copies = 1;
+        t.settings.offset = 0;
+    }
+    this.settings.buffer = t.settings.copies > 1; //t.settings.b;
+    this.blendingMode = 'difference';
+    this.spiralColor = 'white';
+    if (t.settings.mode == 1) {
+        this.blendingMode = 'xor';
+    } else if (t.settings.mode == 2) {
+        this.blendingMode = 'source-atop';
+        var a = Math.pow(1 / (Math.max(1, t.settings.copies)), .5);
+        this.spiralColor = 'rgba(255, 255, 255, ' + a + ')';
+    }
+    if (t.settings.buffer) {
+        this.buffer = { canvas: document.createElement('canvas') };
+        this.buffer.context = t.buffer.canvas.getContext('2d');
+    }
+    this.pos = new Pos();
+    this.spiral = new Spiral(3, 100, .5);
+    this.spiral2 = new Spiral(t.settings.arms, 100, .5);
+    this.fillStyle;
+    this.frame = 0;
+    this.flash = false;
+    this.noise1 = new ValueNoise();
+    this.noise2 = new ValueNoise();
+    this.noise2.smooth = this.noise2.smoothstep;
+    this.update = function (time) {
+        var ctx = t.context,
+            speed = time * t.settings.dir * t.settings.speed,
+            turns = 2 + Math.cos(speed * .21) * 2,
+            curve = .5 + Math.cos(speed * .31) * .4,
+            twists = 3 + t.noise1.getValue(speed * .21) * 3;
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = t.fillStyle;
+        t.spiral.updateCurveTurnsTwists(turns, curve, twists).draw(ctx, t.pos, t.pos.dist, speed * .35);
+        ctx.globalCompositeOperation = t.blendingMode;
+        t.frame++;
+        if (t.frame > t.settings.flash && t.settings.flash > 0) {
+            t.flash = !t.flash;
+            t.frame = 0;
+        }
+        if (t.settings.buffer) {
+            t.drawBufferSpiral(time, t.flash);
+        } else {
+            t.drawDirectSpiral(time, t.flash);
+        }
+        if (t.settings.color !== 0) {
+            t.canvas.style.filter = 'hue-rotate(' + Math.floor(time * t.settings.color * 360 % 360) + 'deg)';
+        }
+    };
+    this.drawBufferSpiral = function (time, flash) {
+        if (!t.buffer.canvas.width || !t.buffer.canvas.height) {
+            return;
+        }
+        var ctx = t.buffer.context,
+            speed = time * t.settings.cspeed,
+            offset = flash ? t.spiral2.angleArmWidth : 0,
+            twists = 2.5 + t.noise2.getValue(speed * .33) * 2.5;
+        t.spiral2.updateCurveTurnsTwists(0, 1, twists);
+        ctx.clearRect(0, 0, t.pos.fullr, t.pos.fullr);
+        t.spiral2.draw(ctx, { x: t.pos.radius, y: t.pos.radius }, t.pos.radius, offset + speed * -.3);
+        // Copy buffer to main drawing.
+        var p,
+            radius = t.pos.offset * (.5 - .5 * Math.cos(speed * .1)),
+            c = new Point(t.pos.offx, t.pos.offy);
+        for (var i = 0; i < t.settings.copies; i++) {
+            p = c.clone().move(radius, i / t.settings.copies * TAU + speed * .22);
+            t.context.drawImage(
+                t.buffer.canvas,
+                p.x, p.y, t.pos.w, t.pos.h, //src
+                0, 0, t.pos.w, t.pos.h //dst
+            );
+        }
+    };
+    this.drawDirectSpiral = function (time, flash) {
+        var ctx = t.context,
+            speed = time * t.settings.cspeed,
+            twists = 5 * t.noise1.getValue(speed * .33);
+        t.spiral2.updateCurveTurnsTwists(
+            0,
+            1, //,
+            twists
+        );
+        // Draw spirals.
+        ctx.fillStyle = t.spiralColor;
+        var p, angle,
+            radius = t.pos.offset * (.5 - .5 * Math.cos(speed * .1)),
+            offset = flash ? t.spiral2.angleArmWidth : 0,
+            c = new Point(t.pos.x, t.pos.y);
+        for (var i = 0; i < t.settings.copies; i++) {
+            angle = i / t.settings.copies * TAU + speed * .22;
+            p = c.clone().move(radius, angle);
+            t.spiral2.draw(ctx, p, t.pos.radius, offset + speed * -.3);
+        }
+    };
+
+    this.resize = function (width, height) {
+        t.pos.set(width, height);
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.context.lineCap = "round";
+        t.context.lineJoin = "round";
+        t.pos.offset = t.pos.dist * .3 * t.settings.offset;
+        t.pos.radius = Math.ceil(t.pos.dist + t.pos.offset);
+        t.pos.fullr = Math.ceil(t.pos.radius * 2);
+        t.pos.offx = t.pos.radius - t.pos.x;
+        t.pos.offy = t.pos.radius - t.pos.y;
+        if (t.settings.buffer) {
+            t.buffer.canvas.width = t.pos.fullr;
+            t.buffer.canvas.height = t.pos.fullr;
+            t.buffer.context.fillStyle = t.spiralColor;
+        }
+        t.fillStyle = gradient.createRadial(t.context, t.colors, t.pos.x, t.pos.y, 0, t.pos.dist, 10);
+    };
+}
+
+
+function Spiral(arms, steps, width) {
+    this.arms = arms;
+    this.steps = steps;
+    this.angleOffset = TAU / arms;
+    this.angleArmWidth = this.angleOffset * width;
+    this.angleTwist = this.angleArmWidth;
+}
+Spiral.prototype = {
+    updateCurveTurnsTwists: function (turns, curve, twists) {
+        this.curve = curve;
+        this.turnAngle = turns * TAU;
+        this.step = 1 / (this.steps * (Math.abs(turns * .5) + 1));
+        this.twists = twists * Math.PI;
+        return this;
+    },
+    draw: function (ctx, c, radius, angle) {
+        angle = angle % TAU;
+        for (var r = 0; r < this.arms; r++) {
+            this.drawArm(ctx, c, radius, r * this.angleOffset + angle);
+        }
+    },
+    drawArm: function (ctx, c, radius, angle) {
+        var i, p;
+        ctx.beginPath();
+        ctx.moveTo(c.x, c.y);
+        for (i = 0; i < 1; i += this.step) {
+            p = this.getCoord(c, radius, angle, i);
+            ctx.lineTo(p.x, p.y);
+        }
+        var angle2 = angle + this.angleArmWidth;
+        ctx.arc(c.x, c.y, radius, this.getAngle(angle, 1), this.getAngle(angle2, 1), false);
+        for (i = 1 - this.step; i > 0; i -= this.step) {
+            p = this.getCoord(c, radius, angle2, i);
+            ctx.lineTo(p.x, p.y);
+        }
+        ctx.lineTo(c.x, c.y);
+        ctx.fill();
+    },
+    getCoord: function (c, radius, angle, i) {
+
+        var va = this.getAngle(angle, i);
+        radius *= i;
+        return {
+            x: c.x + radius * Math.cos(va),
+            y: c.y + radius * Math.sin(va)
+        };
+    },
+    getAngle: function (angle, i) {
+        var ai = .5 - .5 * Math.cos(i * this.twists);
+        return angle + this.turnAngle * Math.pow(i, this.curve) + ai * this.angleTwist;
+    }
+};
+
+    var render = new Render(document.getElementById('canvas'), ["#00ffff","#07fefe","#0bfefe","#0ffefe","#12fefe","#15fefe","#18fefe","#1bfefe","#1dfefe","#20fefe","#22fefe","#24fefe","#27fefe","#29fefe","#2bfefe","#2dfefe","#2ffefe","#31fefe","#33fefe","#35fefe","#36fefe","#38fefe","#3afefe","#3cfefe","#3efefe","#3ffefe","#41fefe","#43fefe","#44fefe","#46fefe","#47fefe","#49fefe","#4bfefe","#4cfefe","#4efefe","#4ffefe","#51fefe","#52fefe","#54fefe","#55fefe","#57fefe","#58fefe","#5afefe","#5bfefe","#5cfefe","#5efefe","#5ffefe","#61fefe","#62fefe","#63fefe","#65fefe","#66fefe","#67fefe","#69fefe","#6afefe","#6bfefe","#6dfefe","#6efefe","#6ffefe","#71fefe","#72fefe","#73fefe","#74fefe","#76fefe","#77fefe","#78fefe","#79fefe","#7afefe","#7cfefe","#7dfefe","#7efefe","#7ffefe","#81fefe","#82fefe","#83fefe","#84fefe","#85fefe","#86fefe","#88fefe","#89fefe","#8afefe","#8bfefe","#8cfefe","#8dfefe","#8ffefe","#90fefe","#91fefe","#92fefe","#93fefe","#94fefe","#95fefe","#96fefe","#97fefe","#99fefe","#9afefe","#9bfefe","#9cfefe","#9dfefe","#9efefe","#9ffefe","#a0fefe","#a1fefe","#a2fefe","#a3fefe","#a4fefe","#a5fefe","#a7fefe","#a8fefe","#a9fefe","#aafefe","#abfefe","#acfefe","#adfefe","#aefefe","#affefe","#b0fefe","#b1fefe","#b2fefe","#b3fefe","#b4fefe","#b5fefe","#b6fefe","#b7fefe","#b8fefe","#b9fefe","#bafefe","#bbfefe","#bcfefe","#bdfefe","#befefe","#bffefe","#c0fefe","#c1fefe","#c2fefe","#c3fefe","#c4fefe","#c5fefe","#c6fefe","#c7fefe","#c8fefe","#c9fefe","#c9fefe","#cafefe","#cbfefe","#ccfefe","#cdfefe","#cefefe","#cffefe","#d0fefe","#d1fefe","#d2fefe","#d3fefe","#d4fefe","#d5fefe","#d6fefe","#d7fefe","#d8fefe","#d8fefe","#d9fefe","#dafefe","#dbfefe","#dcfefe","#ddfefe","#defefe","#dffefe","#e0fefe","#e1fefe","#e2fefe","#e3fefe","#e3fefe","#e4fefe","#e5fefe","#e6fefe","#e7fefe","#e8fefe","#e9fefe","#eafefe","#ebfefe","#ebfefe","#ecfefe","#edfefe","#eefefe","#effefe","#f0fefe","#f1fefe","#f2fefe","#f2fefe","#f3fefe","#f4fefe","#f5fefe","#f6fefe","#f7fefe","#f8fefe","#f9fefe","#f9fefe","#fafefe","#fbfefe","#fcfefe","#fdfefe","#fefefe","#ffffff"], ["#00ffff","#ffffff"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/91 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:26:10 GMT -->
+</html>

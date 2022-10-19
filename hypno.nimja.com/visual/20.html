@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/20 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:22:55 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Deep Circle - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Pulsing plasma circle effect." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Deep Circle - Nimja Hypnosis" />
+    <meta property="og:description" content="Pulsing plasma circle effect." />
+    <meta property="og:url" content="20.html" />
+    <meta property="og:image" content="thumb/Deep_Circle-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="21.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/20.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="19.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Deep Circle</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/20.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <style>
+    #canvas {
+        /* Anchor to the upper left */
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        /* Scale out 2X from the corner */
+        -webkit-transform: scale(2.0, 2.0);
+        -webkit-transform-origin: 0 0 0;
+        -ms-transform: scale(2.0, 2.0);
+        -ms-transform-origin: 0 0 0;
+        transform: scale(2.0, 2.0);
+        transform-origin: 0 0 0;
+    }
+</style>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script src="https://hypno.nimja.com/version/22.01/js/webgl-utils.js"></script>
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+    attribute vec2 a_position;
+    varying vec2 vTextureCoord;
+    void main() {
+    gl_Position = vec4(a_position, 0, 1);
+    vTextureCoord = (a_position + 1.0) / 2.0;
+    }
+</script>
+<script id="2d-fragment-shader" type="x-shader/x-fragment">
+    // Original by nimitz - https://www.shadertoy.com/view/ldlXRS
+
+precision lowp float;
+
+varying vec2 vTextureCoord;
+
+uniform vec2 iResolution;
+uniform float iGlobalTime;
+uniform float iHue;
+uniform float iSaturation;
+
+const float offHue = 0.26;
+
+
+vec3 rgb2hsv(vec3 c)
+{
+    vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);
+    vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+vec3 hsv2rgb(vec3 c)
+{
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+vec3 mod289(vec3 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec2 mod289(vec2 x) {
+  return x - floor(x * (1.0 / 289.0)) * 289.0;
+}
+
+vec3 permute(vec3 x) {
+  return mod289(((x*34.0)+1.0)*x);
+}
+
+float noise(vec2 v)
+  {
+  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                     -0.577350269189626,  // -1.0 + 2.0 * C.x
+                      0.024390243902439); // 1.0 / 41.0
+// First corner
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+
+// Other corners
+  vec2 i1;
+  //i1.x = step( x0.y, x0.x ); // x0.x > x0.y ? 1.0 : 0.0
+  //i1.y = 1.0 - i1.x;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  // x0 = x0 - 0.0 + 0.0 * C.xx ;
+  // x1 = x0 - i1 + 1.0 * C.xx ;
+  // x2 = x0 - 1.0 + 2.0 * C.xx ;
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+
+// Permutations
+  i = mod289(i); // Avoid truncation effects in permutation
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+		+ i.x + vec3(0.0, i1.x, 1.0 ));
+
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+
+// Gradients: 41 points uniformly over a line, mapped onto a diamond.
+// The ring size 17*17 = 289 is close to a multiple of 41 (41*7 = 287)
+
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+
+// Normalise gradients implicitly by scaling m
+// Approximation of: m *= inversesqrt( a0*a0 + h*h );
+  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+
+// Compute final noise value at P
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+//Noise animation - Electric
+//by nimitz (stormoid.com) (twitter: @stormoid)
+
+//The domain is displaced by two fbm calls one for each axis.
+//Turbulent fbm (aka ridged) is used for better effect.
+
+#define time iGlobalTime*0.19
+#define tau 6.2831853
+
+mat2 makem2(in float theta){float c = cos(theta);float s = sin(theta);return mat2(c,-s,s,c);}
+
+float fbm(in vec2 p)
+{
+	float z=2.;
+	float rz = 0.;
+	vec2 bp = p;
+	for (float i= 1.;i < 6.;i++)
+	{
+		rz+= abs((noise(p)-0.5)*2.)/z;
+		z = z*2.;
+		p = p*2.;
+	}
+	return rz;
+}
+
+float dualfbm(in vec2 p)
+{
+    //get two rotated fbm calls and displace the domain
+	vec2 p2 = p*.7;
+	vec2 basis = vec2(fbm(p2-time*1.6),fbm(p2+time*1.7));
+	basis = (basis-.5)*.2;
+	p += basis;
+
+	//coloring
+	return fbm(p*makem2(time*0.2));
+}
+
+float circ(vec2 p)
+{
+	float r = length(p);
+	r = log(sqrt(r));
+	return abs(mod(r*4.,tau)-3.14)*3.+.2;
+
+}
+
+void main()
+{
+	//setup system
+	vec2 p = -.5 + vTextureCoord.xy;
+	p.x *= iResolution.x / iResolution.y;
+	p*=4.;
+
+    float rz = dualfbm(p);
+
+	//rings
+	p /= exp(mod(time*10.,3.14159));
+	rz *= pow(abs((0.1-circ(p))),.9);
+
+	//final color
+	vec3 col = vec3(.2,0.1,0.4)/rz;
+	col=pow(abs(col),vec3(.99));
+    vec3 hsvCol = rgb2hsv( col ) ;
+    hsvCol.x += iHue + offHue;
+    hsvCol.y = hsvCol.y * iSaturation;
+	gl_FragColor = vec4(hsv2rgb(hsvCol), 1.0);
+}
+</script>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    // Get A WebGL context
+    var canvas = document.getElementById("canvas");
+    if (video) {
+        canvas.style.mixBlendMode = 'hard-light';
+    }
+    var gl = getWebGLContext(canvas);
+    if (!gl) {
+        alert("WebgGL not supported...");
+    } else {
+        var defaults = {
+            speed: { type: 'ratio' },
+            dir: { type: 'dir' }
+        };
+        var config = new Config([]);
+        var set = config.get(defaults);
+
+        // setup GLSL program
+        vertexShader = createShaderFromScriptElement(gl, "2d-vertex-shader");
+        fragmentShader = createShaderFromScriptElement(gl, "2d-fragment-shader");
+        program = createProgram(gl, [vertexShader, fragmentShader]);
+        if (!program) {
+            alert("Problem with shader?");
+        }
+        gl.useProgram(program);
+
+        for (var i in set) {
+            if (i == 'speed' || i == 'dir') {
+                continue;
+            }
+            // Add settings to values.
+            var floatVar = gl.getUniformLocation(program, "set_" + i);
+            gl.uniform1f(floatVar, parseFloat(set[i]));
+        }
+
+        // look up where the vertex data needs to go.
+        var positionLocation = gl.getAttribLocation(program, "a_position");
+
+        // set the resolution
+        var iResolution = gl.getUniformLocation(program, "iResolution");
+        gl.uniform2f(iResolution, canvas.width, canvas.height);
+
+        // set the timing
+        var iGlobalTime = gl.getUniformLocation(program, "iGlobalTime");
+        gl.uniform1f(iGlobalTime, Date.now());
+
+        // set the hue
+        var iHue = gl.getUniformLocation(program, "iHue");
+        gl.uniform1f(iHue, 0.8);
+
+        // set the sat
+        var iSaturation = gl.getUniformLocation(program, "iSaturation");
+        gl.uniform1f(iSaturation, 1);
+
+        // Create a buffer and put a single clipspace rectangle in
+        // it (2 triangles)
+        var buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -1.0, -1.0,
+            1.0, -1.0,
+            -1.0, 1.0,
+            -1.0, 1.0,
+            1.0, -1.0,
+            1.0, 1.0]), gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(positionLocation);
+        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+        // set the resolution
+        var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+        gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+
+        function perFrame(time, diff) {
+            gl.uniform1f(iGlobalTime, time * set.speed * set.dir);
+            // draw
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            words.update();
+        }
+
+        function redraw(width, height) {
+            canvas.width = Math.ceil(width / 2);
+            canvas.height = Math.ceil(height / 2);
+            gl.uniform2f(iResolution, canvas.width, canvas.height);
+            gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+        intro(words.words, function () {
+            resize = redraw;
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    <a href="https://www.shadertoy.com/view/ldlXRS" class="original">Original</a>
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/20 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:22:57 GMT -->
+</html>

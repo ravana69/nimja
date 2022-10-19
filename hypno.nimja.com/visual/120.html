@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/120 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:27:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Pixel Snow - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A relaxing view through your screen." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Pixel Snow - Nimja Hypnosis" />
+    <meta property="og:description" content="A relaxing view through your screen." />
+    <meta property="og:url" content="120.html" />
+    <meta property="og:image" content="thumb/Pixel_Snow-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="121.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/120.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="119.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Pixel Snow</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/120.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    
+/**
+ * By Nimja - Pixel Snow.
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors, colorSet) {
+    var t = this;
+    this.canvas = new Canvas(canvas);
+    this.context = this.canvas.context;
+    this.pos = this.canvas.pos;
+    this.colors = colors;
+    this.colorList = (new Colors(colors)).colors;
+    this.colorSet = colorSet;
+    var defaults = {
+        spark: { type: 'ratio' },
+        turb: { type: 'ratio' },
+        wind: { type: 'ratio' },
+        count: { type: 'ratio' },
+        size: { type: 'ratio' },
+        color: { type: 'adjust', val: 1.9 },
+        spread: { type: 'adjust', val: 1 },
+        speed: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.settings.count = Math.round(this.settings.count * 1000);
+    this.settings.speed *= .5;
+    this.settings.turb *= this.settings.speed;
+    this.settings.spark *= 15;
+    this.snowFlakes = [];
+    this.sparkleFlake;
+    this.noiseX = new ValueNoise();
+    this.noiseY = new ValueNoise();
+    this.noiseZ = new ValueNoise();
+    this.update = function (time, difference) {
+        var ctx = t.context,
+            speed = difference * t.settings.speed * .5,
+            cTime = time * t.settings.color;
+
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        ctx.fillStyle = t.getGradient(ctx, cTime);
+        // Draw flakes.
+        for (var i in t.snowFlakes) {
+            t.snowFlakes[i].render(ctx, t.pos, speed, t.noiseX, t.noiseY, t.noiseZ);
+        }
+        // Select sparkle.
+        var flake = getIndex(t.snowFlakes, Math.random()), cur = flake.getCur(t.pos);
+        if (cur < .3) {
+            this.sparkleFlake = flake;
+            this.sparkleFlake.count = 0;
+        }
+        if (this.sparkleFlake && this.sparkleFlake.count < 5) {
+            flake = this.sparkleFlake;
+            flake.count++;
+            cur = flake.getCur(t.pos);
+            var color = getIndex(t.colorList, cur).adjustHsl(cTime + cur * t.settings.spread, 0, .5),
+                spark = this.settings.spark * flake.size,
+                hspark = spark * .5;
+            ctx.fillStyle = t.getGradientGlow(ctx, flake.cx, flake.cy, flake.size, hspark, color);
+            ctx.fillRect(flake.cx - hspark, flake.cy, spark, flake.size);
+            ctx.fillRect(flake.cx, flake.cy - hspark, flake.size, spark);
+        }
+    };
+    this.init = function () {
+        for (var i = 0; i < t.settings.count; i++) {
+            this.snowFlakes.push(new SnowFlake());
+        }
+    };
+    this.getGradient = function (ctx, offset) {
+        var grd = ctx.createRadialGradient(t.pos.x, t.pos.y, 0, t.pos.x, t.pos.y, t.pos.dist);
+        var steps = 10, cur, col;
+        for (var i = 0; i < steps; i++) {
+            cur = i / (steps - 1);
+            col = getIndex(t.colorList, cur);
+            grd.addColorStop(cur, col.adjustHsl(offset + cur * t.settings.spread, 0, 0).toHex());
+        }
+        return grd;
+    };
+    this.getGradientGlow = function (ctx, x, y, size, radius, color) {
+        x += size * .5
+        y += size * .5
+        var grd = ctx.createRadialGradient(x, y, 0, x, y, radius);
+        grd.addColorStop(0, color.toRgba(1));
+        grd.addColorStop(1, color.toRgba(0));
+        return grd;
+    };
+    this.resize = function (width, height) {
+        t.canvas.resize(width, height);
+        t.pos.turb = t.settings.turb;
+        t.pos.wind = t.settings.wind * -.5;
+        t.pos.size = Math.max(1, t.pos.dist * .005 * t.settings.size);
+        t.pos.ratio = t.pos.x / t.pos.y;
+    };
+    t.init();
+}
+
+function SnowFlake() {
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+    this.cur = 0;
+    this.count = 0;
+    this.init = function () {
+        this.x = Math.random() * 2 - 1;
+        this.z = Math.random() * 2 - 1;
+        this.y = -1;
+        this.cur = 0;
+        this.noiseOffset = Math.random() * 10;
+        this.count = 0;
+    };
+    this.render = function (ctx, pos, diff, nx, ny, nz) {
+        this.cur += diff;
+        var nv = this.cur * 2 + this.noiseOffset, nstrength = diff * pos.turb,
+            angle = this.cur * pos.wind, sizea = nx.getValueOctaves(nv * 5, 2) * Math.PI,
+            sizex = .6 + Math.cos(sizea) * .4,
+            sizey = .6 + Math.sin(sizea) * .4;
+        this.x += nx.getValueOctaves(nv + this.y + this.z, 2) * nstrength;
+        this.y += ny.getValueOctaves(nv + this.x + this.z, 2) * nstrength;
+        this.z += nz.getValueOctaves(nv + this.x + this.y, 2) * nstrength;
+        // Rorate along y (so x/z)
+        var x = this.x * Math.cos(angle) + this.z * Math.sin(angle);
+        var z = -this.x * Math.sin(angle) + this.z * Math.cos(angle);
+        // Make depth.
+        var zmult = 1 / (2 + z);
+        this.size = Math.max(.5, pos.size - z * pos.size * .5);
+        this.cx = pos.x + (x * pos.w) * zmult;
+        this.cy = pos.y + ((this.y + this.cur - .5) * pos.h) * zmult * pos.ratio;
+        if ((this.cy - this.size) > pos.h) {
+            this.init();
+        }
+        ctx.fillRect(this.cx, this.cy, this.size * sizex, this.size * sizey);
+    }
+    this.getCur = function (pos) {
+        var p = new Point(this.cx, this.cy);
+        return p.distanceFrom(pos) / pos.dist
+    }
+    this.init();
+    this.cur = Math.random() * 2;
+}
+    var render = new Render(document.getElementById('canvas'), ["#ffffff","#fcfeff","#f9fdff","#f6fcff","#f3fbff","#f0faff","#edf9ff","#ebf7ff","#e8f6ff","#e5f5ff","#e3f4ff","#e0f3ff","#ddf2ff","#daf1ff","#d8efff","#d5eeff","#d3edff","#d0ebff","#ceeaff","#cbe9ff","#c9e7ff","#c6e6ff","#c3e5ff","#c1e4ff","#bfe2ff","#bce1ff","#badfff","#b8ddff","#b5dcff","#b2dbff","#b1d9ff","#aed8ff","#acd6ff","#a9d5ff","#a7d3ff","#a5d2ff","#a2d0ff","#a1ceff","#9ecdff","#9ccbff","#9ac9ff","#98c8ff","#95c6ff","#93c5ff","#91c2ff","#8fc1ff","#8cc0ff","#8bbdff","#89bcff","#86baff","#85b8ff","#83b6ff","#80b5ff","#7eb3ff","#7db1ff","#7aafff","#78aeff","#77abff","#75a9ff","#72a8ff","#71a5ff","#6fa4ff","#6da2ff","#6aa1ff","#699eff","#679cff","#659bfe","#6598fd","#6497fb","#6395f9","#6393f9","#6291f7","#6290f5","#618df4","#618cf2","#608bf0","#5f8aee","#5f87ee","#5e86ec","#5d85ea","#5d82e9","#5c81e7","#5b80e5","#5b7de4","#5a7ce2","#597be0","#597ade","#5877dd","#5776db","#5775d9","#5673d9","#5672d7","#5570d5","#546ed4","#546dd2","#536cd0","#526bce","#5268cd","#5167cb","#5066c9","#5064c8","#4f63c6","#4e62c4","#4e5fc3","#4d5ec1","#4c5dbf","#4b5cbd","#4b5abc","#4a59ba","#4958b8","#4955b6","#4855b4","#4754b2","#4751b1","#4650af","#454fad","#444eab","#444caa","#434ba8","#424aa6","#4248a5","#4147a2","#4046a0","#3f449f","#3f439d","#3e429b","#3d4199","#3c3f98","#3b3e95","#3b3e93","#3a3c92","#393b90","#383a8e","#38388c","#37378a","#363688","#363585","#353483","#353381","#34327f","#34317c","#33317a","#323078","#322f75","#312e73","#302d71","#302c6e","#2f2b6c","#2e2a6a","#2d2968","#2d2865","#2c2763","#2b2761","#2b265f","#2a255d","#29245a","#292358","#282256","#272154","#262052","#261f4f","#251f4d","#241e4b","#231d49","#221c47","#211b45","#211a42","#201940","#1f193e","#1e183c","#1d173a","#1c1638","#1b1536","#1b1434","#1a1432","#181330","#18122d","#17112b","#161029","#150f27","#140f25","#130e23","#120d21","#110c1f","#100b1d","#0f0b1b","#0e0a19","#0d0917","#0c0815","#0a0713","#0a0711","#08060f","#07050d","#06040b","#050309","#040307","#030205","#020103","#010001","#000000"], ["#6699ff"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/120 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:27:33 GMT -->
+</html>

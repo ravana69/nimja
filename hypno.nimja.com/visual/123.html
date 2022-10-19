@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/123 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:27:38 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Image Kaleidoscope - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Moving and turning, reflected many times (try dragging an image onto it!)" />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Image Kaleidoscope - Nimja Hypnosis" />
+    <meta property="og:description" content="Moving and turning, reflected many times (try dragging an image onto it!)" />
+    <meta property="og:url" content="123.html" />
+    <meta property="og:image" content="thumb/Image_Kaleidoscope-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="124.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/123.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="122.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Image Kaleidoscope</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/123.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    
+/**
+ * By Nimja - Image Kaleidoscope
+ *
+ * The backgrounds have been taken from unsplash.com
+ *
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors, colorSet) {
+    var t = this;
+    this.canvas = new Canvas(canvas);
+    this.context = this.canvas.context;
+    this.pos = this.canvas.pos;
+    this.colors = colors;
+    this.colorList = (new Colors(colors)).colors;
+    this.colorSet = colorSet;
+    var defaults = {
+        bg: { type: 'int', val: 8, min: 1, max: 12 },
+        ref: { type: 'int', val: 12, min: 4, max: 12 },
+        nom: { type: 'boolean', val: false },
+        fade: { type: 'float', val: 1, min: .05, max: 1 },
+        rot: { type: 'adjust', val: 1.9 },
+        turn: { type: 'adjust', val: 1.9 },
+        speed: { type: 'ratio' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.settings.rot *= .5;
+    this.settings.width /= 25;
+    this.settings.fade *= this.settings.fade;
+    this.settings.count = Math.round(this.settings.count * 40);
+    this.settings.nom = t.settings.ref % 2 == 1 || t.settings.nom;
+
+    this.buffer = new Canvas();
+
+    this.noise = new ValueNoise();
+
+    this.image = new Image();
+    var num = t.settings.bg < 10 ? '0' + t.settings.bg : t.settings.bg.toString();
+    this.image.src = '/assets/visual/images/bg' + num + '.jpg';
+
+    this.update = function (time) {
+        if (!t.buffer.canvas.width || !t.buffer.canvas.height) {
+            return;
+        }
+        var ctx = t.context, offset = time * t.settings.rot;
+        t.drawPart(time);
+        t.canvas.setRotation(1, 0);
+        ctx.clearRect(-t.pos.x, -t.pos.y, t.pos.w, t.pos.h);
+
+        var angle = 0, apart = TAU / t.settings.ref;
+        for (var i = 0; i < t.settings.ref; i++) {
+            var odd = (i % 2 == 1 && !t.settings.nom);
+            angle = i * apart + offset;
+            if (odd) {
+                angle -= apart
+            }
+
+            t.canvas.setRotationXY(odd ? -1 : 1, 1, angle);
+            ctx.drawImage(
+                t.buffer.canvas,
+                0, 0, t.pos.max, t.pos.max,
+                -t.pos.max + .5, -t.pos.max + .5, t.pos.max, t.pos.max
+            );
+        }
+    };
+
+    this.drawPart = function (time) { // Draw the image onto our part.
+        var ctx = t.buffer.context,
+            w = t.image.naturalWidth,
+            h = t.image.naturalHeight,
+            ratio = w / h,
+            wh = w / 2,
+            hh = h / 2,
+            center = t.pos.center,
+            max = t.pos.max,
+            maxh = max * .5;
+        if (!w || !h) {
+            return;
+        }
+        var minScale = Math.max(center.diam / w, center.diam / h),
+            speed = time * t.settings.speed,
+            p = new Point(max - center.x, center.y),
+            scaleCur = 2, //(1 + t.noise.getValueOctaves(speed * .134, 2)),
+            rotation = time * t.settings.turn,
+            scale = minScale + minScale * scaleCur,
+            maxs = center.max / scale, // Max at scale.
+            ix = -wh + (wh - maxs) * t.noise.getValueOctaves(speed * .055 + 240, 2),
+            iy = -hh + (hh - maxs) * t.noise.getValueOctaves(speed * .054 * ratio + 123, 2);
+
+        t.buffer.setRotationXY(scale, scale, rotation);
+        // Move center point to match.
+        p.multiply(1 / scale);
+        p.rotate(rotation);
+
+        ctx.drawImage(t.image, p.x + ix, p.y + iy);
+    }
+
+    this.resize = function (width, height) {
+        t.canvas.resize(width, height);
+        t.pos.max = Math.ceil(t.pos.dist);
+        t.pos.max += t.pos.max % 2;
+        t.pos.diameter = Math.sqrt(t.pos.max * t.pos.max * 2);
+        t.pos.angle = TAU / t.settings.ref;
+        t.pos.angleH = t.pos.angle * .5;
+        t.buffer.canvas.width = t.pos.max;
+        t.buffer.canvas.height = t.pos.max;
+        t.drawBackground(); // Only has to be done once/per resize.s
+    };
+
+    this.drawBackground = function () { // Draw slice we need to place images in.
+        var ctx = t.buffer.context;
+        max = t.pos.max,
+            stAngle = HPI,
+            tAngle = t.pos.angle;
+        // So we can clear it.
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.clearRect(0, 0, max, max);
+        ctx.globalAlpha = 1;
+
+        // Draw arc background.
+        ctx.beginPath();
+        ctx.moveTo(max, max);
+        ctx.arc(max, max, max, -stAngle, -stAngle - tAngle, true);
+        ctx.fillStyle = 'black';
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 1 + t.settings.ref / 24;
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        var xw = max * Math.cos(-stAngle + tAngle);
+        t.pos.center = {
+            x: xw * .5,
+            y: max * .5,
+            w: xw,
+            h: max
+        }
+        t.pos.center.max = Math.sqrt(t.pos.center.x * t.pos.center.x + t.pos.center.y * t.pos.center.y);
+        t.pos.center.diam = t.pos.center.max * 2;
+
+        // From now on can only draw on top.
+        ctx.globalCompositeOperation = 'source-atop';
+        ctx.globalAlpha = t.settings.fade;
+    };
+
+    /**
+     * Create drag/drop support so images can be dropped on the canvas.
+     */
+    this.init = function () {
+        // Dropped on canvas
+        var dropzone = this.canvas.canvas;
+
+        dropzone.addEventListener('dragenter', t.drag);
+        dropzone.addEventListener('dragleave', t.drag);
+        dropzone.addEventListener('dragover', t.drag);
+        dropzone.addEventListener('drop', t.dropEvent.bind(t));
+
+        // Dropped on fullscreen 'button'.
+        dropzone = document.getElementById('fullscreen');
+
+        dropzone.addEventListener('dragenter', t.drag);
+        dropzone.addEventListener('dragleave', t.drag);
+        dropzone.addEventListener('dragover', t.drag);
+        dropzone.addEventListener('drop', t.dropEvent.bind(t));
+    }
+    this.drag = function (e) { e.preventDefault(); };
+    this.dropEvent = function (e) {
+        e.preventDefault();
+
+        if (e.dataTransfer.files.length) {
+            var file = e.dataTransfer.files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            reader.addEventListener('loadend', function () {
+                t.updateImage(reader.result);
+            });
+        } else if (e.dataTransfer.items.length) {
+            t.updateImage(e.dataTransfer.getData('URL'));
+        }
+    };
+    this.updateImage = function (src) {
+        var img = new Image();
+        img.onload = function () {
+            t.image = img;
+        }
+        img.src = src;
+    }
+
+    t.init();
+}
+
+    var render = new Render(document.getElementById('canvas'), ["#ffffff","#fbfffe","#f7fffe","#f4fffe","#f0fffe","#ecfffe","#e9fffd","#e4fffe","#e1fffe","#ddfffd","#d9fffe","#d5fffe","#d1fffe","#cdfffe","#c9ffff","#c5ffff","#c1ffff","#befdff","#bafdff","#b7fdff","#b4fcff","#b0fcff","#adfcff","#a9fcff","#a7faff","#a3faff","#9ffaff","#9df8ff","#9af8ff","#96f8ff","#94f6ff","#90f5ff","#8df5ff","#89f5ff","#88f3ff","#84f2ff","#81f2ff","#7ff0ff","#7cefff","#78efff","#77ecff","#73ecff","#70ecff","#6debff","#6be8ff","#68e8ff","#65e7ff","#64e5ff","#60e4ff","#5de4ff","#5ce1ff","#59e0ff","#56e0ff","#52dfff","#52dcff","#4edbff","#4bdbff","#4ad7ff","#47d7ff","#44d6ff","#43d3ff","#40d2ff","#3dd1ff","#3ad1ff","#3acdff","#37cdff","#34ccff","#33c8ff","#30c7ff","#2dc7ff","#2dc3ff","#2ac2ff","#27c1ff","#27beff","#24bdff","#21bcff","#1ebbff","#1eb7ff","#1bb6ff","#18b5ff","#18b2ff","#15b1ff","#12b0ff","#12acff","#0fabff","#0caaff","#0aa9ff","#0aa5ff","#07a4ff","#04a3ff","#049fff","#029eff","#009cfe","#0098fe","#0097fc","#0095f9","#0094f7","#0090f7","#008ff5","#008df2","#0089f2","#0088f0","#0086ee","#0082ee","#0081eb","#0080e9","#007ee6","#007be6","#0079e4","#0078e1","#0074e1","#0073df","#0071dc","#006edc","#006cd9","#006bd7","#006ad4","#0066d4","#0065d1","#0064cf","#0060cf","#005fcc","#005ec9","#005ac9","#0059c6","#0058c4","#0057c1","#0053c1","#0052be","#0051bb","#004ebb","#004cb8","#004bb5","#0048b5","#0047b2","#0046af","#0043af","#0042ac","#0040a9","#003fa6","#003ca5","#003ba3","#003aa0","#00379f","#00369c","#003599","#003298","#003195","#003193","#003090","#002d8f","#002c8c","#002b89","#002888","#002785","#002782","#002480","#00237d","#00227a","#002177","#001f76","#001e73","#001d70","#001b6e","#001a6b","#001a68","#001866","#001763","#001660","#00155d","#00135b","#001358","#001255","#001053","#001050","#000f4c","#000d4a","#000d47","#000c44","#000b40","#000a3e","#00093b","#000938","#000835","#000732","#00072e","#00052c","#000528","#000425","#000421","#00031e","#00031b","#000218","#000214","#000111","#00010d","#00000a","#000007","#000003","#000000"], ["#0099ff"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/123 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:27:41 GMT -->
+</html>

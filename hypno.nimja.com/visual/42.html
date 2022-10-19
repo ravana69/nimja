@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/42 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:23:55 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Custom Spiral - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Highly configurable full-screen spiral." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Custom Spiral - Nimja Hypnosis" />
+    <meta property="og:description" content="Highly configurable full-screen spiral." />
+    <meta property="og:url" content="42.html" />
+    <meta property="og:image" content="thumb/Custom_Spiral-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="43.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/42.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="41.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Custom Spiral</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/42.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <style>
+    @keyframes rotating {
+        from {
+            transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+        }
+    }
+
+    @-webkit-keyframes rotating
+
+    /* Safari and Chrome */
+        {
+        from {
+            transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+        }
+    }
+
+    .rotating {
+        -webkit-animation: rotating 2s linear infinite;
+        -moz-animation: rotating 2s linear infinite;
+        -ms-animation: rotating 2s linear infinite;
+        -o-animation: rotating 2s linear infinite;
+        animation: rotating 2s linear infinite;
+        -webkit-animation-direction: normal;
+        animation-direction: normal;
+    }
+
+    .rotating2 {
+        -webkit-animation: rotating 2.1s linear infinite;
+        -moz-animation: rotating 2.1s linear infinite;
+        -ms-animation: rotating 2.1s linear infinite;
+        -o-animation: rotating 2.1s linear infinite;
+        animation: rotating 2.1s linear infinite;
+        -webkit-animation-direction: reverse;
+        animation-direction: reverse;
+    }
+</style>
+<canvas class="rotating2" id="canvas2" width="100" height="100" style="left: 0px; top: 0px; display: none;">Canvas not
+    supported.</canvas>
+<canvas class="rotating" id="canvas" width="100" height="100" style="left: 0px; top: 0px; display: block;">Canvas not
+    supported.</canvas>
+<script>
+    function perFrame(time, diff) {
+        if (render.update) {
+            render.update(time, diff);
+        }
+        words.update();
+    }
+    function resizeCanvas(canvas, visible, width, height, duration, direction) {
+        if (!visible) {
+            canvas.style.display = 'none';
+            return;
+        }
+        var x = width / 2;
+        var y = height / 2;
+        var radius = Math.sqrt(x * x + y * y);
+        var size = Math.ceil(radius) * 2;
+        var hsize = size / 2;
+        canvas.width = size;
+        canvas.height = size;
+        canvas.style.left = (x - hsize) + 'px';
+        canvas.style.top = (y - hsize) + 'px';
+        canvas.style.display = 'block';
+        if (duration) {
+            canvas.style.animationDuration = duration + 's';
+            canvas.style.webkitAnimationDuration = duration + 's';
+            canvas.style.msAnimationDuration = duration + 's';
+            canvas.style.mozAnimationDuration = duration + 's';
+        }
+        if (direction) {
+            direction = direction < 0 ? 'reverse' : 'normal';
+            canvas.style.animationDirection = direction;
+            canvas.style.webkitAnimationDirection = direction;
+            canvas.style.msAnimationDirectionn = direction;
+            canvas.style.mozAnimationDirection = direction;
+        }
+        return size;
+    }
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    //Spiral.
+    /**
+ * By Nimja - The Render class.
+ * @param {element} canvas
+ * @param {element} canvas2
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, canvas2, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.context.globalCompositeOperation = "source-over";
+    this.canvas2 = canvas2;
+    this.context2 = t.canvas2.getContext('2d');
+    this.context2.globalCompositeOperation = "source-over";
+    this.colors = colors;
+    this.pos = {x: 0, y: 0, w: 0, h: 0};
+//    this.spiralTop = new Spiral(t.pos, colors);
+    this.spiralTop = new Spiral(t.pos, (new Colors(colors)).toRgba(1, .8));
+    this.spiralBottom = new Spiral(t.pos, (new Colors(colors)).reverse().toRgba(.2));
+    var defaults = {
+        turns: 10,
+        arms: 1,
+        curve: 2.5,
+        width: .5,
+        dir: 0
+    };
+    this.settings = config.get(defaults);
+    this.draw = function () {
+        t.spiralTop.draw(t.context, t.settings);
+        var settingsBottom = {
+            turns: t.settings.turns * .9,
+            arms: t.settings.arms,
+            curve: t.settings.curve,
+            width: t.settings.width,
+            dir: !t.settings.dir
+        };
+        t.spiralBottom.draw(t.context2, settingsBottom);
+    };
+    this.redraw = function (width, height) {
+        var size = resizeCanvas(t.canvas, true, width, height, 1.5);
+        resizeCanvas(t.canvas2, true, width, height, 3, 1);
+        t.pos.w = size;
+        t.pos.h = size;
+        t.pos.max = size;
+        t.pos.size = t.pos.max / 2;
+        t.pos.x = t.pos.size;
+        t.pos.y = t.pos.size;
+        t.draw();
+    };
+}
+function Spiral(pos, colors) {
+    var t = this;
+    this.pos = pos;
+    this.colors = colors;
+    this.draw = function (ctx, settings) {
+        var width = settings.width * (1 / settings.arms);
+        ctx.fillStyle = gradient.createRadial(ctx, t.colors, t.pos.x, t.pos.y, 0, t.pos.size);;
+        for (var i = 0; i < settings.arms; i++) {
+            ctx.beginPath();
+            ctx.moveTo(t.pos.x, t.pos.y);
+            var offset = i / settings.arms;
+            var outCoords = t.calculateArm(settings, offset);
+            var inCoords = t.calculateArm(settings, offset + width);
+            t.drawArm(ctx, outCoords, false);
+            t.drawArc(ctx, outCoords, inCoords, settings.dir);
+            t.drawArm(ctx, inCoords, true);
+            ctx.closePath();
+            ctx.fill();
+        }
+    };
+    this.calculateArm = function (settings, offset) {
+        var result = [];
+        var steps = 180 * settings.turns;
+        var step = 1 / steps;
+        for (var i = 0; i <= 1; i += step) {
+            result.push(this.calculatePoint(settings, offset, i));
+        }
+        return result;
+    };
+    this.calculatePoint = function (settings, offset, cur) {
+        var curRot = (cur * settings.turns * TAU) + offset * TAU;
+        var curSmooth = Math.pow(cur, settings.curve);
+        var curRadius = t.pos.size * curSmooth;
+        if (settings.dir) {
+            curRot = TAU - curRot;
+        }
+        var x = t.pos.x + curRadius * Math.cos(curRot);
+        var y = t.pos.y + curRadius * Math.sin(curRot);
+        return {x: x, y: y};
+    };
+    this.drawArm = function (ctx, coords, reverse) {
+        if (reverse) {
+            coords.reverse();
+        }
+        var c;
+        for (var index in coords) {
+            c = coords[index];
+            ctx.lineTo(c.x, c.y);
+        }
+    };
+    this.drawArc = function (ctx, outCoords, inCoords, antiClockwise) {
+        var c1 = outCoords[outCoords.length - 1];
+        var c2 = inCoords[inCoords.length - 1];
+        var a1 = Math.atan2(c1.y - t.pos.y, c1.x - t.pos.x);
+        var a2 = Math.atan2(c2.y - t.pos.y, c2.x - t.pos.x);
+        ctx.arc(t.pos.x, t.pos.y, t.pos.size, a1, a2, antiClockwise);
+    };
+}
+    var render = new Render(
+        document.getElementById('canvas'),
+        document.getElementById('canvas2'),
+        ["#ffffff","#fcfdfe","#fafcfd","#f8fbfc","#f6fafc","#f4f9fb","#f2f8fa","#f0f7fa","#eef6f9","#ecf5f8","#eaf4f8","#e8f2f7","#e6f1f6","#e4f0f6","#e2eff5","#e0eef4","#deedf4","#dcebf3","#daeaf2","#d8e9f2","#d6e8f1","#d4e6f0","#d2e5f0","#d0e4ef","#cee3ee","#cce1ee","#cbe0ed","#c9dfec","#c7deec","#c5dceb","#c3dbeb","#c1daea","#bfd8e9","#bdd7e9","#bbd5e8","#b9d4e7","#b8d2e7","#b6d1e6","#b4d0e6","#b2cfe5","#b0cde4","#aecce4","#adcae3","#abc9e3","#a9c7e2","#a7c6e1","#a6c4e1","#a4c3e0","#a2c2df","#a0c0df","#9fbede","#9dbdde","#9bbcdd","#99badd","#97b9dc","#96b7db","#94b5db","#92b4da","#90b3da","#8eb1d9","#8dafd9","#8baed8","#89acd7","#88aad7","#86a9d6","#84a8d6","#83a5d5","#81a4d5","#7fa3d4","#7ea1d3","#7c9fd3","#7b9ed2","#799cd2","#789ad1","#7699d1","#7497d0","#7395d0","#7193cf","#6f92ce","#6d91ce","#6c8ecd","#6a8dcd","#698bcc","#6889cc","#6688cb","#6486cb","#6384ca","#6182ca","#5f81c9","#5e7ec9","#5c7dc8","#5b7bc8","#597ac7","#5877c7","#5676c6","#5474c5","#5372c5","#5270c5","#506fc4","#4f6cc4","#4d6bc3","#4b69c3","#4a68c2","#4965c2","#4764c1","#4562c0","#455fc0","#435ec0","#415cbf","#405abf","#3f58bd","#3e57bb","#3e56b9","#3d54b8","#3d53b6","#3c52b4","#3c4fb3","#3b4eb0","#3a4dae","#3a4bad","#394aab","#3849a9","#3848a7","#3746a6","#3645a3","#3644a1","#3542a0","#35419e","#34409c","#333e9a","#333d98","#323c96","#313b94","#313993","#303890","#2f378e","#2f358d","#2e348b","#2d3388","#2d3187","#2c3185","#2b3082","#2b2f80","#2a2d7f","#292c7c","#292b7a","#282979","#272976","#272874","#262673","#252570","#25256e","#24246c","#242369","#232266","#222164","#222061","#221f5f","#211f5d","#211e5a","#201d58","#1f1c55","#1f1b52","#1e1b50","#1d1a4e","#1c194c","#1c1849","#1b1747","#1a1745","#1a1642","#191540","#18143d","#18133b","#171339","#161236","#151134","#151032","#141030","#130f2d","#120e2b","#110d29","#100d27","#100c24","#0f0b22","#0e0a20","#0d0a1e","#0c091b","#0b0819","#0a0717","#090715","#080613","#070511","#07040e","#06040c","#05030a","#040208","#030206","#020104","#010002","#000000"], ["#4059bf"]
+    );
+    intro(words.words, function () {
+        resize = render.redraw.bind(render);
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/42 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:23:58 GMT -->
+</html>

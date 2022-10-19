@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/40 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:23:50 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Pulsing Shapes - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Various shapes pulsing either outward or inward." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Pulsing Shapes - Nimja Hypnosis" />
+    <meta property="og:description" content="Various shapes pulsing either outward or inward." />
+    <meta property="og:url" content="40.html" />
+    <meta property="og:image" content="thumb/Pulsing_Shapes-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="41.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/40.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="39.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Pulsing Shapes</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/40.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - The Render class.
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    this.pos = { x: 0, y: 0, w: 0, h: 0, canvas: {} };
+    this.totalFrames = 80;
+    this.drawFrame = 0;
+    this.buffer = new Buffer(this.context);
+    var defaults = {
+        amount: { type: 'ratio' },
+        shape: { type: 'int', val: 0, min: 0, max: 10 },
+        ratio: { type: 'float', val: 0, min: 0, max: .8 },
+        speed: { type: 'ratio' },
+        dir: { type: 'bool', val: 0 }
+    };
+    this.settings = config.get(defaults);
+    t.settings.count = Math.floor(t.settings.amount * 20);
+    this.shape = new Shape(0);
+    this.update = function (time) {
+        if (t.drawFrame < t.totalFrames) {
+            var cur = t.drawFrame / t.totalFrames;
+            if (!t.settings.dir) {
+                cur = 1 - cur;
+            }
+            t.draw(t.buffer.getContext(t.drawFrame), cur);
+            t.drawFrame++;
+        }
+        t.buffer.drawNextFrame();
+    };
+    this.resize = function (width, height) {
+        t.totalFrames = Math.round((1 / t.settings.speed) * 80);
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.pos.radius = Math.sqrt(t.pos.x * t.pos.x + t.pos.y * t.pos.y);
+        t.pos.steps = t.settings.count;
+        t.pos.offset = 1 / t.pos.steps * .4;
+        t.buffer.update(t.totalFrames, width, height);
+        t.shape = new Shape(t.settings.shape, t.pos.radius, t.settings.ratio, false);
+        t.drawFrame = 0;
+    };
+    this.draw = function (ctx, current) {
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, t.pos.w, t.pos.h);
+        var cur, width, lineWidth, angle = current * TAU;
+        for (var i = 0; i < t.pos.steps; i++) {
+            cur = (i + .5) / t.pos.steps;
+            width = (Math.sin(angle + cur * TAU * 2) + 1) * .5;
+            lineWidth = width * t.pos.offset;
+            ctx.beginPath();
+            t.shape.drawBar(ctx, t.pos.x, t.pos.y, -HPI, true, cur, width * t.pos.offset);
+            ctx.fillStyle = getIndex(t.colors, 1.1 - width * 1.1);
+            ctx.fill();
+        }
+    };
+}
+    var render = new Render(document.getElementById('canvas'), ["#ffffff","#fdfefd","#fbfdfc","#f9fcfb","#f7fbfa","#f5faf9","#f3faf8","#f1f9f7","#eff8f6","#edf7f5","#ebf6f4","#e9f5f3","#e7f5f2","#e5f4f1","#e3f3f0","#e1f2ef","#dff1ee","#ddf0ed","#dbefec","#d9efeb","#d7eeea","#d5ede9","#d3ece8","#d1ebe7","#cfeae6","#cde9e5","#cbe8e4","#c9e8e3","#c7e7e2","#c5e6e1","#c3e5e0","#c1e4e0","#bfe3df","#bde2de","#bae1dd","#b8e0dc","#b6e0db","#b4dfda","#b2deda","#b0ddd9","#aedcd8","#abdbd8","#a9dad7","#a7d9d6","#a5d8d5","#a3d7d5","#a1d6d4","#9ed5d3","#9cd4d2","#9ad3d2","#98d3d1","#95d1d0","#93d1d0","#91d0cf","#8fcfcf","#8dcece","#8bcdcd","#89cbcc","#87cacb","#85c9ca","#83c8ca","#82c7c9","#7fc6c8","#7dc5c7","#7cc3c7","#7ac2c6","#78c1c5","#77bfc4","#75bec3","#73bdc3","#71bcc2","#6fbac1","#6db9c0","#6bb8bf","#6ab6bf","#68b5be","#66b4bd","#65b2bd","#63b1bc","#61b0bb","#5fafba","#5dadb9","#5bacb9","#59abb8","#58a9b7","#56a8b6","#54a7b6","#53a5b5","#51a4b4","#4fa3b3","#4da2b3","#4c9fb2","#4a9eb1","#489db0","#479bb0","#459aaf","#4399ae","#4297ae","#4095ad","#3e94ac","#3c93ab","#3b91ab","#3a90aa","#388fa9","#378ca9","#358ba8","#338aa7","#3288a7","#3086a6","#2e85a5","#2c84a4","#2b82a4","#2981a3","#277fa2","#267da2","#257ca1","#237ba0","#2278a0","#20779f","#1e769e","#1d739e","#1b729d","#19719c","#18709c","#176d9b","#156c9a","#136a9a","#126899","#106798","#106596","#106295","#106193","#105f91","#0f5e8f","#0f5b8e","#0f5a8c","#0f5889","#0f5688","#0e5486","#0e5384","#0e5083","#0e4f81","#0e4e7e","#0d4c7c","#0d4a7b","#0d4879","#0d4777","#0d4475","#0c4373","#0c4271","#0c3f70","#0c3e6d","#0b3d6b","#0b3b69","#0b3967","#0b3865","#0b3763","#0a3461","#0a335f","#0a325d","#0a305b","#092e59","#092d56","#092c54","#092a52","#082950","#08274e","#08254c","#08244a","#072347","#072146","#072043","#071f41","#061e3e","#061c3c","#061b3a","#061a38","#061836","#051733","#051631","#05142f","#04132c","#04122a","#041028","#040f25","#030e23","#030d20","#030c1e","#030b1b","#020a19","#020917","#020814","#010711","#01050f","#01040c","#01030a","#000207","#000105","#000002","#000000"], ["#116699"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/40 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:23:52 GMT -->
+</html>

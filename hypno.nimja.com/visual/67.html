@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/67 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:03 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Magic Flame - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="A beautiful, flickering flame with amazing colors." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Magic Flame - Nimja Hypnosis" />
+    <meta property="og:description" content="A beautiful, flickering flame with amazing colors." />
+    <meta property="og:url" content="67.html" />
+    <meta property="og:image" content="thumb/Magic_Flame-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="68.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/67.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="66.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Magic Flame</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/67.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - Magic Flame
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors, colorSet) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    console.log(colors);
+    this.colorList = new Colors(colors);
+    this.colorSet = colorSet;
+    this.gradientColors = [];
+    this.pos = new Pos();
+    var defaults = {
+        size: {type: 'ratio'},
+        color: {type: 'adjust', val: 2},
+        spread: {type: 'adjust', val: 2},
+        speed: {type: 'ratio'},
+        state: {type: 'int', val: 0, min: 0, max: 2},
+        light: {type: 'boolean', val: false},
+        dir: {type: 'dir'}
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.count = 50;
+    this.particles = [];
+    this.prev = 0;
+    this.prevFlicker = .5;
+    this.colorBack = t.settings.light ? '#FFFFFF' : '#000000';
+    this.colorEdge = t.settings.light ? 'rgba(255, 255, 255, 0)' : 'rgba(0, 0, 0, 0)';
+    this.composition = t.settings.light ? 'multiply' : 'lighter';
+    this.update = function (time) {
+        var cTime = time * t.settings.color;
+        time *= t.settings.speed;
+        var diff = time - t.prev;
+        t.prev = time;
+        var ctx = t.context;
+        if (t.settings.light) {
+            ctx.fillStyle = t.colorBack;
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillRect(0, 0, t.pos.w, t.pos.h);
+            ctx.globalCompositeOperation = t.composition;
+        } else {
+            ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        }
+        t.drawBackground(ctx, cTime);
+        t.drawFlame(ctx, diff, time * .7, cTime);
+    };
+    this.flicker = function (amount) {
+        var diff = (Math.random() - t.prevFlicker) * .05;
+        t.prevFlicker += diff;
+        return 1 + t.prevFlicker * amount;
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.context.lineCap = "round";
+        t.context.lineJoin = "round";
+        t.context.globalCompositeOperation = t.composition;
+        t.pos.set(width, height);
+        t.pos.max = t.pos.y * t.settings.size;
+        t.pos.flame = t.pos.max * .6;
+        t.pos.offset = t.pos.flame * .35;
+        t.pos.yf = t.pos.y - t.pos.flame * .5;
+        t.pos.spread = t.settings.spread;
+    };
+
+    this.drawBackground = function (ctx, cTime)
+    {
+        //Big background flicker.
+        var yoff = t.pos.max * .5,
+                x = t.pos.x,
+                y = t.pos.y - yoff + t.pos.offset,
+                size = t.pos.max * 1 * t.flicker(.3),
+                colors = t.getColorsBg(cTime),
+                max = colors.length - 1,
+                xoff = 0;
+        var curIndex, grd = ctx.createRadialGradient(x + xoff, y + yoff, 0, x, y, size);
+        for (var index in colors) {
+            curIndex = index / max;
+            grd.addColorStop(curIndex, colors[index]);
+        }
+        ctx.fillStyle = grd;
+        ctx.fillRect(x - size, y - size, size * 2, size * 2);
+    };
+    this.drawFlame = function (ctx, diff, time, cTime)
+    {
+        for (var index in t.particles) {
+            t.particles[index].draw(ctx, diff, time, cTime);
+        }
+    };
+    this.getColorsBg = function (cTime) {
+        var colors = [], i, cur;
+        var steps = 20;
+        var max = .7;
+        for (i = 0; i < steps; i++) {
+            cur = i / steps;
+            colors.push(getIndex(t.colorList.colors, cur).adjustHsl(cTime + cur * t.settings.spread, 0, 0).toRgba(max - cur * max));
+        }
+        return colors;
+    };
+
+    this.init = function () {
+        if (t.settings.state < 2) {
+            for (var i = 0; i < t.count; i++) {
+                var particle = new Particle(t.colorList.colors, t.pos, t.settings.dir);
+                particle.life = i / t.count;
+                particle.colorEdge = t.colorEdge;
+                t.particles.push(particle);
+            }
+        } else {
+            t.drawFlame = function () {};
+        }
+        if (t.settings.state == 1) {
+            t.drawBackground = function () {};
+        }
+    };
+    t.init();
+}
+
+function Particle(colors, pos, dir) {
+    var t = this;
+    this.colors = colors;
+    this.pos = pos;
+    this.dir = dir;
+    this.curve = TAU * .5;
+    this.speed = 0;
+    this.offset = 0;
+    this.life = 0;
+    this.colorEdge = 'rgba(0,0,0,0)';
+
+}
+Particle.prototype = {
+    draw: function (ctx, diff, time, cTime)
+    {
+        this.life += diff;
+        if (this.life > 1) {
+            this.life = this.life % 1;
+            this.reset();
+        }
+        var cur = this.dir > 0 ? this.life : 1 - this.life;
+        var curved = curveIn(cur);
+        var size = (Math.cos(cur * Math.PI) + 1) * .5;
+        var x = this.pos.x + this.pos.offset * (1 - size) * Math.sin(cur * this.curve * this.speed + this.offset - time);
+        var y = this.pos.y + this.pos.offset - this.pos.flame * curved * this.speed;
+        var color = getIndex(this.colors, curved).adjustHsl(cTime + cur * this.pos.spread, 0, 0);
+        color = curved < .1 ? color.toRgba(curved * 10) : color.toRgb();
+        this.drawParticle(ctx, x, y, this.pos.flame * .2 * size, color);
+
+    },
+    reset: function () {
+        this.speed = .7 + Math.random() * .5;
+        this.offset = Math.random();
+    },
+
+    drawParticle: function (ctx, x, y, size, color)
+    {
+        var grd = ctx.createRadialGradient(x, y, 0, x, y, size);
+        grd.addColorStop(0, color);
+        grd.addColorStop(1, this.colorEdge);
+        ctx.fillStyle = grd;
+        ctx.fillRect(x - size, y - size, size * 2, size * 2);
+    }
+};
+    var render = new Render(document.getElementById('canvas'), ["#ffff00","#fdfe0b","#fbfe12","#f9fe18","#f8fe1d","#f6fe22","#f4fe27","#f2fe2b","#f1fe2f","#effe33","#edfe36","#ebfe3a","#eafe3e","#e8fe41","#e6fe44","#e4fe47","#e3fe4b","#e1fe4e","#dffe51","#ddfe54","#dbfe57","#d9fe5a","#d8fe5c","#d6fe5f","#d4fe62","#d2fe65","#d0fe67","#cefe6a","#ccfe6d","#cafe6f","#c9fe72","#c7fe74","#c5fe77","#c3fe79","#c1fe7c","#bffe7e","#bdfe81","#bbfe83","#b9fe85","#b7fe88","#b5fe8a","#b3fe8c","#b1fe8f","#affe91","#adfe93","#abfe95","#a9fe97","#a7fe9a","#a4fe9c","#a2fe9e","#a0fea0","#9efea2","#9cfea4","#9afea7","#97fea9","#95feab","#93fead","#91feaf","#8ffeb1","#8cfeb3","#8afeb5","#88feb7","#85feb9","#83febb","#81febd","#7efebf","#7cfec1","#79fec3","#77fec5","#74fec7","#72fec9","#6ffeca","#6dfecc","#6afece","#67fed0","#65fed2","#62fed4","#5ffed6","#5cfed8","#5afed9","#57fedb","#54fedd","#51fedf","#4efee1","#4bfee3","#47fee4","#44fee6","#41fee8","#3efeea","#3afeeb","#36feed","#33feef","#2ffef1","#2bfef2","#27fef4","#22fef6","#1dfef8","#18fef9","#12fefb","#0bfefd","#00ffff","#0bfdfe","#12fbfe","#18f9fe","#1df8fe","#22f6fe","#27f4fe","#2bf2fe","#2ff1fe","#33effe","#36edfe","#3aebfe","#3eeafe","#41e8fe","#44e6fe","#47e4fe","#4be3fe","#4ee1fe","#51dffe","#54ddfe","#57dbfe","#5ad9fe","#5cd8fe","#5fd6fe","#62d4fe","#65d2fe","#67d0fe","#6acefe","#6dccfe","#6fcafe","#72c9fe","#74c7fe","#77c5fe","#79c3fe","#7cc1fe","#7ebffe","#81bdfe","#83bbfe","#85b9fe","#88b7fe","#8ab5fe","#8cb3fe","#8fb1fe","#91affe","#93adfe","#95abfe","#97a9fe","#9aa7fe","#9ca4fe","#9ea2fe","#a0a0fe","#a29efe","#a49cfe","#a79afe","#a997fe","#ab95fe","#ad93fe","#af91fe","#b18ffe","#b38cfe","#b58afe","#b788fe","#b985fe","#bb83fe","#bd81fe","#bf7efe","#c17cfe","#c379fe","#c577fe","#c774fe","#c972fe","#ca6ffe","#cc6dfe","#ce6afe","#d067fe","#d265fe","#d462fe","#d65ffe","#d85cfe","#d95afe","#db57fe","#dd54fe","#df51fe","#e14efe","#e34bfe","#e447fe","#e644fe","#e841fe","#ea3efe","#eb3afe","#ed36fe","#ef33fe","#f12ffe","#f22bfe","#f427fe","#f622fe","#f81dfe","#f918fe","#fb12fe","#fd0bfe","#ff00ff"], ["#ffff00","#00ffff","#ff00ff"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/67 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:05 GMT -->
+</html>

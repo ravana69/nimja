@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/56 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:33 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Tentacle Cluster - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Wiggling tentacles, reaching out to find you." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Tentacle Cluster - Nimja Hypnosis" />
+    <meta property="og:description" content="Wiggling tentacles, reaching out to find you." />
+    <meta property="og:url" content="56.html" />
+    <meta property="og:image" content="thumb/Tentacle_Cluster-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="57.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/56.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="55.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Tentacle Cluster</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/56.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - Tentacle Cluster
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.context.globalCompositeOperation = "lighter";
+    this.colors = colors;
+    this.colorList = (new Colors(colors)).colors;
+    this.pos = { x: 0, y: 0, w: 0, h: 0, canvas: {} };
+    var defaults = {
+        speed: { type: 'ratio' },
+        width: { type: 'ratio' },
+        amp: { type: 'ratio' },
+        amount: { type: 'ratio' },
+        color: { type: 'adjust', val: 2 },
+        spread: { type: 'adjust', val: 2 },
+        mode: { type: 'int', val: 0, min: 0, max: 3 },
+        flat: { type: 'bool', val: false },
+        dir: { type: 'dir', val: 0 }
+    };
+    this.settings = config.get(defaults);
+    this.settings.speed *= 1.6;
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.strands = [];
+    this.backgroundColor = 'black';
+    this.drawMode = 'screen';
+    canvasBlendMode = (t.settings.mode % 2 == 1) ? 'multiply' : 'screen';
+    this.update = function (time) {
+        var ctx = t.context, strand, cTime = time * t.settings.color;
+        ctx.globalCompositeOperation = "source-over";
+        ctx.fillStyle = t.backgroundColor;
+        ctx.fillRect(0, 0, t.pos.w, t.pos.h);
+        ctx.globalCompositeOperation = t.drawMode;
+        gradient.setShiftSpread(cTime, t.settings.spread);
+        for (var index in t.strands) {
+            strand = t.strands[index]
+            strand.draw(ctx, time);
+            if (t.settings.color != 0) {
+                if (t.settings.flat) {
+                    var colorIndex = t.settings.invert ? 1 - strand.lengthRatio : strand.lengthRatio;
+                    strand.color = getIndex(t.colorList, colorIndex).adjustHsl(cTime + colorIndex * t.settings.spread, 0, 0).toHex();;
+                } else {
+                    strand.color = gradient.createRadial(t.context, t.colorList, t.pos.x, t.pos.y, 0, t.pos.radius * strand.length);
+                }
+            }
+        }
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.pos.radius = Math.sqrt(t.pos.x * t.pos.x + t.pos.y * t.pos.y);
+        //        t.pos.radius = Math.min(t.pos.x, t.pos.y);
+        t.pos.base = t.pos.radius * .05 * t.settings.width;
+        t.context.lineWidth = t.pos.thickness;
+        t.context.lineCap = "round";
+        t.context.lineJoin = "round";
+        if (!t.settings.flat) {
+            gradient.setShiftSpread(0, t.settings.spread);
+            for (var i in t.strands) {
+                var strand = t.strands[i];
+                t.strands[i].color = gradient.createRadial(t.context, t.colorList, t.pos.x, t.pos.y, 0, t.pos.radius * strand.length);
+            }
+        }
+    };
+    this.init = function () {
+        if (t.settings.mode == 1 || t.settings.mode == 3) {
+            t.drawMode = (t.settings.mode == 1) ? 'multiply' : 'source-over';
+            t.backgroundColor = 'white';
+            t.colors = t.colors.reverse();
+        } else if (t.settings.mode == 2) {
+            t.drawMode = 'source-over';
+        } else {
+            t.drawMode = 'screen';
+        }
+        t.settings.count = Math.floor(30 * t.settings.amount);
+        for (var i = 0; i < t.settings.count; i++) {
+            var cur = i / (t.settings.count - 1);
+            var strand = new Strand(t.pos, 1 - cur, t.settings.dir, t.settings.speed, t.settings.amp);
+            var colorIndex = t.settings.invert ? 1 - strand.lengthRatio : strand.lengthRatio;
+            strand.color = getIndex(t.colorList, colorIndex).adjustHsl(colorIndex * t.settings.spread, 0, 0).toHex();;
+            t.strands.push(strand);
+        }
+    };
+    t.init();
+}
+function Strand(pos, lengthRatio, dir, speed, amp) {
+    var t = this;
+    this.lengthRatio = lengthRatio;
+    this.length = t.lengthRatio * .7 + .3;
+    this.moveSpeed = (.2 + 1 - t.length) * (Math.random() * .4 + .3) * speed;
+    this.amplitude = (1 - t.length) * .2 + (Math.random() * Math.PI + .5) * .45 * amp;
+    this.steps = Math.round(this.length * 100 * amp);
+    this.step = 1 / t.steps;
+    this.phase = t.amplitude * t.moveSpeed * .9 + Math.random() + .25;
+    this.dir = dir;
+    this.color = 'white';
+    this.angle = Math.random() * TAU;
+    this.anglePlus = Math.random() * .4 - .2;
+    this.pos = pos;
+    this.draw = function (ctx, time) {
+        var angle, radius, offset, c,
+            max = t.steps - 1,
+            phase = t.phase * t.dir,
+            move = time * t.moveSpeed,
+            baseAngle = t.angle + move * t.anglePlus,
+            coords = [];
+        ctx.beginPath();
+        ctx.fillStyle = t.color;
+        angle = t.amplitude * Math.sin(move) + baseAngle - HPI;
+        ctx.arc(t.pos.x, t.pos.y, t.pos.base, angle, angle - Math.PI, true);
+        for (var i = 0; i < 1; i += this.step) {
+            angle = t.amplitude * Math.sin(i * phase + move) + baseAngle;
+            radius = t.pos.radius * t.length * i;
+            offset = t.pos.base * (1 - i);
+            c = {
+                x: t.pos.x + radius * Math.cos(angle),
+                y: t.pos.y + radius * Math.sin(angle),
+                xo: offset * Math.cos(angle + HPI),
+                yo: offset * Math.sin(angle + HPI)
+            };
+            ctx.lineTo(c.x + c.xo, c.y + c.yo);
+            coords.push(c);
+        }
+        for (var i = max; i >= 0; i--) {
+            c = coords[i];
+            ctx.lineTo(c.x - c.xo, c.y - c.yo);
+        }
+        ctx.fill();
+    };
+}
+    var render = new Render(document.getElementById('canvas'), ["#ffffff","#fefdfd","#fefbfb","#fdfaf9","#fdf8f8","#fcf6f6","#fcf5f4","#fbf3f3","#fbf1f1","#faf0ef","#faeeee","#f9ecec","#f9ebea","#f8e9e8","#f8e7e7","#f7e6e5","#f7e4e3","#f6e2e1","#f6e0df","#f5dfde","#f5dddc","#f4dbda","#f4dad8","#f3d8d6","#f3d6d5","#f2d4d3","#f2d2d1","#f1d1cf","#f1cfcd","#f0cdcb","#f0cbca","#efcac8","#efc8c6","#eec6c4","#eec4c2","#edc2c0","#edc0be","#ecbebc","#ecbdba","#ebbbb8","#ebb9b6","#eab7b4","#eab5b2","#e9b3b0","#e9b1ae","#e8afac","#e8adaa","#e7aba8","#e7a9a6","#e6a7a4","#e6a5a2","#e5a3a0","#e5a19e","#e49f9c","#e49d99","#e39b97","#e39995","#e29793","#e29591","#e1938f","#e1918c","#e08e8a","#e08c88","#df8a85","#df8883","#de8681","#dd837e","#dd817c","#dc7f7a","#dc7d77","#db7a75","#db7872","#da7670","#da736d","#d9716b","#d96e68","#d86c66","#d86963","#d76760","#d7645d","#d6625b","#d65f58","#d55c55","#d55a52","#d4574f","#d4544c","#d35149","#d24e46","#d24c43","#d1493f","#d1453c","#d04238","#d03f35","#cf3c31","#cf392d","#ce3529","#ce3125","#cd2e21","#cd2a1c","#cc2616","#cc2211","#ca2112","#c92113","#c82115","#c72116","#c62118","#c52119","#c4211a","#c3211b","#c1211d","#c0211e","#bf211f","#be2120","#bd2121","#bc2122","#bb2123","#ba2124","#b82125","#b72126","#b62127","#b52128","#b42129","#b3212a","#b1212b","#b0212c","#af212d","#ae212e","#ad212f","#ab2130","#aa2131","#a92132","#a82133","#a72134","#a52135","#a42135","#a32136","#a22137","#a12138","#9f2139","#9e213a","#9d213b","#9c213b","#9a213c","#99213d","#98213e","#96213f","#95213f","#942140","#932141","#912142","#902143","#8f2143","#8d2144","#8c2145","#8b2146","#892146","#882147","#872148","#852149","#842149","#83214a","#81214b","#80214c","#7f214c","#7d214d","#7c214e","#7a214f","#79214f","#772150","#762151","#752151","#732152","#722153","#702154","#6f2154","#6d2155","#6c2156","#6a2156","#692157","#672158","#662158","#642159","#62215a","#61215a","#5f215b","#5e215c","#5c215c","#5a215d","#59215e","#57215e","#55215f","#542160","#522160","#502161","#4e2162","#4d2162","#4b2163","#492164","#472164","#452165","#442266"], ["#ffffff","#cc2211","#442266"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/56 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:35 GMT -->
+</html>

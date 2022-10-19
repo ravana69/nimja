@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/59 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:41 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Tinsel Lights - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Sweet strings of light, swirling around a cone-shape." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Tinsel Lights - Nimja Hypnosis" />
+    <meta property="og:description" content="Sweet strings of light, swirling around a cone-shape." />
+    <meta property="og:url" content="59.html" />
+    <meta property="og:image" content="thumb/Tinsel_Lights-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="60.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/59.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="58.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Tinsel Lights</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/59.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - Tinsel Lights
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    this.pos = {x: 0, y: 0, w: 0, h: 0, canvas: {}};
+    var defaults = {
+        mode: {type: 'int', val: 0, min: 0, max: 2},
+        hturns: {type: 'int', val: 7, min: 1, max: 20},
+        vturns: {type: 'int', val: 3, min: 0, max: 20},
+        cturns: {type: 'int', val: 5, min: 1, max: 20},
+        color: {type: 'adjust', val: 2},
+        spread: {type: 'adjust', val: 2},
+        count: {type: 'ratio'},
+        speed: {type: 'ratio'},
+        size: {type: 'ratio'},
+        dir: {type: 'dir'}
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.settings.vturns = this.settings.vturns > 0 ? this.settings.vturns : 0.5;
+    this.drawer = new Drawer(t.pos, t.settings, t.colors);
+    this.update = function (time) {
+        ctx = t.context;
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        t.drawer.draw(ctx, time);
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.pos.yo = t.pos.y - t.pos.y * .15;
+        t.pos.tall = t.pos.y * .7;
+        t.pos.wide = t.pos.x * .5;
+        t.pos.radius = Math.sqrt(t.pos.x * t.pos.x + t.pos.y * t.pos.y);
+        t.pos.sr = t.pos.radius * .4;
+        t.pos.size = t.pos.radius / 13 * t.settings.size;
+        t.pos.hsize = t.pos.size * .5;
+        t.context.globalCompositeOperation = 'lighter';
+    };
+}
+function Drawer(pos, settings, colors)
+{
+    var t = this;
+    this.pos = pos;
+    this.settings = settings;
+    this.steps = Math.round(350 * t.settings.count);
+    this.colors = (new Colors(colors)).colors;
+    this.offsets = [];
+    for (var i = 0; i < t.steps; i++) {
+        t.offsets.push(Math.random());
+    }
+    this.coord = new Coord3D(100);
+    this.draw = function (ctx, time) {
+//        ctx.fillStyle = 'red';
+//        ctx.fillRect(0, 0, t.pos.w, t.pos.h);
+        var c, color, size,
+            cTime = t.settings.color * time,
+            max = t.steps - 1,
+            timeSpeed = time * t.settings.speed * 2.66;
+        for (var i = 0; i < t.steps; i++) {
+            c = t.calculate(i, max, timeSpeed);
+            color = getIndex(t.colors, c.cpos).adjustHsl(cTime + c.cpos * t.settings.spread, 0, 0).toRgba(c.alpha);
+            size = c.zsize * t.pos.hsize;
+            ctx.fillStyle = gradient.createRadial(ctx, [color, 'rgba(0, 0, 0, 0)'], c.x, c.y, 0, size, 2);
+            ctx.fillRect(c.x - size, c.y - size, size * 2, size * 2);
+        }
+    };
+    this.calculateCone = function(i, max, timeSpeed) {
+        var x, y, z, alpha, vpos, cpos, cur, angle, c;
+        cur = i / max;
+        angle = cur * TAU * t.settings.hturns + timeSpeed * .2 * t.settings.dir;
+        vpos = Math.abs(Math.sin(cur * Math.PI * t.settings.vturns));
+        y = (vpos * 2 - 1) * t.pos.tall;
+        x = (t.pos.wide * vpos) * Math.cos(angle);
+        z = .003 * vpos * Math.sin(angle);
+        alpha = .6 - Math.sin(angle) * .4;
+        cpos = vpos;
+        if (t.settings.mode == 1) {
+            cpos = (Math.sin(cur * TAU * t.settings.cturns + timeSpeed) + 1) / 2;
+        } else if (t.settings.mode == 2) {
+            cpos = (Math.sin(t.offsets[i] * TAU + timeSpeed * (1 + t.offsets[i])) + 1) / 2;
+        } else {
+            alpha *= (Math.sin(cur * TAU * t.settings.cturns - timeSpeed) + 1) / 2;
+        }
+        c = t.coord.calculate(x, y, z);
+        return {
+            x: t.pos.x + c.x,
+            y: t.pos.yo + c.y,
+            alpha: alpha,
+            cpos: cpos,
+            zsize: c.r
+        };
+    };
+    this.calculateCylinder = function(i, max, timeSpeed) {
+        var x, y, z, alpha, vpos, cpos, cur, angle, c;
+        cur = i / max;
+        angle = cur * TAU * t.settings.hturns + timeSpeed * .2 * t.settings.dir;
+        vpos = (Math.sin(cur * TAU * t.settings.vturns + HPI) + 1) / 2;
+        y = (vpos * 2 - 1) * t.pos.tall;
+        x = t.pos.wide * Math.cos(angle);
+        z = .003 * Math.sin(angle);
+        alpha = .6 - Math.sin(angle) * .4;
+        cpos = vpos;
+        if (t.settings.mode == 1) {
+            cpos = (Math.sin(cur * TAU * t.settings.cturns + timeSpeed) + 1) / 2;
+        } else if (t.settings.mode == 2) {
+            cpos = (Math.sin(t.offsets[i] * TAU + timeSpeed * (1 + t.offsets[i])) + 1) / 2;
+        } else {
+            alpha *= (Math.sin(cur * TAU * t.settings.cturns - timeSpeed) + 1) / 2;
+        }
+        c = t.coord.calculate(x, y, z);
+        return {
+            x: t.pos.x + c.x,
+            y: t.pos.y + c.y,
+            alpha: alpha,
+            cpos: cpos,
+            zsize: c.r
+        };
+    };
+    this.calculateSphere = function(i, max, timeSpeed) {
+        var x, y, z, alpha, vangle, cpos, cur, angle, c;
+        cur = i / max;
+        angle = cur * TAU * t.settings.hturns + timeSpeed * .2 * t.settings.dir;
+//        cpos = (Math.sin(cur * TAU * t.settings.vturns + HPI) + 1) / 2;
+        vangle = cur * t.settings.vturns * TAU - HPI;
+        y = t.pos.sr * Math.sin(vangle);
+        cpos = (y / t.pos.sr + 1) / 2;
+        x = t.pos.sr * Math.cos(vangle) * Math.cos(angle) ;
+        z = Math.cos(vangle) * Math.sin(angle);
+        alpha = .6 - z * .4;
+        if (t.settings.mode == 1) {
+            cpos = (Math.sin(cur * TAU * t.settings.cturns + timeSpeed) + 1) / 2;
+        } else if (t.settings.mode == 2) {
+            cpos = (Math.sin(t.offsets[i] * TAU + timeSpeed * (1 + t.offsets[i])) + 1) / 2;
+        } else {
+            alpha *= (Math.sin(cur * TAU * t.settings.cturns - timeSpeed) + 1) / 2;
+        }
+        c = t.coord.calculate(x, y, z * .003);
+        return {
+            x: t.pos.x + c.x,
+            y: t.pos.y + c.y,
+            alpha: alpha,
+            cpos: cpos,
+            zsize: c.r
+        };
+    };
+    if (t.settings.shape == 1) {
+        t.calculate = t.calculateCylinder;
+    } else if (t.settings.shape == 2) {
+        t.calculate = t.calculateSphere;
+    } else {
+        t.calculate = t.calculateCone;
+    }
+}
+
+function Coord3D(scale) {
+    var t = this;
+    this.scale = scale ? scale : 100;
+    /**
+     * Values are from -1..1 or 0..1 for z.
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} z
+     * @returns {undefined}
+     */
+    this.calculate = function (x, y, z)
+    {
+        var zAdjust = 1 + z * t.scale;
+        if (zAdjust < 0.0001) {
+            zAdjust = 0.0001;
+        }
+        zAdjust = 1 / zAdjust;
+        return {
+            x: x * zAdjust,
+            y: y * zAdjust,
+            r: zAdjust,
+            r2: Math.pow(zAdjust, 1.2)
+        };
+    };
+}
+    var render = new Render(document.getElementById('canvas'), ["#ff0000","#fe0b07","#fe120b","#fe180e","#fe1d11","#fe2214","#fe2717","#fe2b19","#fe2f1c","#fe331e","#fe3620","#fe3a23","#fe3e25","#fe4127","#fe4429","#fe472b","#fe4b2d","#fe4e2e","#fe5130","#fe5432","#fe5734","#fe5a36","#fe5c37","#fe5f39","#fe623b","#fe653c","#fe673e","#fe6a3f","#fe6d41","#fe6f43","#fe7244","#fe7446","#fe7747","#fe7949","#fe7c4a","#fe7e4b","#fe814d","#fe834e","#fe8550","#fe8851","#fe8a53","#fe8c54","#fe8f55","#fe9157","#fe9358","#fe9559","#fe975b","#fe9a5c","#fe9c5d","#fe9e5f","#fea060","#fea261","#fea462","#fea764","#fea965","#feab66","#fead67","#feaf69","#feb16a","#feb36b","#feb56c","#feb76e","#feb96f","#febb70","#febd71","#febf72","#fec173","#fec375","#fec576","#fec777","#fec978","#feca79","#fecc7a","#fece7c","#fed07d","#fed27e","#fed47f","#fed680","#fed881","#fed982","#fedb83","#fedd84","#fedf86","#fee187","#fee388","#fee489","#fee68a","#fee88b","#feea8c","#feeb8d","#feed8e","#feef8f","#fef190","#fef291","#fef492","#fef693","#fef894","#fef995","#fefb96","#fefd97","#ffff99","#fdfe98","#fbfe98","#f9fe98","#f8fe98","#f6fe98","#f4fe98","#f2fe98","#f1fe98","#effe98","#edfe98","#ebfe98","#eafe98","#e8fe98","#e6fe98","#e4fe98","#e3fe98","#e1fe98","#dffe98","#ddfe98","#dbfe98","#d9fe98","#d8fe98","#d6fe98","#d4fe98","#d2fe98","#d0fe98","#cefe98","#ccfe98","#cafe98","#c9fe98","#c7fe98","#c5fe98","#c3fe98","#c1fe98","#bffe98","#bdfe98","#bbfe98","#b9fe98","#b7fe98","#b5fe98","#b3fe98","#b1fe98","#affe98","#adfe98","#abfe98","#a9fe98","#a7fe98","#a4fe98","#a2fe98","#a0fe98","#9efe98","#9cfe98","#9afe98","#97fe98","#95fe98","#93fe98","#91fe98","#8ffe98","#8cfe98","#8afe98","#88fe98","#85fe98","#83fe98","#81fe98","#7efe98","#7cfe98","#79fe98","#77fe98","#74fe98","#72fe98","#6ffe98","#6dfe98","#6afe98","#67fe98","#65fe98","#62fe98","#5ffe98","#5cfe98","#5afe98","#57fe98","#54fe98","#51fe98","#4efe98","#4bfe98","#47fe98","#44fe98","#41fe98","#3efe98","#3afe98","#36fe98","#33fe98","#2ffe98","#2bfe98","#27fe98","#22fe98","#1dfe98","#18fe98","#12fe98","#0bfe98","#00ff99"], ["#ff0000","#ffff99","#00ff99"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/59 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:43 GMT -->
+</html>

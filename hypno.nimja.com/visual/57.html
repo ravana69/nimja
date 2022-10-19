@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/57 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:35 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Deep Spiral Dots - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="3D type visual with dots moving around the edge of a cylinder." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Deep Spiral Dots - Nimja Hypnosis" />
+    <meta property="og:description" content="3D type visual with dots moving around the edge of a cylinder." />
+    <meta property="og:url" content="57.html" />
+    <meta property="og:image" content="thumb/Deep_Spiral_Dots-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="58.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/57.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="56.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Deep Spiral Dots</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/57.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<script>
+    var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+    config = new Config([]);
+    /**
+ * By Nimja - Deep Spiral Dots
+ * @param {element} canvas
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(canvas, colors) {
+    var t = this;
+    this.canvas = canvas;
+    this.context = t.canvas.getContext('2d');
+    this.colors = colors;
+    this.colorList = (new Colors(colors)).colors;
+    this.pos = {x: 0, y: 0, w: 0, h: 0, canvas: {}};
+    var defaults = {
+        speed: {type: 'ratio'},
+        amp: {type: 'ratio'},
+        color: {type: 'adjust', val: 2},
+        spread: {type: 'adjust', val: 2},
+        rot: {type: 'int', min: 2, max: 20, val: 7}
+    };
+    this.settings = config.get(defaults);
+    this.settings.color *= 180;
+    this.settings.spread *= 180;
+    this.drawer = new Drawer(t.pos, t.settings);
+    this.update = function (time) {
+        ctx = t.context;
+        ctx.clearRect(0, 0, t.pos.w, t.pos.h);
+        if (t.settings.color != 0) {
+            gradient.setShiftSpread(time * t.settings.color, t.settings.spread);
+            t.context.fillStyle = gradient.createRadial(t.context, t.colorList, t.pos.x, t.pos.y, 0, t.pos.radius);
+        }
+        t.drawer.draw(ctx, time);
+    };
+    this.resize = function (width, height) {
+        t.canvas.width = width;
+        t.canvas.height = height;
+        t.pos.w = width;
+        t.pos.h = height;
+        t.pos.x = width / 2;
+        t.pos.y = height / 2;
+        t.pos.radius = coordMath.distance(t.pos);
+        t.pos.base = t.pos.radius * .05 * t.settings.width;
+        t.pos.width = t.pos.radius / 20;
+        t.context.lineWidth = t.pos.thickness;
+        t.context.lineCap = "round";
+        t.context.lineJoin = "round";
+        gradient.setShiftSpread(t.settings.color, t.settings.spread);
+        t.context.fillStyle = gradient.createRadial(t.context, t.colors, t.pos.x, t.pos.y, 0, t.pos.radius);
+    };
+}
+function Drawer(pos, settings)
+{
+    var t = this;
+    this.pos = pos;
+    this.settings = settings;
+    this.coord = new Coord3D(50);
+    this.block = TAU * t.settings.fill;
+    this.zStep = 1 / 200;
+    this.zSpeed = 0.03;
+    this.rStep = TAU / t.settings.rot;
+    this.draw = function (ctx, time) {
+        var c, angle, angleOffset = 0, zPlace, width
+                zOffset1 = (time * .36),
+                rotations1 = Math.sin(time * .42) * HPI,
+                rotations2 = Math.cos(time * .023) * TAU * t.settings.amp;
+        ctx.beginPath();
+        ctx.arc(t.pos.x, t.pos.y, t.coord.calculate(0, 0, 1).r * t.pos.radius, 0, TAU);
+        for (var z = 0; z <= 1; z += t.zStep) {
+            angleOffset = Math.sin(z * TAU + zOffset1) * rotations1 + Math.cos(z * TAU) * rotations2;
+            zPlace = Math.abs((z + time * t.zSpeed * t.settings.speed) % 1 * 2 - 1);
+            for (var r = 0; r <= TAU; r += t.rStep) {
+                angle = r + angleOffset;
+                c = t.coord.calculate(
+                        Math.cos(angle) * t.pos.radius,
+                        Math.sin(angle) * t.pos.radius,
+                        zPlace
+                );
+                width = t.pos.width * c.r2;
+//                ctx.fillRect(t.pos.x + c.x - width, t.pos.y + c.y - width, width * 2, width * 2);
+                ctx.moveTo(t.pos.x + c.x, t.pos.y + c.y);
+                ctx.arc(t.pos.x + c.x, t.pos.y + c.y, width, 0, TAU);
+            }
+        }
+        ctx.fill();
+    };
+}
+
+function Coord3D(scale) {
+    var t = this;
+    this.scale = scale ? scale : 100;
+    /**
+     * Values are from -1..1 or 0..1 for z.
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} z
+     * @returns {undefined}
+     */
+    this.calculate = function (x, y, z)
+    {
+        var zAdjust = 1 + z * t.scale;
+        if (zAdjust < 0.0001) {
+            zAdjust = 0.0001;
+        }
+        zAdjust = 1 / zAdjust;
+        return {
+            x: x * zAdjust,
+            y: y * zAdjust,
+            r: zAdjust,
+            r2: Math.pow(zAdjust, 1.2)
+        };
+    };
+
+}
+    var render = new Render(document.getElementById('canvas'), ["#000066","#020b67","#031269","#04186b","#051d6d","#06226f","#072771","#082b73","#092f75","#0a3377","#0a3679","#0b3a7b","#0c3e7c","#0d417e","#0d4480","#0e4782","#0f4b84","#0f4e85","#105187","#105489","#11578a","#125a8c","#125c8e","#135f90","#136291","#146593","#146795","#156a96","#156d98","#166f9a","#16729b","#17749d","#17779e","#1879a0","#187ca2","#197ea3","#1981a5","#1a83a6","#1a85a8","#1b88a9","#1b8aab","#1c8cad","#1c8fae","#1d91b0","#1d93b1","#1d95b3","#1e97b4","#1e9ab6","#1f9cb7","#1f9eb9","#20a0ba","#20a2bc","#20a4bd","#21a7bf","#21a9c0","#22abc2","#22adc3","#23afc4","#23b1c6","#23b3c7","#24b5c9","#24b7ca","#25b9cc","#25bbcd","#25bdce","#26bfd0","#26c1d1","#27c3d3","#27c5d4","#27c7d5","#28c9d7","#28cad8","#28ccda","#29cedb","#29d0dc","#2ad2de","#2ad4df","#2ad6e0","#2bd8e2","#2bd9e3","#2bdbe4","#2cdde6","#2cdfe7","#2de1e8","#2de3ea","#2de4eb","#2ee6ec","#2ee8ee","#2eeaef","#2febf0","#2fedf2","#2feff3","#30f1f4","#30f2f6","#30f4f7","#31f6f8","#31f8f9","#31f9fb","#32fbfc","#32fdfd","#33ffff","#32fefe","#32fdfe","#31fcfe","#31fbfe","#31fafe","#30f9fe","#30f8fe","#30f7fe","#2ff6fe","#2ff5fe","#2ff4fe","#2ef3fe","#2ef3fe","#2ef2fe","#2df1fe","#2df0fe","#2deffe","#2ceefe","#2cedfe","#2becfe","#2bebfe","#2beafe","#2ae9fe","#2ae8fe","#2ae7fe","#29e6fe","#29e5fe","#28e4fe","#28e3fe","#28e2fe","#27e1fe","#27e0fe","#27e0fe","#26dffe","#26defe","#25ddfe","#25dcfe","#25dbfe","#24dafe","#24d9fe","#23d8fe","#23d7fe","#23d6fe","#22d5fe","#22d4fe","#21d3fe","#21d2fe","#20d1fe","#20d0fe","#20cffe","#1fcefe","#1fcdfe","#1eccfe","#1ecbfe","#1dcafe","#1dc9fe","#1dc8fe","#1cc7fe","#1cc6fe","#1bc4fe","#1bc3fe","#1ac2fe","#1ac1fe","#19c0fe","#19bffe","#18befe","#18bdfe","#17bcfe","#17bbfe","#16bafe","#16b9fe","#15b8fe","#15b7fe","#14b6fe","#14b5fe","#13b4fe","#13b2fe","#12b1fe","#12b0fe","#11affe","#10aefe","#10adfe","#0facfe","#0fabfe","#0eaafe","#0da9fe","#0da7fe","#0ca6fe","#0ba5fe","#0aa4fe","#0aa3fe","#09a2fe","#08a1fe","#079ffe","#069efe","#059dfe","#049cfe","#039bfe","#029afe","#0099ff"], ["#000066","#33ffff","#0099ff"]);
+    resize = render.resize.bind(render);
+
+    function perFrame(time, diff) {
+        words.update();
+        render.update(time, diff);
+    }
+    intro(words.words, function () {
+        nimja.callResize();
+        nanimate(animate);
+    });
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/57 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:24:38 GMT -->
+</html>

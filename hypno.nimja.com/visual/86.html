@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<!-- Mirrored from hypno.nimja.com/visual/86 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:54 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <title>Warp Tunnel - Nimja Hypnosis</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Travel through an infinite tunnel, twisting in all directions." />
+    <meta name="referrer" content="origin" />
+    <meta name="author" content="Nimja.com" />
+    <link rel="apple-touch-icon" sizes="180x180" href="https://hypno.nimja.com/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://hypno.nimja.com/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://hypno.nimja.com/favicon-16x16.png">
+    <link rel="manifest" href="https://hypno.nimja.com/site.webmanifest">
+    <link rel="mask-icon" href="https://hypno.nimja.com/safari-pinned-tab.svg" color="#405299">
+    <meta name="msapplication-TileColor" content="#405299">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta name="theme-color" content="#405299">
+    <meta name="apple-mobile-web-app-title" content="Nimja Hypnosis">
+    <meta name="application-name" content="Nimja Hypnosis">
+    <meta property="og:title" content="Warp Tunnel - Nimja Hypnosis" />
+    <meta property="og:description" content="Travel through an infinite tunnel, twisting in all directions." />
+    <meta property="og:url" content="86.html" />
+    <meta property="og:image" content="thumb/Warp_Tunnel-by-Nimja.jpg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <script src="https://hypno.nimja.com/version/22.01/js/visual/view.js" type="application/javascript"></script>
+    <link href="https://hypno.nimja.com/version/22.01/style/visual.css" rel="stylesheet" />
+    <style>
+        #text {
+            color: #ffffff;
+            text-shadow: 0px 0px 0.5vw #000000;
+        }
+
+        #textHolder {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body style="background-color: #000000;">
+    <table class="copyright">
+    <tr>
+        <td class="prev">
+            <a href="87.html" id="mlink">&#9668;</a>
+        </td>
+        <td>
+            <a href="customise/86.html">
+                <mute>Nimja Hypnosis</mute> ⚙ Edit<span>
+                    - <i>Click lower half for full-screen.</i></span>
+            </a>
+        </td>
+        <td class="next">
+            <a href="85.html">&#9658;</a>
+        </td>
+    </tr>
+</table>
+    <div id="textHolder"><span id="text">Loading...</span></div>
+    <div onclick="nimja.fullscreen.launch()" id="fullscreen"></div>
+    <div id="start-button">
+        <svg viewBox="0 0 10 10">
+            <title>Play</title>
+            <path d="M 2 2 L 8 5 2 8 z" />
+        </svg>
+    </div>
+    <div id="intro">
+    <div class="intro-content">
+        <h1>Warp Tunnel</h1>
+        <h2>By Nimja Hypnosis</h2>
+        <a id="intro-start" class="button-start" href="#">Start Visual</a>
+        <a class="button-edit" href="customise/86.html" target="_top">Customize</a>
+        <p id="intro-cam-warning"><b>Webcam Mirror enabled</b> - No data is sent to server.</p>
+        <p>WARNING: Possibly flashing imagery!</p>
+        <p>Click/tap lower half to go full-screen.</p>
+        <div id="intro-word-list"></div>
+    </div>
+</div>
+    <script src="http://assets.nimja.com/js/three.min.js"></script>
+<script src="https://hypno.nimja.com/version/22.01/js/visual/threehelper.js"></script>
+<canvas id="canvas" width="100" height="100">Canvas not supported.</canvas>
+<!-- https://threejs.org/docs/index.html -->
+<script>
+    var renderer_canvas = document.getElementById('canvas');
+    function hasWebGL() {
+        try {
+            return !!(window.WebGLRenderingContext && (renderer_canvas.getContext('webgl') || renderer_canvas.getContext('experimental-webgl')));
+        } catch (e) {
+            return false;
+        }
+    }
+    if (false && !hasWebGL()) {
+        alert("WebGL not supported.");
+    } else {
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, canvas: renderer_canvas });
+
+        function resize(w, h) {
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+            if (render.resize) {
+                render.resize(w, h);
+            }
+        }
+
+        function perFrame(time, diff) {
+            words.update();
+            render.update(time, diff);
+            renderer.render(scene, camera);
+        }
+        var words = new Words(["blank","bliss","blissfully","calm","calmer","deep","deeper","drifting","drop","dropping","empty","empty mind","enjoying","floating","focus","follow","keep looking","keep reading","keep staring","keep watching","looking","no thoughts","reading","relax","relaxing","sinking","staring","watching"], 30, 5);
+        config = new Config([]);
+        //Spiral.
+        /**
+ * By Nimja - Warp Tunnel
+ *
+ * @param {array} colors
+ * @returns {Render}
+ */
+function Render(colors, colorSet) {
+    var t = this;
+    this.colors = colors;
+    this.hexColors = (new Colors(colors)).toInt();
+    this.colorSet = colorSet;
+    this.cubes = [];
+    this.max = 20;
+    var defaults = {
+        type: { type: 'int', val: 0, min: 0, max: 4 },
+        p: { type: 'float', val: 1, min: 0, max: 3 },
+        rep: { type: 'int', val: 1, min: 1, max: 4 },
+        twist: { type: 'float', val: 1, min: 0, max: 4 },
+        wspeed: { type: 'ratio' },
+        light: { type: 'adjust', val: 2.45 },
+        color: { type: 'adjust', val: 2 },
+        width: { type: 'ratio' },
+        color: { type: 'adjust', val: 2 },
+        speed: { type: 'ratio' },
+        dir: { type: 'dir' }
+    };
+    this.settings = config.get(defaults);
+    this.settings.soft = true;
+    this.settings.light *= .5 / t.settings.rep;
+    this.settings.speed *= (1 + t.settings.rep * .5) * .4;
+    this.settings.wspeed *= 1 / t.settings.rep * Math.PI;
+    this.pointCount = 20;
+    this.height = 100;
+    this.maxCurve = Math.PI * .7 * this.settings.twist;
+    this.minCurve = this.maxCurve / this.pointCount;
+    this.lightCount = 4;
+    this.lightRange = .265;
+    this.lightOffset = t.settings.light === 0 ? .42 : 0;
+    this.lights = [];
+    this.curve;
+    this.pathTube;
+    this.moveTime;
+    /**
+     * Every frame.
+     * @param {Number} time
+     */
+    this.update = function (time) {
+        var textureSpeed = time * t.settings.speed * t.settings.dir,
+            bendSpeed = textureSpeed * t.settings.wspeed,
+            cur;
+        this.moveTime = bendSpeed;
+
+        var boneStep = new THREE.Vector3(0, t.height / t.pointCount, 0);
+        var bone = new THREE.Vector3(0, 0, 0);
+        var axisX = new THREE.Vector3(1, 0, 0);
+        var axisY = new THREE.Vector3(0, 1, 0);
+        var axisZ = new THREE.Vector3(0, 0, 1);
+
+        // Animate
+        bone.add(boneStep);
+        bone.add(boneStep);
+        for (var i = 3; i < t.pointCount; i++) {
+            var cur = i / t.pointCount * TAU;
+            var rot = t.rotation(cur + bendSpeed);
+            if (t.minCurve > 0) {
+                boneStep.applyAxisAngle(axisX, rot.x);
+                boneStep.applyAxisAngle(axisY, rot.y);
+                boneStep.applyAxisAngle(axisZ, rot.z);
+            }
+            bone.add(boneStep);
+
+            t.curve.points[i].copy(bone);
+        }
+        t.pathTube.update();
+        t.texture.offset.y = textureSpeed % 1;
+
+        for (var i = 0; i < t.lightCount; i++) {
+            var light = t.lights[i];
+            var cur = i / t.lights.length * 2;
+            var offset = (textureSpeed * t.settings.light + cur + t.lightOffset) % 2;
+            if (offset < 0) {
+                offset += 2;
+            }
+            if (offset < 1) {
+                var p = t.curve.getPointAt(1 - offset);
+                p.applyAxisAngle(axisX, -HPI);
+                light.position.copy(p);
+            } else {
+                light.position.set(0, 0, t.height * (offset - 1));
+            }
+        }
+        if (t.settings.color !== 0) {
+            renderer.domElement.style.filter = 'hue-rotate(' + Math.floor(time * t.settings.color * 360 % 360) + 'deg)';
+        }
+    };
+
+    this.rotation = function (cur) {
+        var xa = cur * 0.5;
+        var ya = cur * 0.6;
+        return {
+            x: t.minCurve * (
+                .4 * Math.cos(xa) +
+                .3 * Math.cos(xa * 1.4) +
+                .2 * Math.sin(xa * 2.1) +
+                .1 * Math.sin(xa * 3.9)
+            ),
+            z: t.minCurve * (
+                .5 * Math.sin(ya) +
+                .3 * Math.sin(ya * 1.8) +
+                .2 * Math.sin(ya * 2.4)
+            ),
+            y: t.minCurve * t.rotationY(cur)
+        };
+    };
+
+    this.rotationY = function (cur) {
+        var ya = cur * 0.6;
+        return .55 * Math.cos(ya) +
+            .3 * Math.sin(ya * 2.1) +
+            .15 * Math.sin(ya * 3.9);
+    };
+
+    this.callBack = function (cur) {
+        var vcur = 1 - cur * .5,
+            angle = cur * t.rotationY(cur + t.moveTime) * t.maxCurve * 0;
+        return [vcur, angle];
+    };
+
+    /**
+     * Render the particles..
+     * @returns {undefined}
+     */
+    this.init = function () {
+        var res_w = 32;
+        var res_h = 100;
+
+        var curve = t.createCurve(t.pointCount);
+        t.curve = curve;
+        t.pathTube = new PathTube(curve, 2 * t.settings.width, res_h, res_w, t.callBack);
+        t.texture = t.createTexture();
+        var mesh = t.createMesh(t.pathTube.geometry, t.texture);
+        scene.add(mesh);
+        mesh.rotation.x = -HPI;
+
+        camera.up = new THREE.Vector3(0, 0, 1);
+        //        camera.position.z = t.height * .7;
+        //        camera.position.y = t.height * .5;
+        //        var light = new THREE.DirectionalLight(0xffffff, 1, 100);
+        //        light.position.set(-1, -1, 1);
+        //        scene.add(light);
+
+        for (var i = 0; i < t.lightCount; i++) {
+            //Create a PointLight
+            var plight = new THREE.PointLight(0xffffff, 2, t.height * t.lightRange);
+            scene.add(plight);
+            t.lights.push(plight);
+        }
+
+        // Fog.
+        scene.fog = new THREE.Fog(0x000000, t.height * .5, t.height * 1);
+
+
+    };
+
+
+    this.createCurve = function (pointCount) {
+        var points = [];
+        for (var i = 0; i < pointCount; i++) {
+            var cur = i / (pointCount - 1);
+            points.push(new THREE.Vector3(0, cur * t.height, 0));
+        }
+        return new THREE.CatmullRomCurve3(points);
+    };
+
+    this.createMesh = function (geometry, texture) {
+        var material = new THREE.MeshLambertMaterial({
+            map: texture,
+            color: 0xffffff,
+            side: THREE.BackSide
+        });
+        var mesh = new THREE.Mesh(geometry, material);
+        return mesh;
+    };
+
+    this.createTexture = function () {
+        var textureRenderer = new TextureRenderer(512, t.colors, false);
+        textureRenderer.adjust = t.settings.p;
+        switch (t.settings.type) {
+            case 4:
+                textureRenderer.drawPixels(textureRenderer.calculatePointRoad);
+                break;
+            case 3:
+                textureRenderer.drawPixels(textureRenderer.calculatePointGradient);
+                break;
+            case 2:
+                textureRenderer.drawPixels(textureRenderer.calculatePointWavey);
+                break;
+            case 1:
+                textureRenderer.drawZoomLines();
+                break;
+            default:
+                textureRenderer.drawPixels(textureRenderer.calculatePointWater);
+        }
+
+        var texture = textureRenderer.getTexture();
+        texture.repeat.set(t.settings.rep, t.settings.rep * 2);
+        return texture;
+    };
+}
+
+        var render = new Render(
+            ["#ffffff","#fcfffd","#fafffc","#f7fffa","#f5fff9","#f2fff7","#f0fff6","#edfff5","#ebfff3","#e8fff2","#e6fff1","#e3ffef","#e1ffee","#deffed","#dbffec","#d9ffea","#d6ffe9","#d3ffe8","#d1ffe7","#ceffe6","#cbffe5","#c9ffe4","#c6ffe2","#c4ffe1","#c0ffe0","#beffdf","#bbffde","#b8ffdd","#b5ffdc","#b2ffdb","#afffdb","#acffda","#aaffd8","#a7ffd7","#a3ffd7","#a1ffd6","#9effd5","#9affd5","#97ffd4","#95ffd2","#91ffd3","#8effd1","#8bffd0","#88ffcf","#84ffd0","#81ffcf","#7fffcd","#7affce","#77ffcd","#75ffcc","#70ffcd","#6dffcc","#6affcb","#68ffca","#65fdca","#64fbc9","#63f9c7","#62f7c8","#62f5c6","#61f3c5","#60f0c5","#5feec3","#5eedc2","#5eebc1","#5de8c1","#5ce6bf","#5be5be","#5ae2be","#59e0bc","#59dfbb","#58dcbb","#57dab9","#56d8b8","#55d6b8","#55d4b6","#54d2b5","#53d1b3","#52ceb3","#51ccb2","#51cbb0","#50c8b0","#4fc6af","#4ec5ad","#4dc2ad","#4dc1ab","#4cbfaa","#4bbda8","#4abba8","#4ab9a6","#49b7a5","#48b5a5","#47b3a3","#47b2a2","#46afa1","#45ada0","#44ac9e","#44aa9d","#43a89c","#42a69a","#41a499","#41a298","#40a097","#3f9f95","#3e9d95","#3e9b93","#3d9992","#3c9890","#3b958f","#3b948e","#3a928c","#39908c","#398e8a","#388d88","#378a88","#368986","#368784","#358683","#348382","#348280","#33807f","#327e7e","#317c7c","#317b7b","#30797a","#307778","#2f7577","#2e7475","#2e7174","#2d7072","#2d6e71","#2c6c6f","#2c6a6e","#2b696c","#2b676b","#2a6569","#296468","#296167","#286065","#275e63","#275d62","#265b60","#26595f","#25585d","#24555c","#24545a","#235259","#235057","#224f56","#214d54","#214c52","#204a51","#1f484f","#1f474e","#1e454c","#1e434b","#1d4249","#1c4048","#1c3e46","#1b3d44","#1a3b43","#1a3941","#193840","#18363e","#18353c","#17333b","#173239","#163038","#152e36","#152d34","#142b33","#132a31","#13282f","#12272e","#11252c","#11242a","#102229","#0f2027","#0f1f25","#0e1e24","#0d1c22","#0d1a20","#0c191f","#0b181d","#0b161b","#0a151a","#091318","#091216","#081014","#070f13","#060d11","#060c0f","#050b0e","#04090c","#04080a","#030608","#020507","#020405","#010203","#000101","#000000"], ["#66ffcc"]
+        );
+        intro(words.words, function () {
+            if (render.init) {
+                render.init();
+            }
+            nimja.callResize();
+            nanimate(animate);
+        });
+    }
+</script>
+    
+</body>
+
+
+<!-- Mirrored from hypno.nimja.com/visual/86 by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Oct 2022 05:25:57 GMT -->
+</html>
